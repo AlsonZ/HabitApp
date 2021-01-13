@@ -9,6 +9,7 @@ import {
   Button,
 } from 'react-native';
 import HabitButton from './components/habitButton';
+import Colors from './components/settings/colors';
 
 const App = () => {
   const press = () => {};
@@ -21,8 +22,10 @@ const App = () => {
           <Button title="Test" style={styles.habitButton}></Button>
           <HabitButton
             title="Habit"
-            textColor="white"
-            backgroundColor="red"
+            textColor={Colors.gray}
+            backgroundColor={Colors.transparent}
+            textActiveColor={Colors.white}
+            backgroundActiveColor={Colors.red}
             onPress={press}></HabitButton>
         </View>
       </SafeAreaView>
