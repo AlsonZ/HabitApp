@@ -4,7 +4,14 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import XSvg from './svgs/XSvg';
 import TickSvg from './svgs/TickSvg';
 
-const HabitButton = ({title, textColor, backgroundColor, onPress}) => {
+const HabitButton = ({
+  title,
+  textColor,
+  backgroundColor,
+  textActiveColor,
+  backgroundActiveColor,
+  onPress,
+}) => {
   const [isActive, setIsActive] = useState(false);
 
   const svgProps = {
@@ -12,7 +19,7 @@ const HabitButton = ({title, textColor, backgroundColor, onPress}) => {
     height: '30',
     viewBox: '0 0 20 20',
     //rgba(0,0,0,0.4)
-    fill: isActive ? textColor : 'gray',
+    fill: isActive ? textActiveColor : textColor,
   };
 
   const buttonPress = () => {
@@ -27,11 +34,14 @@ const HabitButton = ({title, textColor, backgroundColor, onPress}) => {
       <View
         style={[
           styles.button,
-          {backgroundColor: isActive ? backgroundColor : 'rgba(0,0,0,0.1)'},
+          {backgroundColor: isActive ? backgroundActiveColor : backgroundColor},
         ]}>
         {isActive ? <TickSvg {...svgProps} /> : <XSvg {...svgProps} />}
         <Text
-          style={[styles.buttonText, {color: isActive ? textColor : 'gray'}]}>
+          style={[
+            styles.buttonText,
+            {color: isActive ? textActiveColor : textColor},
+          ]}>
           {title}
         </Text>
       </View>
