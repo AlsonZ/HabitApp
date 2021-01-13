@@ -25,7 +25,7 @@ const App = () => {
             textColor={Colors.gray}
             backgroundColor={Colors.transparent}
             textActiveColor={Colors.white}
-            backgroundActiveColor={Colors.red}
+            backgroundActiveColor={Colors.blue}
             onPress={press}></HabitButton>
         </View>
       </SafeAreaView>

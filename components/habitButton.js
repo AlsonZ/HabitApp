@@ -30,7 +30,7 @@ const HabitButton = ({
   };
 
   return (
-    <TouchableOpacity onPress={buttonPress}>
+    <TouchableOpacity onPress={buttonPress} style={styles.touchable}>
       <View
         style={[
           styles.button,
@@ -50,12 +50,18 @@ const HabitButton = ({
 };
 
 const styles = StyleSheet.create({
+  touchable: {
+    width: 64,
+    height: 81,
+    margin: 10,
+    borderRadius: 8,
+    display: 'flex',
+  },
   button: {
     paddingVertical: 14,
     paddingHorizontal: 10,
-    margin: 10,
-    borderRadius: 8,
     width: 60,
+    borderRadius: 8,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
