@@ -1,5 +1,6 @@
 const Colors = {
   gray: 'gray',
+  lightgray: 'lightgray',
   white: 'white',
   red: 'red',
   blue: 'blue',
