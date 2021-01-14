@@ -9,9 +9,10 @@ import {
   StatusBar,
   Button,
 } from 'react-native';
-import HabitButton from './components/habitButton';
-import Colors from './components/settings/colors';
+import HabitButton from './components/HabitButton';
+import Colors from './components/settings/Colors';
 import {NavigationContainer} from '@react-navigation/native';
+import TabNavigation from './components/TabNavigation';
 
 const App = () => {
   const press = () => {};
@@ -19,8 +20,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <View>
+      <SafeAreaView style={{flex: 1}}>
+        {/* <View>
           <Button title="Test" style={styles.habitButton}></Button>
           <HabitButton
             title="Habit"
@@ -29,7 +30,8 @@ const App = () => {
             textActiveColor={Colors.white}
             backgroundActiveColor={Colors.blue}
             onPress={press}></HabitButton>
-        </View>
+        </View> */}
+        <TabNavigation />
       </SafeAreaView>
     </NavigationContainer>
   );
