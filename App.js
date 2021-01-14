@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import {
   SafeAreaView,
@@ -10,12 +11,13 @@ import {
 } from 'react-native';
 import HabitButton from './components/habitButton';
 import Colors from './components/settings/colors';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App = () => {
   const press = () => {};
 
   return (
-    <>
+    <NavigationContainer>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <View>
@@ -29,7 +31,7 @@ const App = () => {
             onPress={press}></HabitButton>
         </View>
       </SafeAreaView>
-    </>
+    </NavigationContainer>
   );
 };
 
