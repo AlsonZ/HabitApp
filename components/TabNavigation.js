@@ -5,16 +5,9 @@ import Habits from './Habits';
 import Colors from './settings/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import AddHabit from './AddHabit';
 const Tab = createMaterialBottomTabNavigator();
 
-const AddHabit = () => {
-  return (
-    <View>
-      <Text>Add Habit</Text>
-    </View>
-  );
-};
 const EditHabit = () => {
   return (
     <View>
