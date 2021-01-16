@@ -5,7 +5,7 @@ import Habits from './Habits';
 import Colors from './settings/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AddHabit from './AddHabit';
+import AddHabitNav from './addhabit/AddHabitNav';
 const Tab = createMaterialBottomTabNavigator();
 
 const EditHabit = () => {
@@ -29,7 +29,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="Add"
-        component={AddHabit}
+        component={AddHabitNav}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({color}) => (
