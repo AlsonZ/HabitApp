@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AddHabitMain from './AddHabitMain.js';
+import {AddHabitProvider} from '../contexts/AddHabitContext';
 
 const Stack = createStackNavigator();
 
@@ -15,14 +16,16 @@ const testPage = () => {
 
 const AddHabitNav = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Main"
-        options={{title: 'Create a new Habit'}}
-        component={AddHabitMain}
-      />
-      <Stack.Screen name="test" component={testPage} />
-    </Stack.Navigator>
+    <AddHabitProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          options={{title: 'Create a new Habit'}}
+          component={AddHabitMain}
+        />
+        <Stack.Screen name="test" component={testPage} />
+      </Stack.Navigator>
+    </AddHabitProvider>
   );
 };
 

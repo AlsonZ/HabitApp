@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {AddHabitContext} from '../contexts/AddHabitContext';
 import {useState} from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AddHabitMain = ({navigation}) => {
-  const [habitName, setHabitName] = useState('');
+  const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
   return (
     <View>
@@ -14,13 +21,21 @@ const AddHabitMain = ({navigation}) => {
         <MCIcon name="lead-pencil" color={'black'} size={26} />
         <TextInput
           placeholder="Habit Name"
-          onChangeText={(text) => setHabitName(text)}></TextInput>
+          onChangeText={(text) =>
+            setHabitDetails({...habitDetails, name: text})
+          }></TextInput>
       </View>
-
       <Button
-        title="Go to Details"
+        title="test"
+        onPress={() => {
+          console.log(habitDetails);
+        }}></Button>
+      <TouchableOpacity
         onPress={() => navigation.navigate('test')}
-      />
+        style={styles.habitItem}>
+        <MCIcon name="apps" color={'black'} size={26} />
+        <Text>{habitDetails.category}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
