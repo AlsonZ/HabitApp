@@ -14,6 +14,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import Colors from '../settings/Colors';
 import ColorIcon from './icons/ColorIcon';
+import NumberIcon from './icons/NumberIcon';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -72,12 +73,7 @@ const AddHabitMain = ({navigation}) => {
           size={24}
         />
         <Text style={styles.habitText}>Schedule</Text>
-        <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        />
+        <NumberIcon number={habitDetails.schedule} />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
@@ -88,13 +84,8 @@ const AddHabitMain = ({navigation}) => {
           color={'black'}
           size={24}
         />
-        <Text style={styles.habitText}>Frequency</Text>
-        <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        />
+        <Text style={styles.habitText}>Daily Schedule</Text>
+        <NumberIcon number={habitDetails.dailySchedule} />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
@@ -108,20 +99,25 @@ const AddHabitMain = ({navigation}) => {
         <Text style={styles.habitText}>Colors</Text>
         <ColorIcon
           activeColor={habitDetails.colors.backgroundActiveColor}
-          border={Colors.border}
+          borderColor={Colors.border}
         />
       </TouchableOpacity>
+
+      {/* Reminders is not a feature currently enabled */}
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
-        style={styles.habitItem}>
+        style={styles.habitItem}
+        disabled={true}>
         <IonIcon
           style={styles.habitIcon}
           name="color-palette-outline"
-          color={'black'}
+          color={'gray'}
           size={24}
         />
-        <Text style={styles.habitText}>Reminders</Text>
+        <Text style={[styles.habitText, {color: 'gray'}]}>Reminders</Text>
+        <NumberIcon number={`0`} borderColor="gray" textColor="gray" />
       </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
         style={styles.habitItem}>
@@ -132,10 +128,11 @@ const AddHabitMain = ({navigation}) => {
           size={24}
         />
         <Text style={styles.habitText}>Order</Text>
+        <NumberIcon number={habitDetails.order} />
       </TouchableOpacity>
 
       <Button
-        title="test"
+        title="Log Details"
         onPress={() => {
           console.log(habitDetails);
         }}></Button>
