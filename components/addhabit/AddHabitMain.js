@@ -13,6 +13,7 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import Colors from '../settings/Colors';
+import ColorIcon from './icons/ColorIcon';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -105,11 +106,32 @@ const AddHabitMain = ({navigation}) => {
           size={24}
         />
         <Text style={styles.habitText}>Colors</Text>
-        <View
-          style={[
-            styles.colorIcon,
-            {backgroundColor: habitDetails.colors.backgroundActiveColor},
-          ]}></View>
+        <ColorIcon
+          activeColor={habitDetails.colors.backgroundActiveColor}
+          border={Colors.border}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('test')}
+        style={styles.habitItem}>
+        <IonIcon
+          style={styles.habitIcon}
+          name="color-palette-outline"
+          color={'black'}
+          size={24}
+        />
+        <Text style={styles.habitText}>Reminders</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('test')}
+        style={styles.habitItem}>
+        <IonIcon
+          style={styles.habitIcon}
+          name="color-palette-outline"
+          color={'black'}
+          size={24}
+        />
+        <Text style={styles.habitText}>Order</Text>
       </TouchableOpacity>
 
       <Button
@@ -145,17 +167,6 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 'auto',
-  },
-  colorIcon: {
-    position: 'absolute',
-    marginRight: 3,
-    marginLeft: 'auto',
-    width: 20,
-    height: 19,
-    borderRadius: 3,
-    borderWidth: 1.9,
-    borderColor: Colors.border,
-    right: 0,
   },
 });
 
