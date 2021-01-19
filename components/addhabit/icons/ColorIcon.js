@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-const ColorIcon = ({activeColor, border}) => {
+const ColorIcon = ({activeColor, borderColor}) => {
   return (
     <View
       style={[
         styles.colorIcon,
         {
           backgroundColor: activeColor,
-          borderColor: border,
+          borderColor: borderColor,
         },
       ]}></View>
   );
