@@ -11,7 +11,8 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import FAIcon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import Colors from '../settings/Colors';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -77,6 +78,39 @@ const AddHabitMain = ({navigation}) => {
           size={26}
         />
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('test')}
+        style={styles.habitItem}>
+        <FontistoIcon
+          style={styles.habitIcon}
+          name="clock"
+          color={'black'}
+          size={24}
+        />
+        <Text style={styles.habitText}>Frequency</Text>
+        <MCIcon
+          style={styles.rightIcon}
+          name="code-greater-than"
+          color={'black'}
+          size={26}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('test')}
+        style={styles.habitItem}>
+        <IonIcon
+          style={styles.habitIcon}
+          name="color-palette-outline"
+          color={'black'}
+          size={24}
+        />
+        <Text style={styles.habitText}>Colors</Text>
+        <View
+          style={[
+            styles.colorIcon,
+            {backgroundColor: habitDetails.colors.backgroundActiveColor},
+          ]}></View>
+      </TouchableOpacity>
 
       <Button
         title="test"
@@ -111,6 +145,17 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 'auto',
+  },
+  colorIcon: {
+    position: 'absolute',
+    marginRight: 3,
+    marginLeft: 'auto',
+    width: 20,
+    height: 19,
+    borderRadius: 3,
+    borderWidth: 1.9,
+    borderColor: Colors.border,
+    right: 0,
   },
 });
 
