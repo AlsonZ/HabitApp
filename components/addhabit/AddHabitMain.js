@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   habitIcon: {
     width: 35,
-    height: 30,
+    height: 25,
   },
   habitText: {
     margin: 3,
