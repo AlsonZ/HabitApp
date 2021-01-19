@@ -8,13 +8,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontistoIcon from 'react-native-vector-icons/Fontisto';
-import AntIcon from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+
 import Colors from '../settings/Colors';
 import ColorIcon from './icons/ColorIcon';
 import NumberIcon from './icons/NumberIcon';
+
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import FontistoIcon from 'react-native-vector-icons/Fontisto';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -110,7 +112,7 @@ const AddHabitMain = ({navigation}) => {
         disabled={true}>
         <IonIcon
           style={styles.habitIcon}
-          name="color-palette-outline"
+          name="notifications-outline"
           color={'gray'}
           size={24}
         />
@@ -123,7 +125,7 @@ const AddHabitMain = ({navigation}) => {
         style={styles.habitItem}>
         <IonIcon
           style={styles.habitIcon}
-          name="color-palette-outline"
+          name="list"
           color={'black'}
           size={24}
         />
