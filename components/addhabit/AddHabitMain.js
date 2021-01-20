@@ -37,7 +37,7 @@ const AddHabitMain = ({navigation}) => {
           }></TextInput>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('test')}
+        onPress={() => navigation.navigate('Category')}
         style={styles.habitItem}>
         <AntIcon
           style={styles.habitIcon}

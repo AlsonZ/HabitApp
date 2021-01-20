@@ -4,6 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AddHabitMain from './AddHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
 
+import Category from './items/Category';
+
 const Stack = createStackNavigator();
 
 const testPage = () => {
@@ -24,6 +26,7 @@ const AddHabitNav = () => {
           component={AddHabitMain}
         />
         <Stack.Screen name="test" component={testPage} />
+        <Stack.Screen name="Category" component={Category} />
       </Stack.Navigator>
     </AddHabitProvider>
   );
