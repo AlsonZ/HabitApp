@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../settings/Colors';
@@ -15,28 +16,40 @@ const Category = ({navigation}) => {
   const [categories, setCategories] = useContext(CategoriesContext);
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
-  const [submitCategoryColor, setSubmitCategoryColor] = useState(Colors.red);
-  const [submitCategoryName, setSubmitCategoryName] = useState('');
+  const [categoryColor, setCategoryColor] = useState(Colors.red);
+  const [categoryName, setCategoryName] = useState('');
 
-  const setCategoryName = (text) => {
-    setSubmitCategoryName(text);
+  const onCategoryNameChange = (text) => {
+    setCategoryName(text);
     if (text.trim() != '') {
-      setSubmitCategoryColor(Colors.green);
+      setCategoryColor(Colors.green);
     } else {
-      setSubmitCategoryColor(Colors.red);
+      setCategoryColor(Colors.red);
     }
   };
 
-  const selectCategory = () => {
-    setHabitDetails({...habitDetails, category: 'test'});
+  const createCategory = () => {
+    console.log(categoryName);
+    if (categoryName.trim() != '') {
+      setCategories([...categories, {name: categoryName}]);
+      setCategoryName('');
+    }
+  };
+
+  const selectCategory = (category) => {
+    setHabitDetails({...habitDetails, category: category});
     console.log('test');
     navigation.navigate('Main');
   };
 
-  const CategoryListItem = ({name}) => {
+  const CategoryListItem = ({category}) => {
     return (
-      <TouchableOpacity onPress={selectCategory} style={styles.categoryItem}>
-        <Text style={styles.categoryText}>{name}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          selectCategory(category);
+        }}
+        style={styles.categoryItem}>
+        <Text style={styles.categoryText}>{category}</Text>
         <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
@@ -48,12 +61,14 @@ const Category = ({navigation}) => {
   };
 
   const loadCategories = () => {
-    return categories.map((name) => <CategoryListItem name={name} />);
+    if (categories) {
+      return categories.map(({name}) => <CategoryListItem category={name} />);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      {loadCategories}
+    <ScrollView style={styles.container}>
+      {loadCategories()}
       <View style={styles.categoryItem}>
         <MCIcon
           style={styles.categoryIcon}
@@ -63,26 +78,29 @@ const Category = ({navigation}) => {
         />
         <TextInput
           placeholder="Category Name"
-          onChangeText={setCategoryName}></TextInput>
+          onChangeText={onCategoryNameChange}
+          onSubmitEditing={createCategory}
+          value={categoryName}
+          style={styles.textInput}></TextInput>
         <TouchableOpacity
           style={styles.rightIcon}
           // onPress={() => navigation.navigate('ChooseCategoryIcon')}
           onPress={createCategory}>
           <MCIcon
             name="arrow-right-bold-box-outline"
-            color={submitCategoryColor}
+            color={categoryColor}
             size={26}
           />
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     margin: 17,
   },
   categoryItem: {
@@ -103,6 +121,9 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 'auto',
+  },
+  textInput: {
+    width: '60%',
   },
 });
 
