@@ -33,12 +33,10 @@ const Category = ({navigation}) => {
     navigation.navigate('Main');
   };
 
-  const loadCategories = () => {};
-
-  return (
-    <View style={styles.container}>
+  const CategoryListItem = ({name}) => {
+    return (
       <TouchableOpacity onPress={selectCategory} style={styles.categoryItem}>
-        <Text style={styles.categoryText}>Placeholder Category</Text>
+        <Text style={styles.categoryText}>{name}</Text>
         <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
@@ -46,6 +44,16 @@ const Category = ({navigation}) => {
           size={26}
         />
       </TouchableOpacity>
+    );
+  };
+
+  const loadCategories = () => {
+    return categories.map((name) => <CategoryListItem name={name} />);
+  };
+
+  return (
+    <View style={styles.container}>
+      {loadCategories}
       <View style={styles.categoryItem}>
         <MCIcon
           style={styles.categoryIcon}
@@ -59,7 +67,7 @@ const Category = ({navigation}) => {
         <TouchableOpacity
           style={styles.rightIcon}
           // onPress={() => navigation.navigate('ChooseCategoryIcon')}
-        >
+          onPress={createCategory}>
           <MCIcon
             name="arrow-right-bold-box-outline"
             color={submitCategoryColor}
