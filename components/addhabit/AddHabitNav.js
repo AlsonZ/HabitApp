@@ -30,7 +30,11 @@ const AddHabitNav = () => {
           />
           <Stack.Screen name="test" component={testPage} />
           <Stack.Screen name="Category" component={Category} />
-          <Stack.Screen name="Schedule" component={Schedule} />
+          <Stack.Screen
+            name="Schedule"
+            options={{title: 'Repeat every'}}
+            component={Schedule}
+          />
         </Stack.Navigator>
       </AddHabitProvider>
     </CategoriesProvider>

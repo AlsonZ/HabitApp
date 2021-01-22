@@ -66,7 +66,7 @@ const AddHabitMain = ({navigation}) => {
           }></TextInput>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('test')}
+        onPress={() => navigation.navigate('Schedule')}
         style={styles.habitItem}>
         <FontistoIcon
           style={styles.habitIcon}
