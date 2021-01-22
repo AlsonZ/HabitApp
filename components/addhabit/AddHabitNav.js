@@ -6,6 +6,7 @@ import {AddHabitProvider} from '../contexts/AddHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 
 import Category from './items/Category';
+import Schedule from './items/Schedule';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const AddHabitNav = () => {
           />
           <Stack.Screen name="test" component={testPage} />
           <Stack.Screen name="Category" component={Category} />
+          <Stack.Screen name="Schedule" component={Schedule} />
         </Stack.Navigator>
       </AddHabitProvider>
     </CategoriesProvider>
