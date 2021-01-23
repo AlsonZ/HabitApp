@@ -62,7 +62,9 @@ const Category = ({navigation}) => {
 
   const loadCategories = () => {
     if (categories) {
-      return categories.map(({name}) => <CategoryListItem category={name} />);
+      return categories.map(({name}, index) => (
+        <CategoryListItem category={name} key={index} />
+      ));
     }
   };
 
