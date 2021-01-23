@@ -7,6 +7,7 @@ import {CategoriesProvider} from '../contexts/CategoriesContext';
 
 import Category from './items/Category';
 import Schedule from './items/Schedule';
+import HabitColorItem from './items/HabitColorItem';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,11 @@ const AddHabitNav = () => {
             name="Schedule"
             options={{title: 'Repeat every'}}
             component={Schedule}
+          />
+          <Stack.Screen
+            name="HabitColorItem"
+            options={{title: 'Repeat every'}}
+            component={HabitColorItem}
           />
         </Stack.Navigator>
       </AddHabitProvider>

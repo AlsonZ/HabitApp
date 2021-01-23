@@ -95,7 +95,7 @@ const AddHabitMain = ({navigation}) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('test')}
+        onPress={() => navigation.navigate('HabitColorItem')}
         style={styles.habitItem}>
         <IonIcon
           style={styles.habitIcon}
