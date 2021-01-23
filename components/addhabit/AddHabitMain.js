@@ -79,15 +79,20 @@ const AddHabitMain = ({navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
-        style={styles.habitItem}>
+        style={styles.habitItem}
+        disabled={true}>
         <FontistoIcon
           style={styles.habitIcon}
           name="clock"
-          color={'black'}
+          color={'gray'}
           size={24}
         />
-        <Text style={styles.habitText}>Daily Schedule</Text>
-        <NumberIcon number={habitDetails.dailySchedule} />
+        <Text style={[styles.habitText, {color: 'gray'}]}>Daily Schedule</Text>
+        <NumberIcon
+          number={habitDetails.dailySchedule}
+          borderColor="gray"
+          textColor="gray"
+        />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
