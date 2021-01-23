@@ -102,8 +102,8 @@ const Category = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    // justifyContent: 'center',
     margin: 17,
+    marginRight: 1,
   },
   categoryItem: {
     display: 'flex',
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 44,
     marginBottom: 6,
+    marginRight: 16,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },

@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 44,
     marginBottom: 6,
+    marginRight: 16,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
