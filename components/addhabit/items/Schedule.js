@@ -1,15 +1,28 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useContext} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
+import {AddHabitContext} from '../../contexts/AddHabitContext';
 
-const Schedule = () => {
+const Schedule = ({navigation}) => {
   const scheduleItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
   const ScheduleListItem = ({day}) => {
     const dayText = day == 1 ? 'day' : 'days';
 
+    const setSchedule = () => {
+      setHabitDetails({...habitDetails, schedule: day});
+      navigation.navigate('Main');
+    };
+
     return (
-      <View style={styles.listItem}>
+      <TouchableOpacity style={styles.listItem} onPress={setSchedule}>
         <FontistoIcon
           style={styles.habitIcon}
           name="date"
@@ -19,11 +32,13 @@ const Schedule = () => {
         <Text>
           {day} {dayText}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
   const loadScheduleList = () =>
-    scheduleItems.map((day) => <ScheduleListItem day={day} />);
+    scheduleItems.map((day, index) => (
+      <ScheduleListItem day={day} key={index} />
+    ));
 
   return <ScrollView style={styles.container}>{loadScheduleList()}</ScrollView>;
 };
