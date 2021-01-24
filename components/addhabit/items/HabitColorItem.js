@@ -12,31 +12,60 @@ import {
 import {AddHabitContext} from '../../contexts/AddHabitContext';
 import ColorIcon from '../icons/ColorIcon';
 import {HabitColors} from '../../settings/Colors';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import HabitButton from '../../HabitButton';
 
 const HabitColorItem = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [chosenColor, setChosenColor] = useState(HabitColors.black);
 
-  // return (
-  //   <TouchableOpacity style={styles.listItem} onPress={setSchedule}>
-  //     <FontistoIcon
-  //       style={styles.habitIcon}
-  //       name="date"
-  //       color={'black'}
-  //       size={24}
-  //     />
-  //     <Text>
-  //       {day} {dayText}
-  //     </Text>
-  //   </TouchableOpacity>
-  // );
+  const loadListItems = () => {
+    return Object.keys(habitDetails.colors).map((item) => {
+      let name = item;
+      switch (item) {
+        case 'textColor':
+          name = 'Inactive Text Color';
+          break;
+        case 'backgroundColor':
+          name = 'Inactive Background Color';
+          break;
+        case 'textActiveColor':
+          name = 'Active Background Color';
+          break;
+        case 'backgroundActiveColor':
+          name = 'Active Background Color';
+          break;
+      }
+      return (
+        <TouchableOpacity
+          style={styles.listItem}
+          onPress={() => {
+            setModalVisible(true);
+          }}>
+          <IonIcon
+            style={styles.habitIcon}
+            name="color-palette-outline"
+            color={'black'}
+            size={24}
+          />
+          <Text>{name}</Text>
+          <ColorIcon
+            activeColor={habitDetails.colors[item]}
+            style={styles.colorIcon}
+          />
+        </TouchableOpacity>
+      );
+    });
+  };
 
   const loadHabitColors = () => {
-    return Object.keys(HabitColors).map((color) => {
+    return Object.keys(HabitColors).map((color, index) => {
       return (
         <ColorIcon
-          activeColor={color}
+          key={index}
+          activeColor={HabitColors[color]}
           borderColor="black"
           style={{width: 50, height: 50, margin: 5}}
         />
@@ -63,11 +92,21 @@ const HabitColorItem = ({navigation}) => {
   return (
     <View style={styles.container}>
       {modalItem()}
-      <Button
-        title="Open"
-        onPress={() => {
-          setModalVisible(true);
-        }}></Button>
+      {loadListItems()}
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <HabitButton
+          title="Habit"
+          textColor={habitDetails.colors.textColor}
+          backgroundColor={habitDetails.colors.backgroundColor}
+          textActiveColor={habitDetails.colors.textActiveColor}
+          backgroundActiveColor={habitDetails.colors.backgroundActiveColor}
+        />
+      </View>
     </View>
   );
 };
@@ -123,6 +162,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  colorIcon: {
+    position: 'absolute',
+    marginRight: 3,
+    marginLeft: 'auto',
+    right: 0,
   },
 });
 
