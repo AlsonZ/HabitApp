@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-const ColorIcon = ({activeColor, borderColor}) => {
+const ColorIcon = ({activeColor, borderColor, style}) => {
   return (
     <View
       style={[
@@ -9,20 +9,17 @@ const ColorIcon = ({activeColor, borderColor}) => {
           backgroundColor: activeColor,
           borderColor: borderColor,
         },
+        style,
       ]}></View>
   );
 };
 
 const styles = StyleSheet.create({
   colorIcon: {
-    position: 'absolute',
-    marginRight: 3,
-    marginLeft: 'auto',
     width: 20,
     height: 19,
     borderRadius: 3,
     borderWidth: 1.9,
-    right: 0,
   },
 });
 
