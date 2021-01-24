@@ -12,7 +12,7 @@ import Colors from '../../settings/Colors';
 import {CategoriesContext} from '../../contexts/CategoriesContext';
 import {AddHabitContext} from '../../contexts/AddHabitContext';
 
-const Category = ({navigation}) => {
+const CategoryItem = ({navigation}) => {
   const [categories, setCategories] = useContext(CategoriesContext);
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Category;
+export default CategoryItem;

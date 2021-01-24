@@ -9,7 +9,7 @@ import {
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import {AddHabitContext} from '../../contexts/AddHabitContext';
 
-const Schedule = ({navigation}) => {
+const ScheduleItem = ({navigation}) => {
   const scheduleItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Schedule;
+export default ScheduleItem;
