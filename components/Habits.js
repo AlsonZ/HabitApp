@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import HabitButton from './HabitButton';
-import Colors from './settings/Colors';
+import {DefaultColors as Colors} from './settings/Colors';
 
 const Habits = () => {
   const press = () => {};

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Habits from './Habits';
-import Colors from './settings/Colors';
+import {DefaultColors as Colors} from './settings/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddHabitNav from './addhabit/AddHabitNav';

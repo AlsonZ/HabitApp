@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import Colors from '../settings/Colors';
+import {DefaultColors as Colors} from '../settings/Colors';
 
 export const AddHabitContext = createContext();
 

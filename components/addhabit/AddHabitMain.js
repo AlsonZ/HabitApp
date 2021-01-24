@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Colors from '../settings/Colors';
+import {DefaultColors as Colors} from '../settings/Colors';
 import ColorIcon from './icons/ColorIcon';
 import NumberIcon from './icons/NumberIcon';
 
@@ -107,6 +107,7 @@ const AddHabitMain = ({navigation}) => {
         <ColorIcon
           activeColor={habitDetails.colors.backgroundActiveColor}
           borderColor={Colors.border}
+          style={styles.colorIcon}
         />
       </TouchableOpacity>
 
@@ -171,6 +172,12 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 'auto',
+  },
+  colorIcon: {
+    position: 'absolute',
+    marginRight: 3,
+    marginLeft: 'auto',
+    right: 0,
   },
 });
 

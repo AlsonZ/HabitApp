@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../../settings/Colors';
+import {DefaultColors as Colors} from '../../settings/Colors';
 
 const Category = ({navigation}) => {
   return (
