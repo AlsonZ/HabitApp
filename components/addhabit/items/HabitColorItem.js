@@ -24,13 +24,19 @@ const HabitColorItem = ({navigation}) => {
 
   useEffect(() => {
     if (chosenColor != '') {
-      setHabitDetails((prevState) => ({
-        ...prevState,
-        colors: {
-          ...prevState.colors,
-          [currentEditingColor]: chosenColor,
-        },
-      }));
+      // setHabitDetails((prevState) => ({
+      //   ...prevState,
+      //   colors: {
+      //     ...prevState.colors,
+      //     [currentEditingColor]: chosenColor,
+      //   },
+      // }));
+
+      // this way of updating state keeps existing list order
+      // as react native does not have flex ordering
+      let habitDetailsCopy = Object.assign({}, habitDetails);
+      habitDetailsCopy.colors[currentEditingColor] = chosenColor;
+      setHabitDetails(habitDetailsCopy);
     }
   }, [chosenColor]);
 
