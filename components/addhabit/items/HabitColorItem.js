@@ -99,13 +99,17 @@ const HabitColorItem = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <HabitButton
-          title="Habit"
-          textColor={habitDetails.colors.textColor}
-          backgroundColor={habitDetails.colors.backgroundColor}
-          textActiveColor={habitDetails.colors.textActiveColor}
-          backgroundActiveColor={habitDetails.colors.backgroundActiveColor}
-        />
+        <View style={styles.exampleHabitItemContainer}>
+          <Text>Example Habit Item</Text>
+          <HabitButton
+            title="Habit"
+            textColor={habitDetails.colors.textColor}
+            backgroundColor={habitDetails.colors.backgroundColor}
+            textActiveColor={habitDetails.colors.textActiveColor}
+            backgroundActiveColor={habitDetails.colors.backgroundActiveColor}
+          />
+          <Text style={styles.smallText}>Press Item to show active colors</Text>
+        </View>
       </View>
     </View>
   );
@@ -168,6 +172,15 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginLeft: 'auto',
     right: 0,
+  },
+  exampleHabitItemContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '30%',
+  },
+  smallText: {
+    fontSize: 11,
   },
 });
 
