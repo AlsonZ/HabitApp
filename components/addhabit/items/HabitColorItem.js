@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
   Modal,
@@ -19,10 +19,23 @@ const HabitColorItem = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [chosenColor, setChosenColor] = useState(HabitColors.black);
+  const [chosenColor, setChosenColor] = useState('');
+  const [currentEditingColor, setCurrentEditingColor] = useState('');
+
+  useEffect(() => {
+    if (chosenColor != '') {
+      setHabitDetails((prevState) => ({
+        ...prevState,
+        colors: {
+          ...prevState.colors,
+          [currentEditingColor]: chosenColor,
+        },
+      }));
+    }
+  }, [chosenColor]);
 
   const loadListItems = () => {
-    return Object.keys(habitDetails.colors).map((item) => {
+    return Object.keys(habitDetails.colors).map((item, index) => {
       let name = item;
       switch (item) {
         case 'textColor':
@@ -32,7 +45,7 @@ const HabitColorItem = ({navigation}) => {
           name = 'Inactive Background Color';
           break;
         case 'textActiveColor':
-          name = 'Active Background Color';
+          name = 'Active Text Color';
           break;
         case 'backgroundActiveColor':
           name = 'Active Background Color';
@@ -40,9 +53,11 @@ const HabitColorItem = ({navigation}) => {
       }
       return (
         <TouchableOpacity
+          key={index + item}
           style={styles.listItem}
           onPress={() => {
             setModalVisible(true);
+            setCurrentEditingColor(item);
           }}>
           <IonIcon
             style={styles.habitIcon}
@@ -61,14 +76,20 @@ const HabitColorItem = ({navigation}) => {
   };
 
   const loadHabitColors = () => {
-    return Object.keys(HabitColors).map((color, index) => {
+    return Object.keys(HabitColors).map((colorKey, index) => {
       return (
-        <ColorIcon
-          key={index}
-          activeColor={HabitColors[color]}
-          borderColor="black"
-          style={{width: 50, height: 50, margin: 5}}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            setChosenColor(colorKey);
+            setModalVisible(false);
+          }}>
+          <ColorIcon
+            key={index}
+            activeColor={HabitColors[colorKey]}
+            borderColor="black"
+            style={{width: 50, height: 50, margin: 5}}
+          />
+        </TouchableOpacity>
       );
     });
   };
