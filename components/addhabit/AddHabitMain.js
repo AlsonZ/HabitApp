@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {AddHabitContext} from '../contexts/AddHabitContext';
+import {HabitListContext} from '../contexts/HabitListContext';
 import {
   View,
   Text,
@@ -20,6 +21,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
+  const [habitList, setHabitList] = useContext(HabitListContext);
 
   return (
     <View style={styles.container}>
@@ -126,7 +128,8 @@ const AddHabitMain = ({navigation}) => {
         <NumberIcon number={`0`} borderColor="gray" textColor="gray" />
       </TouchableOpacity>
 
-      <TouchableOpacity
+      {/* Order is only for Editing */}
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate('test')}
         style={styles.habitItem}>
         <IonIcon
@@ -137,12 +140,18 @@ const AddHabitMain = ({navigation}) => {
         />
         <Text style={styles.habitText}>Order</Text>
         <NumberIcon number={habitDetails.order} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
+      <Button
+        title="Create New Habit"
+        onPress={() => {
+          setHabitList((prevState) => [...prevState, habitDetails]);
+        }}></Button>
       <Button
         title="Log Details"
         onPress={() => {
           console.log(habitDetails);
+          console.log(habitList);
         }}></Button>
     </View>
   );

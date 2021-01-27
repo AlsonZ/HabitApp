@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AddHabitMain from './AddHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
+import {HabitListProvider} from '../contexts/HabitListContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 
 import CategoryItem from './items/CategoryItem';
@@ -23,25 +24,27 @@ const AddHabitNav = () => {
   return (
     <CategoriesProvider>
       <AddHabitProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Main"
-            options={{title: 'Create a new Habit'}}
-            component={AddHabitMain}
-          />
-          <Stack.Screen name="test" component={testPage} />
-          <Stack.Screen name="Category" component={CategoryItem} />
-          <Stack.Screen
-            name="Schedule"
-            options={{title: 'Repeat every'}}
-            component={ScheduleItem}
-          />
-          <Stack.Screen
-            name="HabitColorItem"
-            options={{title: 'Select Colors'}}
-            component={HabitColorItem}
-          />
-        </Stack.Navigator>
+        <HabitListProvider>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Main"
+              options={{title: 'Create a new Habit'}}
+              component={AddHabitMain}
+            />
+            <Stack.Screen name="test" component={testPage} />
+            <Stack.Screen name="Category" component={CategoryItem} />
+            <Stack.Screen
+              name="Schedule"
+              options={{title: 'Repeat every'}}
+              component={ScheduleItem}
+            />
+            <Stack.Screen
+              name="HabitColorItem"
+              options={{title: 'Select Colors'}}
+              component={HabitColorItem}
+            />
+          </Stack.Navigator>
+        </HabitListProvider>
       </AddHabitProvider>
     </CategoriesProvider>
   );
