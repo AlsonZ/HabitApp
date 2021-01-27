@@ -85,12 +85,12 @@ const HabitColorItem = ({navigation}) => {
     return Object.keys(HabitColors).map((colorKey, index) => {
       return (
         <TouchableOpacity
+          key={index}
           onPress={() => {
             setChosenColor(colorKey);
             setModalVisible(false);
           }}>
           <ColorIcon
-            key={index}
             activeColor={HabitColors[colorKey]}
             borderColor="black"
             style={{width: 50, height: 50, margin: 5}}
