@@ -26,8 +26,56 @@ const Habits = () => {
     // else return "create a new Habit now + navigation link to add habit screen"
   };
   return (
-    <View>
-      <Button title="Test" style={styles.habitButton}></Button>
+    <View style={styles.container}>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
+      <HabitButton
+        title="Habit"
+        textColor={Colors.gray}
+        backgroundColor={Colors.transparent}
+        textActiveColor={Colors.white}
+        backgroundActiveColor={Colors.blue}
+        onPress={press}></HabitButton>
       <HabitButton
         title="Habit"
         textColor={Colors.gray}
@@ -44,7 +92,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
