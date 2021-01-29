@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const storeHabits = async (value) => {
   try {
-    console.log('Storing: ' + value);
     const jsonValue = JSON.stringify(value);
     console.log('Storing JSON: ' + jsonValue);
     await AsyncStorage.setItem('HabitList', jsonValue);
