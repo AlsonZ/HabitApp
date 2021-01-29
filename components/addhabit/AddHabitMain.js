@@ -19,6 +19,8 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {getHabits, storeHabits} from '../settings/Storage';
+
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
   const [habitList, setHabitList] = useContext(HabitListContext);
@@ -145,13 +147,47 @@ const AddHabitMain = ({navigation}) => {
       <Button
         title="Create New Habit"
         onPress={() => {
-          setHabitList((prevState) => [...prevState, habitDetails]);
+          if (habitList) {
+            setHabitList((prevState) => [...prevState, habitDetails]);
+          } else {
+            setHabitList([habitDetails]);
+          }
         }}></Button>
       <Button
         title="Log Details"
-        onPress={() => {
+        onPress={async () => {
           console.log(habitDetails);
           console.log(habitList);
+          let habits = await getHabits();
+          console.log(habits);
+        }}></Button>
+      <Button
+        title="add to storage"
+        onPress={() => {
+          const data = [
+            {
+              name: 'TEST',
+              category: 'Category',
+              description: 'test',
+              schedule: 1,
+              dailySchedule: 1,
+              colors: {
+                textColor: Colors.gray,
+                backgroundColor: Colors.transparent,
+                textActiveColor: Colors.white,
+                backgroundActiveColor: Colors.red,
+              },
+              order: 1,
+            },
+          ];
+          storeHabits(data);
+        }}></Button>
+      <Button
+        title="get storage"
+        onPress={async () => {
+          let habits = await getHabits();
+          // console.log('habits before1:' + JSON.stringify(habits));
+          console.log('habits before2:' + habits);
         }}></Button>
     </View>
   );
