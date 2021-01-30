@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 
 import {DefaultColors as Colors} from '../settings/Colors';
-import ColorIcon from './icons/ColorIcon';
-import NumberIcon from './icons/NumberIcon';
+import ColorIcon from '../icons/ColorIcon';
+import NumberIcon from '../icons/NumberIcon';
 
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';

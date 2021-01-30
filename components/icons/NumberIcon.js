@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-const ColorIcon = ({number, borderColor, textColor}) => {
+const NumberIcon = ({number, borderColor, textColor}) => {
   if (!borderColor) {
     borderColor = 'black';
   }
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ColorIcon;
+export default NumberIcon;

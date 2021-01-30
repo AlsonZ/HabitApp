@@ -3,7 +3,7 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
-import ColorIcon from './addhabit/icons/ColorIcon';
+import ColorIcon from './icons/ColorIcon';
 
 const Habits = () => {
   const [habitList, setHabitList] = useContext(HabitListContext);

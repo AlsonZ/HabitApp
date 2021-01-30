@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {AddHabitContext} from '../../contexts/AddHabitContext';
-import ColorIcon from '../icons/ColorIcon';
+import ColorIcon from '../../icons/ColorIcon';
 import {HabitColors} from '../../settings/Colors';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import HabitButton from '../../HabitButton';
