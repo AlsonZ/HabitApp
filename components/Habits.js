@@ -3,7 +3,7 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
-import ColorIcon from './icons/ColorIcon';
+import DayIcon from './icons/DayIcon';
 
 const Habits = () => {
   const [habitList, setHabitList] = useContext(HabitListContext);
@@ -41,22 +41,22 @@ const Habits = () => {
       {loadHabits('bottom')}
       <View style={styles.days}>
         <View style={styles.top}>
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
-          <ColorIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} />
         </View>
         <View style={styles.bottom}>
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
-          <ColorIcon style={styles.icon} activeColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} backgroundColor={'blue'} />
         </View>
       </View>
     </View>

@@ -29,18 +29,11 @@ const DayIcon = ({
 
 const styles = StyleSheet.create({
   icon: {
-    position: 'absolute',
-    marginRight: 3,
-    marginLeft: 'auto',
     width: 20,
     height: 19,
     borderRadius: 3,
     borderColor: 'black',
     borderWidth: 1.9,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
