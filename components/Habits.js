@@ -40,23 +40,44 @@ const Habits = () => {
       {loadHabits('top')}
       {loadHabits('bottom')}
       <View style={styles.days}>
+        <Text style={styles.dayTitle}>Day</Text>
         <View style={styles.top}>
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
-          <DayIcon style={styles.icon} />
+          <DayIcon style={styles.icon} number={1} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={2} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={3} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={4} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={5} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={6} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={7} textStyle={styles.iconText} />
         </View>
         <View style={styles.bottom}>
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
-          <DayIcon style={styles.icon} backgroundColor={'blue'} />
+          <DayIcon style={styles.icon} number={8} textStyle={styles.iconText} />
+          <DayIcon style={styles.icon} number={9} textStyle={styles.iconText} />
+          <DayIcon
+            style={styles.icon}
+            number={10}
+            textStyle={styles.iconText}
+          />
+          <DayIcon
+            style={styles.icon}
+            number={11}
+            textStyle={styles.iconText}
+          />
+          <DayIcon
+            style={styles.icon}
+            number={12}
+            textStyle={styles.iconText}
+          />
+          <DayIcon
+            style={styles.icon}
+            number={13}
+            textStyle={styles.iconText}
+          />
+          <DayIcon
+            style={styles.icon}
+            number={14}
+            textStyle={styles.iconText}
+          />
         </View>
       </View>
     </View>
@@ -68,7 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'lightgreen',
   },
   top: {
     display: 'flex',
@@ -89,10 +109,23 @@ const styles = StyleSheet.create({
     // flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  dayTitle: {
+    textAlign: 'center',
+    fontSize: 20,
+  },
   icon: {
     width: 30,
     height: 30,
-    margin: 10,
+    margin: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightgrey',
+  },
+  iconText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
   },
 });
 
