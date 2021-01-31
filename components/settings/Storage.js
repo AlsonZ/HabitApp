@@ -32,7 +32,7 @@ export const setDate = async (value) => {
   }
 };
 
-export const getDate = async (value) => {
+export const getDate = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('HabitDate');
     if (jsonValue != null) {
