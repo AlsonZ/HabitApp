@@ -16,7 +16,7 @@ export const HabitListProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    storeHabits(habitList);
+    // storeHabits(habitList);
   }, [habitList]);
 
   return (

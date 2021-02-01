@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 19,
-    borderRadius: 3,
-    borderColor: 'black',
-    borderWidth: 1.9,
+    // borderRadius: 3,
+    // borderColor: 'black',
+    // borderWidth: 1.9,
   },
 });
 

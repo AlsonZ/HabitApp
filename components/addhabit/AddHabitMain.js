@@ -158,8 +158,8 @@ const AddHabitMain = ({navigation}) => {
         onPress={async () => {
           console.log(habitDetails);
           console.log(habitList);
-          let habits = await getHabits();
-          console.log(habits);
+          // let habits = await getHabits();
+          // console.log(habits);
         }}></Button>
     </View>
   );

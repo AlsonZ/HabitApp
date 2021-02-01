@@ -1,17 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const storeHabits = async (value) => {
+export const storeHabits = async (value, key) => {
   try {
+    key = key ? key : 'Key-Not-Found';
     const jsonValue = JSON.stringify(value);
-    console.log('Storing JSON: ' + jsonValue);
-    await AsyncStorage.setItem('HabitList', jsonValue);
+    console.log(`Storing JSON with key ${key}: ` + jsonValue);
+    await AsyncStorage.setItem('key', jsonValue);
   } catch (e) {
     console.log('Storage STORE Error: ' + e);
   }
 };
-export const getHabits = async () => {
+export const getHabits = async (key) => {
   try {
-    const jsonValue = await AsyncStorage.getItem('HabitList');
+    key = key ? key : 'Key-Not-Found';
+    const jsonValue = await AsyncStorage.getItem(key);
     if (jsonValue != null) {
       return jsonValue;
     } else {
