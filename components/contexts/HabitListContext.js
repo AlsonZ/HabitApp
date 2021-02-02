@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {storeHabits, getHabits} from '../settings/Storage';
+import {storeHabit, getHabit} from '../settings/Storage';
 
 export const HabitListContext = createContext();
 
@@ -8,9 +8,9 @@ export const HabitListProvider = (props) => {
 
   useEffect(() => {
     const getData = async () => {
-      let habitData = await getHabits();
-      let parsedData = JSON.parse(habitData);
-      setHabitList(parsedData);
+      // let habitData = await getHabits();
+      // let parsedData = JSON.parse(habitData);
+      // setHabitList(parsedData);
     };
     getData();
   }, []);

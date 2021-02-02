@@ -53,6 +53,7 @@ export const storeNewHabit = async (habitDetails) => {
   // store the new list of habits
   storeWithKey(habitList, HabitListKey);
   // this then calls a function to store new habit into mutliple smaller scheduled day storages
+  storeScheduledHabits(habitDetails);
 };
 export const getHabit = async (key) => {
   try {
