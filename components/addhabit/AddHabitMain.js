@@ -1,16 +1,19 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {AddHabitContext} from '../contexts/AddHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {
-  View,
-  Text,
   Button,
+  FlatList,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 
 import {DefaultColors as Colors} from '../settings/Colors';
+import ModalItem from '../modal/ModalItem';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
 
@@ -19,14 +22,47 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {getHabits, storeHabits} from '../settings/Storage';
+import {getHabit, storeHabit} from '../settings/Storage';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
-  const [habitList, setHabitList] = useContext(HabitListContext);
+  // const [habitList, setHabitList] = useContext(HabitListContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const scheduleListItem = ({item, index}) => {
+    return (
+      <View>
+        <CheckBox
+          disable={false}
+          value={item.active}
+          onValueChange={(val) => {
+            console.log(item);
+            setHabitDetails((prevState) => {
+              const scheduleCopy = prevState.schedule;
+              scheduleCopy[index].active = val;
+
+              return {
+                ...prevState,
+                schedule: scheduleCopy,
+              };
+            });
+          }}
+        />
+        <Text>{item.day}</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
+      <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
+        <FlatList
+          data={habitDetails.schedule}
+          renderItem={scheduleListItem}
+          keyExtractor={(item) => `${item.day}`}
+          extraData={habitDetails.schedule.active}
+        />
+      </ModalItem>
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
@@ -70,7 +106,9 @@ const AddHabitMain = ({navigation}) => {
           }></TextInput>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Schedule')}
+        onPress={() => {
+          setModalVisible(true);
+        }}
         style={styles.habitItem}>
         <FontistoIcon
           style={styles.habitIcon}
@@ -79,7 +117,12 @@ const AddHabitMain = ({navigation}) => {
           size={24}
         />
         <Text style={styles.habitText}>Schedule</Text>
-        <NumberIcon number={habitDetails.schedule} />
+        <MCIcon
+          style={styles.rightIcon}
+          name="code-greater-than"
+          color={'black'}
+          size={26}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
@@ -147,17 +190,18 @@ const AddHabitMain = ({navigation}) => {
       <Button
         title="Create New Habit"
         onPress={() => {
-          if (habitList) {
-            setHabitList((prevState) => [...prevState, habitDetails]);
-          } else {
-            setHabitList([habitDetails]);
-          }
+          // if (habitList) {
+          //   setHabitList((prevState) => [...prevState, habitDetails]);
+          // } else {
+          //   setHabitList([habitDetails]);
+          // }
+          storeHabit(habitDetails);
         }}></Button>
       <Button
         title="Log Details"
         onPress={async () => {
           console.log(habitDetails);
-          console.log(habitList);
+          // console.log(habitList);
           // let habits = await getHabits();
           // console.log(habits);
         }}></Button>
