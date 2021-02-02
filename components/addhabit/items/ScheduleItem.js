@@ -6,41 +6,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import FontistoIcon from 'react-native-vector-icons/Fontisto';
+import CheckBox from '@react-native-community/checkbox';
 import {AddHabitContext} from '../../contexts/AddHabitContext';
 
-const ScheduleItem = ({navigation}) => {
-  const scheduleItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+const ScheduleItem = ({item, index}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
-  const ScheduleListItem = ({day}) => {
-    const dayText = day == 1 ? 'day' : 'days';
+  return (
+    <View>
+      <CheckBox
+        disable={false}
+        value={item.active}
+        onValueChange={(val) => {
+          console.log(item);
+          setHabitDetails((prevState) => {
+            const scheduleCopy = prevState.schedule;
+            scheduleCopy[index].active = val;
 
-    const setSchedule = () => {
-      setHabitDetails({...habitDetails, schedule: day});
-      navigation.navigate('Main');
-    };
-
-    return (
-      <TouchableOpacity style={styles.listItem} onPress={setSchedule}>
-        <FontistoIcon
-          style={styles.habitIcon}
-          name="date"
-          color={'black'}
-          size={24}
-        />
-        <Text>
-          {day} {dayText}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-  const loadScheduleList = () =>
-    scheduleItems.map((day, index) => (
-      <ScheduleListItem day={day} key={index} />
-    ));
-
-  return <ScrollView style={styles.container}>{loadScheduleList()}</ScrollView>;
+            return {
+              ...prevState,
+              schedule: scheduleCopy,
+            };
+          });
+        }}
+      />
+      <Text>{item.day}</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import ScheduleItem from './items/ScheduleItem';
 
 import {DefaultColors as Colors} from '../settings/Colors';
 import ModalItem from '../modal/ModalItem';
@@ -29,36 +29,12 @@ const AddHabitMain = ({navigation}) => {
   // const [habitList, setHabitList] = useContext(HabitListContext);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const scheduleListItem = ({item, index}) => {
-    return (
-      <View>
-        <CheckBox
-          disable={false}
-          value={item.active}
-          onValueChange={(val) => {
-            console.log(item);
-            setHabitDetails((prevState) => {
-              const scheduleCopy = prevState.schedule;
-              scheduleCopy[index].active = val;
-
-              return {
-                ...prevState,
-                schedule: scheduleCopy,
-              };
-            });
-          }}
-        />
-        <Text>{item.day}</Text>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
         <FlatList
           data={habitDetails.schedule}
-          renderItem={scheduleListItem}
+          renderItem={(props) => <ScheduleItem {...props} />}
           keyExtractor={(item) => `${item.day}`}
           extraData={habitDetails.schedule.active}
         />
