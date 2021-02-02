@@ -27,14 +27,15 @@ const ModalItem = ({children, modalVisible, setModalVisible}) => {
 const styles = StyleSheet.create({
   modalContainer: {
     display: 'flex',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '49%',
   },
   modalView: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    maxHeight: '60%',
     backgroundColor: 'white',
     padding: 35,
     margin: 20,
