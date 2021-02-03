@@ -3,57 +3,64 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {AddHabitContext} from '../../contexts/AddHabitContext';
+import {DefaultColors} from '../../settings/Colors';
 
 const ScheduleItem = ({item, index}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
-  return (
-    <View>
-      <CheckBox
-        disable={false}
-        value={item.active}
-        onValueChange={(val) => {
-          console.log(item);
-          setHabitDetails((prevState) => {
-            const scheduleCopy = prevState.schedule;
-            scheduleCopy[index].active = val;
+  const onPress = (val) => {
+    console.log(item);
+    setHabitDetails((prevState) => {
+      const scheduleCopy = prevState.schedule;
+      scheduleCopy[index].active = val;
 
-            return {
-              ...prevState,
-              schedule: scheduleCopy,
-            };
-          });
-        }}
-      />
-      <Text>{item.day}</Text>
-    </View>
+      return {
+        ...prevState,
+        schedule: scheduleCopy,
+      };
+    });
+  };
+
+  return (
+    <TouchableHighlight
+      underlayColor={DefaultColors.touchableHightlightUnderlay}
+      onPress={() => {
+        onPress(!item.active);
+      }}>
+      <View style={styles.container}>
+        <CheckBox
+          disable={false}
+          value={item.active}
+          onValueChange={(val) => {
+            onPress(val);
+          }}
+        />
+        <Text style={styles.checkBoxText}>Day {item.day}</Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    margin: 17,
-    marginRight: 1,
-  },
-  listItem: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 44,
-    marginBottom: 6,
-    marginRight: 16,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
+    margin: 2,
+    marginLeft: 20,
   },
-  habitIcon: {
-    width: 35,
-    height: 25,
+  checkBoxText: {
+    fontSize: 15,
+    width: '100%',
   },
 });
 
