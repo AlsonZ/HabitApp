@@ -37,9 +37,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     maxHeight: '60%',
     backgroundColor: 'white',
-    padding: 35,
     margin: 20,
-    borderRadius: 20,
+    borderRadius: 5,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
