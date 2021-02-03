@@ -8,11 +8,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import ScheduleItem from './items/ScheduleItem';
 
-import {DefaultColors as Colors} from '../settings/Colors';
+import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
 import ModalItem from '../modal/ModalItem';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
@@ -32,12 +33,25 @@ const AddHabitMain = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
-        <FlatList
-          data={habitDetails.schedule}
-          renderItem={(props) => <ScheduleItem {...props} />}
-          keyExtractor={(item) => `${item.day}`}
-          extraData={habitDetails.schedule.active}
-        />
+        <View>
+          <Text style={styles.modalHeader}>Hi</Text>
+          <FlatList
+            // style={{height: '90%', marginRight: 1}}
+            data={habitDetails.schedule}
+            renderItem={(props) => <ScheduleItem {...props} />}
+            keyExtractor={(item) => `${item.day}`}
+            extraData={habitDetails.schedule.active}
+          />
+          <View style={styles.modalFooter}>
+            <TouchableHighlight
+              underlayColor={DefaultColors.touchableHightlightUnderlay}
+              onPress={() => {
+                setModalVisible(false);
+              }}>
+              <Text style={styles.modalButton}>OK</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
       </ModalItem>
       <View style={styles.habitItem}>
         <MCIcon
@@ -215,6 +229,25 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginLeft: 'auto',
     right: 0,
+  },
+  modalHeader: {
+    // display: 'flex',
+    alignItems: 'center',
+    // width: '100%',
+    margin: 5,
+    marginLeft: 20,
+    fontSize: 18,
+  },
+  modalFooter: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    margin: 3,
+  },
+  modalButton: {
+    padding: 8,
+    paddingHorizontal: 15,
+    marginRight: 5,
+    fontSize: 15,
   },
 });
 
