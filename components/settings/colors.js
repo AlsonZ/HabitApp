@@ -17,6 +17,7 @@ export const DefaultColors = {
   green: 'green',
   transparent: 'rgba(0, 0, 0, 0.1)',
   border: 'black',
+  touchableHightlightUnderlay: 'lightgray',
 };
 
 export const HabitColors = {
