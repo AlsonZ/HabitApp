@@ -4,9 +4,11 @@ import {
   Modal,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {DefaultColors} from '../settings/Colors';
 
 const ModalItem = ({children, modalVisible, setModalVisible}) => {
   return (
@@ -18,7 +20,21 @@ const ModalItem = ({children, modalVisible, setModalVisible}) => {
         <View style={styles.modalOverlay}></View>
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
-        <View style={styles.modalView}>{children}</View>
+        <View style={styles.modalView}>
+          <View>
+            <Text style={styles.modalHeader}>Hi</Text>
+            {children}
+            <View style={styles.modalFooter}>
+              <TouchableHighlight
+                underlayColor={DefaultColors.touchableHightlightUnderlay}
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+                <Text style={styles.modalButton}>OK</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
       </View>
     </Modal>
   );
@@ -56,6 +72,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalHeader: {
+    // display: 'flex',
+    alignItems: 'center',
+    // width: '100%',
+    margin: 5,
+    marginLeft: 20,
+    fontSize: 18,
+  },
+  modalFooter: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    margin: 3,
+  },
+  modalButton: {
+    padding: 8,
+    paddingHorizontal: 15,
+    marginRight: 5,
+    fontSize: 15,
   },
 });
 

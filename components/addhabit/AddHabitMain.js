@@ -33,25 +33,13 @@ const AddHabitMain = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
-        <View>
-          <Text style={styles.modalHeader}>Hi</Text>
-          <FlatList
-            // style={{height: '90%', marginRight: 1}}
-            data={habitDetails.schedule}
-            renderItem={(props) => <ScheduleItem {...props} />}
-            keyExtractor={(item) => `${item.day}`}
-            extraData={habitDetails.schedule.active}
-          />
-          <View style={styles.modalFooter}>
-            <TouchableHighlight
-              underlayColor={DefaultColors.touchableHightlightUnderlay}
-              onPress={() => {
-                setModalVisible(false);
-              }}>
-              <Text style={styles.modalButton}>OK</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
+        <FlatList
+          style={{marginRight: 1}}
+          data={habitDetails.schedule}
+          renderItem={(props) => <ScheduleItem {...props} />}
+          keyExtractor={(item) => `${item.day}`}
+          extraData={habitDetails.schedule.active}
+        />
       </ModalItem>
       <View style={styles.habitItem}>
         <MCIcon
