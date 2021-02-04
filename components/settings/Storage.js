@@ -7,8 +7,8 @@ const storeWithKey = async (value, key) => {
   try {
     key = key ? key : 'Key-Not-Found';
     const jsonValue = JSON.stringify(value);
-    console.log(`Storing JSON with key ${key}: ` + jsonValue);
-    await AsyncStorage.setItem('key', jsonValue);
+    // console.log(`Storing JSON with key ${key}: ` + jsonValue);
+    await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
     console.log('Storage STORE_WITH_KEY Error: ' + e);
   }
@@ -46,9 +46,14 @@ const storeScheduledHabits = async (habitDetails) => {
 };
 
 export const storeNewHabit = async (habitDetails) => {
+  // console.log('storeNewHabit: ' + JSON.stringify(habitDetails));
   // get habits list to modify
   const habitsListJSON = await getWithKey(HabitListKey);
-  const habitList = await JSON.parse(habitsListJSON);
+  let tempHabitList = await JSON.parse(habitsListJSON);
+  if (!tempHabitList) {
+    tempHabitList = [];
+  }
+  const habitList = await tempHabitList;
   // make sure name is not repeated
   let matchingName = false;
   for (habit in habitList) {
@@ -60,6 +65,7 @@ export const storeNewHabit = async (habitDetails) => {
   if (matchingName) {
     return 'Name Matches Existing Habit';
   }
+
   // add habit to general list of habits array
   habitList.push(habitDetails);
   // store the new list of habits
@@ -68,7 +74,7 @@ export const storeNewHabit = async (habitDetails) => {
   storeScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
-  return getWithKey(HabitListKey);
+  return await getWithKey(HabitListKey);
 };
 export const getDayHabit = async (day) => {
   const key = HabitDayKey + day;

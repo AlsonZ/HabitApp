@@ -23,7 +23,7 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {getHabit, storeHabit} from '../settings/Storage';
+import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -176,15 +176,15 @@ const AddHabitMain = ({navigation}) => {
           // } else {
           //   setHabitList([habitDetails]);
           // }
-          storeHabit(habitDetails);
+          storeNewHabit(habitDetails);
         }}></Button>
       <Button
         title="Log Details"
         onPress={async () => {
           console.log(habitDetails);
           // console.log(habitList);
-          // let habits = await getHabits();
-          // console.log(habits);
+          let habits = await getAllHabits();
+          console.log('Getting all Habits: ' + habits[0]);
         }}></Button>
     </View>
   );

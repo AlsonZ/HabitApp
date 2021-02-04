@@ -1,5 +1,5 @@
 import 'react-native';
-import {storeNewHabit} from '../components/settings/Storage';
+import {storeNewHabit, getAllHabits} from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 
 describe('Storage Tests', () => {
@@ -37,8 +37,11 @@ describe('Storage Tests', () => {
     };
     await storeNewHabit(mockHabitDetails);
   });
-  // test('Get With Key', () => {
-  //   const storedItem = Storage.getWithKey(TestStorageKey);
-  //   console.log('Got: ' + storedItem);
-  // });
+  test('Get With Key', async () => {
+    const storedHabitsJSON = await getAllHabits();
+    const storedHabits = JSON.parse(storedHabitsJSON);
+    storedHabits.forEach((habit) => {
+      console.log('Got: ' + habit.name);
+    });
+  });
 });
