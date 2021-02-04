@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HabitListKey = 'List_Of_All_Habits';
+const HabitDayKey = 'Habit_Day_';
 
 const storeWithKey = async (value, key) => {
   try {
@@ -28,8 +29,19 @@ const getWithKey = async (key) => {
 };
 
 const storeScheduledHabits = async (habitDetails) => {
-  // check day/schedule of habit
-  // get the arrays from the day/s
+  // check array of schedule for active days
+  for (let i = 0; i < habitDetails.schedule; i++) {
+    if (habitDetails.schedule[i].active) {
+      const key = HabitDayKey + habitDetails.schedule[i];
+      // get previously stored data
+      const habitDayJSON = await getWithKey(key);
+      const habitDay = await JSON.parse(habitDayJSON);
+      // add new data
+      habitDay.push(habitDetails);
+      // store into storage
+      storeWithKey(habitDay, key);
+    }
+  }
   // normal setItem or multiSetitem depending on days
 };
 
@@ -55,18 +67,12 @@ export const storeNewHabit = async (habitDetails) => {
   // this then calls a function to store new habit into mutliple smaller scheduled day storages
   storeScheduledHabits(habitDetails);
 };
-export const getHabit = async (key) => {
-  try {
-    key = key ? key : 'Key-Not-Found';
-    const jsonValue = await AsyncStorage.getItem(key);
-    if (jsonValue != null) {
-      return jsonValue;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.log('Storage GET Error: ' + e);
-  }
+export const getAllHabits = async () => {
+  return getWithKey(HabitListKey);
+};
+export const getDayHabit = async (day) => {
+  const key = HabitDayKey + day;
+  return getWithKey(key);
 };
 
 export const setDate = async (value) => {
