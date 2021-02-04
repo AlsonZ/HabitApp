@@ -32,7 +32,10 @@ const AddHabitMain = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
+      <ModalItem
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        title={'Scheduled Days'}>
         <FlatList
           style={{marginRight: 1}}
           data={habitDetails.schedule}

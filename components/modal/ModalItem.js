@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {DefaultColors} from '../settings/Colors';
 
-const ModalItem = ({children, modalVisible, setModalVisible}) => {
+const ModalItem = ({children, modalVisible, setModalVisible, title}) => {
   return (
     <Modal visible={modalVisible} animationType="fade" transparent={true}>
       <TouchableWithoutFeedback
@@ -22,7 +22,7 @@ const ModalItem = ({children, modalVisible, setModalVisible}) => {
       <View style={styles.modalContainer}>
         <View style={styles.modalView}>
           <View>
-            <Text style={styles.modalHeader}>Hi</Text>
+            <Text style={styles.modalHeader}>{title}</Text>
             {children}
             <View style={styles.modalFooter}>
               <TouchableHighlight
