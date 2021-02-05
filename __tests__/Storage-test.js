@@ -82,7 +82,7 @@ describe('Storage Tests', () => {
   test('Edit Habit', async () => {
     // edit the previous habit
     const editedHabit = {
-      name: 'Testing Edited Habit',
+      name: 'Testing Habit', // name cannot be changed
       category: 'Testing',
       description: 'This is a mock edited testing habit',
       schedule: [
@@ -120,8 +120,8 @@ describe('Storage Tests', () => {
     expect(storedHabits).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          name: 'Testing Edited Habit',
           description: 'This is a mock edited testing habit',
+          // schedule:
         }),
       ]),
     );
