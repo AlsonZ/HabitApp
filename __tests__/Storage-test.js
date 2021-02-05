@@ -120,8 +120,8 @@ describe('Storage Tests', () => {
     expect(storedHabits).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          name: 'Testing Habit',
-          description: 'This is a mock testing habit',
+          name: 'Testing Edited Habit',
+          description: 'This is a mock edited testing habit',
         }),
       ]),
     );
