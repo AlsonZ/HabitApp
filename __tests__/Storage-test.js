@@ -114,17 +114,21 @@ describe('Storage Tests', () => {
     // view habit and check if it has been edited in habitlist
     const storedHabitsJSON = await getAllHabits();
     const storedHabits = JSON.parse(storedHabitsJSON);
-    // storedHabits.forEach((habit) => {
-    //   console.log('Got: ' + habit.name);
-    // });
+    // expect edited data here
     expect(storedHabits).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           description: 'This is a mock edited testing habit',
-          // schedule:
+          schedule: expect.arrayContaining([
+            expect.objectContaining({day: 2, active: true}),
+            expect.objectContaining({day: 8, active: false}),
+            expect.objectContaining({day: 9, active: false}),
+            expect.objectContaining({day: 13, active: false}),
+          ]),
         }),
       ]),
     );
     // view habit days and check if they have been removed or added
+    // check day 2, 8, 9, 13
   });
 });
