@@ -1,5 +1,9 @@
 import 'react-native';
-import {storeNewHabit, getAllHabits} from '../components/settings/Storage';
+import {
+  storeNewHabit,
+  getAllHabits,
+  getDayHabit,
+} from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 
 describe('Storage Tests', () => {
@@ -43,5 +47,13 @@ describe('Storage Tests', () => {
     storedHabits.forEach((habit) => {
       console.log('Got: ' + habit.name);
     });
+  });
+  test('Get First Day with Key', async () => {
+    const storedHabitsJSON = await getDayHabit(1);
+    const storedHabits = JSON.parse(storedHabitsJSON);
+    console.log(storedHabits);
+    // storedHabits.forEach((habit) => {
+    // console.log('Got First Day: ' + habit.name);
+    // });
   });
 });
