@@ -78,6 +78,19 @@ export const storeNewHabit = async (habitDetails) => {
   // this then calls a function to store new habit into mutliple smaller scheduled day storages
   await storeScheduledHabits(habitDetails);
 };
+export const editHabit = async (habitDetails) => {
+  // get stored data
+  const habitsListJSON = await getWithKey(HabitListKey);
+  const habitList = await JSON.parse(habitsListJSON);
+  // get index of old habit data
+  let index = await habitList.findIndex(
+    (habit) => habit.name === habitDetails.name,
+  );
+  // replace old index object with new object
+  habitList[index] = habitDetails;
+  // store new data
+  await storeWithKey(habitList, HabitListKey);
+};
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
 };
