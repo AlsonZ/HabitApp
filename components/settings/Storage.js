@@ -33,7 +33,6 @@ const storeScheduledHabits = async (habitDetails) => {
   for (let i = 0; i < habitDetails.schedule.length; i++) {
     if (habitDetails.schedule[i].active) {
       const key = HabitDayKey + habitDetails.schedule[i].day;
-      console.log('Storing Day with Key: ' + key);
       // get previously stored data
       const habitDayJSON = await getWithKey(key);
       let tempHabitData = await JSON.parse(habitDayJSON);
@@ -41,8 +40,10 @@ const storeScheduledHabits = async (habitDetails) => {
         tempHabitData = [];
       }
       const habitDay = await tempHabitData;
+      // make habit data smaller for individual days
+      const {category, schedule, ...reducedHabitDetails} = habitDetails;
       // add new data
-      habitDay.push(habitDetails);
+      habitDay.push(reducedHabitDetails);
       // store into storage
       await storeWithKey(habitDay, key);
     }
@@ -51,7 +52,6 @@ const storeScheduledHabits = async (habitDetails) => {
 };
 
 export const storeNewHabit = async (habitDetails) => {
-  // console.log('storeNewHabit: ' + JSON.stringify(habitDetails));
   // get habits list to modify
   const habitsListJSON = await getWithKey(HabitListKey);
   let tempHabitList = await JSON.parse(habitsListJSON);
@@ -83,7 +83,6 @@ export const getAllHabits = async () => {
 };
 export const getDayHabit = async (day) => {
   const key = HabitDayKey + day;
-  console.log('Get with key: ' + key);
   return getWithKey(key);
 };
 
