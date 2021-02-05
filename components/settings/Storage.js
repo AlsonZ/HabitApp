@@ -44,7 +44,7 @@ const storeScheduledHabits = async (habitDetails) => {
       // add new data
       habitDay.push(habitDetails);
       // store into storage
-      storeWithKey(habitDay, key);
+      await storeWithKey(habitDay, key);
     }
   }
   // normal setItem or multiSetitem depending on days
@@ -74,9 +74,9 @@ export const storeNewHabit = async (habitDetails) => {
   // add habit to general list of habits array
   habitList.push(habitDetails);
   // store the new list of habits
-  storeWithKey(habitList, HabitListKey);
+  await storeWithKey(habitList, HabitListKey);
   // this then calls a function to store new habit into mutliple smaller scheduled day storages
-  storeScheduledHabits(habitDetails);
+  await storeScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
