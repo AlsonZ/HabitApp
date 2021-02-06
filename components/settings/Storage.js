@@ -55,7 +55,8 @@ const deleteScheduledHabits = async (habitDetails) => {
     // get array data
     const key = HabitDayKey + habitDetails.schedule[i].day;
     const habitDayJSON = await getWithKey(key);
-    const habitDayData = await JSON.parse(habitDayJSON);
+    const tempHabitDayData = await JSON.parse(habitDayJSON);
+    const habitDayData = (await tempHabitDayData) ? tempHabitDayData : [];
     // find matching name
     let index = await habitDayData.findIndex(
       (habit) => habit.name === habitDetails.name,
@@ -71,7 +72,7 @@ const editScheduledHabits = async (habitDetails) => {
   // delete old
   await deleteScheduledHabits(habitDetails);
   // store new
-  storeScheduledHabits(habitDetails);
+  await storeScheduledHabits(habitDetails);
 };
 
 export const storeNewHabit = async (habitDetails) => {
@@ -114,7 +115,7 @@ export const editHabit = async (habitDetails) => {
   // store new data
   await storeWithKey(habitList, HabitListKey);
   // edit/replace the day storages
-  editScheduledHabits(habitDetails);
+  await editScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
