@@ -129,6 +129,60 @@ describe('Storage Tests', () => {
       ]),
     );
     // view habit days and check if they have been removed or added
+  });
+  test('Check edited individual days', async () => {
+    // habit already edited due to previous test
     // check day 2, 8, 9, 13
+    // const editedDaysArray = [2, 8, 9, 13];
+    // const storedHabitsJSON = await getDayHabit(1);
+    // const storedHabits = JSON.parse(storedHabitsJSON);
+    // console.log(storedHabits);
+    // expect(storedHabits).toEqual(
+    //   expect.arrayContaining([
+    //     expect.objectContaining({
+    //       name: 'Testing Habit',
+    //       description: 'This is a mock edited testing habit',
+    //     }),
+    //   ]),
+    // );
+    const schedule = [
+      {day: 1, active: true},
+      {day: 2, active: true},
+      {day: 3, active: true},
+      {day: 4, active: true},
+      {day: 5, active: true},
+      {day: 6, active: true},
+      {day: 7, active: true},
+      {day: 8, active: false},
+      {day: 9, active: false},
+      {day: 10, active: true},
+      {day: 11, active: true},
+      {day: 12, active: true},
+      {day: 13, active: false},
+      {day: 14, active: true},
+    ];
+    for (let i = 0; i < schedule.length; i++) {
+      const storedHabitsJSON = await getDayHabit(schedule[i]);
+      const storedHabits = JSON.parse(storedHabitsJSON);
+      if (schedule[i].active) {
+        expect(storedHabits).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: 'Testing Habit',
+              description: 'This is a mock edited testing habit',
+            }),
+          ]),
+        );
+      } else {
+        expect(storedHabits).not.toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: 'Testing Habit',
+              description: 'This is a mock edited testing habit',
+            }),
+          ]),
+        );
+      }
+    }
   });
 });
