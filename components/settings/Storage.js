@@ -50,6 +50,17 @@ const storeScheduledHabits = async (habitDetails) => {
   }
   // normal setItem or multiSetitem depending on days
 };
+const deleteScheduledHabits = async (habitDetails) => {
+  // get array data
+  // find matching name
+  // delete object from array
+};
+const editScheduledHabits = async (habitDetails) => {
+  // delete old
+  await deleteScheduledHabits(habitDetails);
+  // store new
+  storeScheduledHabits(habitDetails);
+};
 
 export const storeNewHabit = async (habitDetails) => {
   // get habits list to modify
@@ -91,6 +102,7 @@ export const editHabit = async (habitDetails) => {
   // store new data
   await storeWithKey(habitList, HabitListKey);
   // edit/replace the day storages
+  editScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
