@@ -90,13 +90,14 @@ export const editHabit = async (habitDetails) => {
   habitList[index] = habitDetails;
   // store new data
   await storeWithKey(habitList, HabitListKey);
+  // edit/replace the day storages
 };
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
 };
 export const getDayHabit = async (day) => {
   const key = HabitDayKey + day;
-  return getWithKey(key);
+  return await getWithKey(key);
 };
 
 export const setDate = async (value) => {
