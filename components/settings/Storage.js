@@ -17,6 +17,7 @@ const storeWithKey = async (value, key) => {
 const getWithKey = async (key) => {
   try {
     key = key ? key : 'Key-Not-Found';
+    // console.log('Called with: ' + key);
     const jsonValue = await AsyncStorage.getItem(key);
     if (jsonValue != null) {
       return jsonValue;

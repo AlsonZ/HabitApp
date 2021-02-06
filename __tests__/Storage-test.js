@@ -93,20 +93,22 @@ describe('Storage Tests', () => {
       }
     }
   });
-  test('Get With Key', async () => {
-    const storedHabitsJSON = await getAllHabits();
-    const storedHabits = JSON.parse(storedHabitsJSON);
-    storedHabits.forEach((habit) => {
-      console.log('Got: ' + habit.name);
-    });
+  test('Get All Habits', async () => {
+    // const storedHabitsJSON =
+    await getAllHabits();
+    // const storedHabits = JSON.parse(storedHabitsJSON);
+
+    expect(AsyncStorage.getItem).lastCalledWith(HabitListKey);
   });
-  test('Get First Day with Key', async () => {
-    const storedHabitsJSON = await getDayHabit(1);
-    const storedHabits = JSON.parse(storedHabitsJSON);
-    console.log(storedHabits);
-    // storedHabits.forEach((habit) => {
-    // console.log('Got First Day: ' + habit.name);
-    // });
+  test('Get Days with Key', async () => {
+    for (let i = 0; i < mockHabitDetails.schedule.length; i++) {
+      // const storedHabitsJSON =
+      await getDayHabit(mockHabitDetails.schedule[i].day);
+      // const storedHabits = JSON.parse(storedHabitsJSON);
+      expect(AsyncStorage.getItem).lastCalledWith(
+        HabitDayKey + mockHabitDetails.schedule[i].day,
+      );
+    }
   });
   test('Edit Habit', async () => {
     // edit the previous habit
