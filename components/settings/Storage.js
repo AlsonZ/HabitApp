@@ -51,9 +51,21 @@ const storeScheduledHabits = async (habitDetails) => {
   // normal setItem or multiSetitem depending on days
 };
 const deleteScheduledHabits = async (habitDetails) => {
-  // get array data
-  // find matching name
-  // delete object from array
+  for (let i = 0; i < habitDetails.schedule.length; i++) {
+    // get array data
+    const key = HabitDayKey + habitDetails.schedule[i].day;
+    const habitDayJSON = await getWithKey(key);
+    const habitDayData = await JSON.parse(habitDayJSON);
+    // find matching name
+    let index = await habitDayData.findIndex(
+      (habit) => habit.name === habitDetails.name,
+    );
+    // delete object from array
+    if (index !== -1) {
+      habitDayData.pop(index);
+      await storeWithKey(habitDayData, key);
+    }
+  }
 };
 const editScheduledHabits = async (habitDetails) => {
   // delete old
