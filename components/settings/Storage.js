@@ -118,6 +118,21 @@ export const editHabit = async (habitDetails) => {
   // edit/replace the day storages
   await editScheduledHabits(habitDetails);
 };
+export const deleteHabit = async (habitDetails) => {
+  // get stored data
+  const habitsListJSON = await getWithKey(HabitListKey);
+  const habitList = await JSON.parse(habitsListJSON);
+  // get index
+  let index = await habitList.findIndex(
+    (habit) => habit.name === habitDetails.name,
+  );
+  // pop from array
+  await habitList.pop(index);
+  // store
+  await storeWithKey(habitList, HabitListKey);
+  // remove from days
+  deleteScheduledHabits(habitDetails);
+};
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
 };
