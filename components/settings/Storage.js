@@ -141,25 +141,30 @@ export const getDayHabit = async (day) => {
   return await getWithKey(key);
 };
 
-export const setDate = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    console.log('Storing Date JSON: ' + jsonValue);
-    await AsyncStorage.setItem('HabitDate', jsonValue);
-  } catch (e) {
-    console.log('Storage STORE Error: ' + e);
-  }
-};
+// export const setDate = async (value) => {
+//   try {
+//     const jsonValue = JSON.stringify(value);
+//     console.log('Storing Date JSON: ' + jsonValue);
+//     await AsyncStorage.setItem('HabitDate', jsonValue);
+//   } catch (e) {
+//     console.log('Storage STORE Error: ' + e);
+//   }
+// };
 
 export const getDate = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('HabitDate');
-    if (jsonValue != null) {
-      return jsonValue;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.log('Storage GET Error: ' + e);
-  }
+  const date = new Date();
+  const dateData = {
+    dateObject: date, // is UTC in vsCode console
+    toString: date.toString(),
+    toDateString: date.toDateString(),
+    toTimeString: date.toTimeString(),
+    localeString: date.toLocaleString(),
+    toUTCString: date.toUTCString(),
+  };
+
+  return dateData;
+};
+
+export const getLatestHabitData = async () => {
+  return await habitData;
 };
