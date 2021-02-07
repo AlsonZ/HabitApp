@@ -4,6 +4,7 @@ import {
   getAllHabits,
   getDayHabit,
   editHabit,
+  deleteHabit,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -159,5 +160,18 @@ describe('Storage Tests', () => {
         );
       }
     }
+  });
+  test('Delete Habit', async () => {
+    await deleteHabit(mockHabitDetails); // same name
+    const storedHabitsJSON = await getAllHabits();
+    const storedHabits = JSON.parse(storedHabitsJSON);
+    expect(storedHabits).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'Testing Habit',
+          description: 'This is a mock edited testing habit',
+        }),
+      ]),
+    );
   });
 });
