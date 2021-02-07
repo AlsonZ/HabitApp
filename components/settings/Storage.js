@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HabitListKey = 'List_Of_All_Habits';
 const HabitDayKey = 'Habit_Day_';
+const PastHabitKey = 'Past_Habit_Data';
 
 const storeWithKey = async (value, key) => {
   try {
@@ -151,20 +152,23 @@ export const getDayHabit = async (day) => {
 //   }
 // };
 
-export const getDate = async () => {
+export const getDate = () => {
   const date = new Date();
-  const dateData = {
-    dateObject: date, // is UTC in vsCode console
-    toString: date.toString(),
-    toDateString: date.toDateString(),
-    toTimeString: date.toTimeString(),
-    localeString: date.toLocaleString(),
-    toUTCString: date.toUTCString(),
-  };
+  // const dateData = {
+  //   dateObject: date, // is UTC in vsCode console
+  //   toString: date.toString(),
+  //   toDateString: date.toDateString(),
+  //   toTimeString: date.toTimeString(),
+  //   localeString: date.toLocaleString(),
+  //   toUTCString: date.toUTCString(),
+  // };
 
-  return dateData;
+  return date;
 };
 
 export const getLatestHabitData = async () => {
-  return await habitData;
+  const tempPastHabitData = await getWithKey(PastHabitKey);
+  const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
+  const latestHabitData = pastHabitData[pastHabitData.length - 1];
+  return latestHabitData;
 };
