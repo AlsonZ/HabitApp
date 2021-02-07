@@ -169,9 +169,24 @@ describe('Storage Tests', () => {
       expect.arrayContaining([
         expect.objectContaining({
           name: 'Testing Habit',
-          description: 'This is a mock edited testing habit',
         }),
       ]),
     );
+  });
+  test('Check deleted individual days', async () => {
+    const schedule = editedHabit.schedule;
+    for (let i = 0; i < schedule.length; i++) {
+      const storedHabitsJSON = await getDayHabit(schedule[i].day);
+      const storedHabits = await JSON.parse(storedHabitsJSON);
+      if (schedule[i].active) {
+        expect(storedHabits).not.toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: 'Testing Habit',
+            }),
+          ]),
+        );
+      }
+    }
   });
 });
