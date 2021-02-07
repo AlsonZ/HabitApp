@@ -131,7 +131,7 @@ export const deleteHabit = async (habitDetails) => {
   // store
   await storeWithKey(habitList, HabitListKey);
   // remove from days
-  deleteScheduledHabits(habitDetails);
+  await deleteScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
   return await getWithKey(HabitListKey);
