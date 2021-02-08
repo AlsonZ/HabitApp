@@ -38,31 +38,41 @@ export const HabitListProvider = (props) => {
       const latestHabitData = tempLatestHabitData
         ? tempLatestHabitData
         : {
-            startDate: date.toUTCString(),
-            endDate: endDate.toUTCString(),
-            latestDate: date.toUTCString(),
+            startDate: date,
+            endDate: endDate,
+            latestDate: date,
             habitDays: [],
           };
 
       console.log(latestHabitData);
-      // const endDate = latestHabitData.endDate;
-      // const startNewSection = () => {};
-      // check if any days have already been done
-      // if (latestHabitData.habitDays.length > 0) {
-      // } else if (latestHabitData.habitDays.length >= 14) {
-      // check if latestHabitData is > 14 (which means it has finished)
-      // }
-      // if(endDate )
-
-      // get latestHabitData finish date
-      // if latestHabitData finish date < current date (then start new spring AND check if current date is only 1 day ahead)
-      // if it is > 1 day ahead, check how many days and input habits accordingly.
-
-      // if latestHabitData < 14 (currently in a spring)
-      // load latestHabitData until max, get current day it is up to, check date is only 1 day ahead of last known date
-      // if more than 1 day head, check and input habits accordingly
-      // if it turns out to be more than 14 days then start a new section
-      // if it not more than load up old data until finished, then load new habits
+      const startNewSection = () => {};
+      // data exists
+      if (latestHabitData.habitDays.length > 0) {
+        // max size
+        if (latestHabitData.habitDays.length >= 14) {
+          startNewSection();
+        }
+        // is in previous section
+        if (
+          date <= latestHabitData.endDate &&
+          date >= latestHabitData.startDate
+        ) {
+          // load previous section data
+          // load new habit data
+          // set loaded date as current date, dont use days as it is unreliable
+        } else {
+          // finish off old section and begin new section
+          // also need to load up from previous endDate to current date in the new section
+          // It is possible that multiple sections may have passed.
+          // startNewSection();
+        }
+        // previous habit data does not exist
+      } else if (latestHabitData.habitDays.length <= 0) {
+        startNewSection();
+        // add day 1 to habitDays of latest data? or do this elsewhere such as when content has been loaded and then do it
+        // that part will just be useeffect triggered on change of habitlist items and also will update the saved data
+        // my habit object also need an active/not active variable to show previously completed habits
+      }
     };
     getData();
   }, []);
