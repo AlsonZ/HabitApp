@@ -4,6 +4,7 @@ import {
   getHabit,
   getDate,
   getLatestHabitData,
+  getDayHabit,
 } from '../settings/Storage';
 
 export const HabitListContext = createContext();
@@ -45,7 +46,14 @@ export const HabitListProvider = (props) => {
           };
 
       console.log(latestHabitData);
-      const startNewSection = () => {};
+      const startNewSection = () => {
+        for(let i = 1; i<= 14; i++) {
+          // get habit day data
+          const habitDay = await getDayHabit(i);
+          // insert into habitlist
+          setHabitList((prevState)=>[...prevState, habitDay])
+        }
+      };
       // data exists
       if (latestHabitData.habitDays.length > 0) {
         // max size
