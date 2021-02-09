@@ -46,12 +46,15 @@ export const HabitListProvider = (props) => {
           };
 
       console.log(latestHabitData);
-      const startNewSection = () => {
-        for(let i = 1; i<= 14; i++) {
+      const startNewSection = async () => {
+        //cleanup old data
+        setHabitList([]);
+        for (let i = 1; i <= 14; i++) {
           // get habit day data
-          const habitDay = await getDayHabit(i);
+          const habitDayJSON = await getDayHabit(i);
+          const habitDay = JSON.parse(habitDayJSON);
           // insert into habitlist
-          setHabitList((prevState)=>[...prevState, habitDay])
+          setHabitList((prevState) => [...prevState, habitDay]);
         }
       };
       // data exists
