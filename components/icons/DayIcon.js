@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const DayIcon = ({
   number,
   borderColor,
@@ -7,6 +7,7 @@ const DayIcon = ({
   backgroundColor,
   style,
   textStyle,
+  onPress,
 }) => {
   if (!borderColor) {
     borderColor = 'black';
@@ -16,14 +17,15 @@ const DayIcon = ({
   }
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
       style={[
         styles.icon,
         {borderColor: borderColor, backgroundColor: backgroundColor},
         style,
       ]}>
       <Text style={({color: textColor}, textStyle)}>{number}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
