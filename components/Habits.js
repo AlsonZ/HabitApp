@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
@@ -7,42 +7,80 @@ import DayIcon from './icons/DayIcon';
 
 const Habits = () => {
   const [habitList, setHabitList] = useContext(HabitListContext);
-
-  const loadHabits = (section) => {
-    if (habitList) {
-      let indents = [];
-      const habitsToLoad = 4;
-      const startHabitIndex = section == 'top' ? 0 : 4;
-      const maxLoaded = startHabitIndex + habitsToLoad;
-      const maximumLoadedHabits =
-        habitList.length > maxLoaded ? maxLoaded : habitList.length;
-      for (let i = startHabitIndex; i < maximumLoadedHabits; i++) {
-        indents.push(
-          <HabitButton
-            key={i + habitList[i].name}
-            title={habitList[i].name}
-            textColor={habitList[i].colors.textColor}
-            backgroundColor={habitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
-            textActiveColor={habitList[i].colors.textActiveColor}
-            backgroundActiveColor={habitList[i].colors.backgroundActiveColor}
-            onPress={() => {
-              console.log(`Pressed ${habitList[i].name}`);
-            }}></HabitButton>,
-        );
-      }
-      // return indents;
-      return <View style={[styles[section]]}>{indents}</View>;
+  const [currentlyLoadedHabits, setCurrentlyLoadedHabits] = useState(
+    <View style={styles.container}></View>,
+  );
+  // const loadHabits = (section) => {
+  //   if (habitList) {
+  //     let indents = [];
+  //     const habitsToLoad = 4;
+  //     const startHabitIndex = section == 'top' ? 0 : 4;
+  //     const maxLoaded = startHabitIndex + habitsToLoad;
+  //     const maximumLoadedHabits =
+  //       habitList.length > maxLoaded ? maxLoaded : habitList.length;
+  //     for (let i = startHabitIndex; i < maximumLoadedHabits; i++) {
+  //       indents.push(
+  //         <HabitButton
+  //           key={i + habitList[i].name}
+  //           title={habitList[i].name}
+  //           textColor={habitList[i].colors.textColor}
+  //           backgroundColor={habitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
+  //           textActiveColor={habitList[i].colors.textActiveColor}
+  //           backgroundActiveColor={habitList[i].colors.backgroundActiveColor}
+  //           onPress={() => {
+  //             console.log(`Pressed ${habitList[i].name}`);
+  //           }}></HabitButton>,
+  //       );
+  //     }
+  //     // return indents;
+  //     return <View style={[styles[section]]}>{indents}</View>;
+  //   }
+  //   // else return "create a new Habit now + navigation link to add habit screen"
+  // };
+  const loadHabits = (day) => {
+    const loadingHabitList = habitList[day];
+    let indents = [];
+    for (let i = 0; i < loadingHabitList.length; i++) {
+      indents.push(
+        <HabitButton
+          key={loadingHabitList[i].name + i}
+          title={loadingHabitList[i].name}
+          textColor={loadingHabitList[i].colors.textColor}
+          backgroundColor={loadingHabitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
+          textActiveColor={loadingHabitList[i].colors.textActiveColor}
+          backgroundActiveColor={
+            loadingHabitList[i].colors.backgroundActiveColor
+          }
+          onPress={() => {
+            console.log(`Pressed ${loadingHabitList[i].name}`);
+          }}></HabitButton>,
+      );
     }
-    // else return "create a new Habit now + navigation link to add habit screen"
+    setCurrentlyLoadedHabits(<View style={styles.container}>{indents}</View>);
   };
   return (
     <View style={styles.container}>
-      {loadHabits('top')}
-      {loadHabits('bottom')}
+      {/* {loadHabits('top')} */}
+      {/* {loadHabits('bottom')} */}
+      {currentlyLoadedHabits}
       <View style={styles.days}>
+        <Button
+          title="test"
+          onPress={() => {
+            habitList.forEach((habit) => {
+              console.log(habit);
+            });
+          }}></Button>
         <Text style={styles.dayTitle}>Day</Text>
         <View style={styles.top}>
-          <DayIcon style={styles.icon} number={1} textStyle={styles.iconText} />
+          <DayIcon
+            onPress={() => {
+              loadHabits(0);
+            }}
+            style={styles.icon}
+            number={1}
+            textStyle={styles.iconText}
+          />
           <DayIcon style={styles.icon} number={2} textStyle={styles.iconText} />
           <DayIcon style={styles.icon} number={3} textStyle={styles.iconText} />
           <DayIcon style={styles.icon} number={4} textStyle={styles.iconText} />
