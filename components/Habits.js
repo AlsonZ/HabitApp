@@ -1,5 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View, Text, Button} from 'react-native';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
@@ -10,6 +10,7 @@ const Habits = () => {
   const [currentlyLoadedHabits, setCurrentlyLoadedHabits] = useState(
     <View style={styles.container}></View>,
   );
+  const [scheduleIcons, setScheduleIcons] = useState([]);
   // const loadHabits = (section) => {
   //   if (habitList) {
   //     let indents = [];
@@ -37,7 +38,8 @@ const Habits = () => {
   //   }
   //   // else return "create a new Habit now + navigation link to add habit screen"
   // };
-  const loadHabits = (day) => {
+  const loadHabits = (index) => {
+    const day = index - 1;
     const loadingHabitList = habitList[day];
     let indents = [];
     for (let i = 0; i < loadingHabitList.length; i++) {
@@ -58,6 +60,35 @@ const Habits = () => {
     }
     setCurrentlyLoadedHabits(<View style={styles.container}>{indents}</View>);
   };
+  useEffect(() => {
+    const generateScheduleIcons = () => {
+      let data = [];
+      for (let i = 1; i <= 14; i++) {
+        data.push({
+          number: i,
+          textStyle: styles.iconText,
+          style: styles.icon,
+          onPress: () => {
+            loadHabits(i);
+          },
+        });
+      }
+      return data;
+    };
+    setScheduleIcons(generateScheduleIcons());
+  }, []);
+  const loadDayIcons = () => {
+    return (
+      <FlatList
+        contentContainerStyle={styles.listContainer}
+        numColumns={7}
+        data={scheduleIcons}
+        renderItem={(props) => <DayIcon {...props} />}
+        keyExtractor={(item) => `${item.number}`}
+        extraData={scheduleIcons}
+      />
+    );
+  };
   return (
     <View style={styles.container}>
       {/* {loadHabits('top')} */}
@@ -68,55 +99,12 @@ const Habits = () => {
           title="test"
           onPress={() => {
             habitList.forEach((habit) => {
-              console.log(habit);
+              // console.log(habit);
+              console.log(scheduleIcons);
             });
           }}></Button>
-        <Text style={styles.dayTitle}>Day</Text>
-        <View style={styles.top}>
-          <DayIcon
-            onPress={() => {
-              loadHabits(0);
-            }}
-            style={styles.icon}
-            number={1}
-            textStyle={styles.iconText}
-          />
-          <DayIcon style={styles.icon} number={2} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={3} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={4} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={5} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={6} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={7} textStyle={styles.iconText} />
-        </View>
-        <View style={styles.bottom}>
-          <DayIcon style={styles.icon} number={8} textStyle={styles.iconText} />
-          <DayIcon style={styles.icon} number={9} textStyle={styles.iconText} />
-          <DayIcon
-            style={styles.icon}
-            number={10}
-            textStyle={styles.iconText}
-          />
-          <DayIcon
-            style={styles.icon}
-            number={11}
-            textStyle={styles.iconText}
-          />
-          <DayIcon
-            style={styles.icon}
-            number={12}
-            textStyle={styles.iconText}
-          />
-          <DayIcon
-            style={styles.icon}
-            number={13}
-            textStyle={styles.iconText}
-          />
-          <DayIcon
-            style={styles.icon}
-            number={14}
-            textStyle={styles.iconText}
-          />
-        </View>
+        <Text style={styles.dayTitle}>Schedule</Text>
+        {loadDayIcons()}
       </View>
     </View>
   );
@@ -128,19 +116,24 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
-  top: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 'auto',
+  listContainer: {
+    alignItems: 'center',
   },
-  bottom: {
-    // flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 'auto',
-  },
+  // top: {
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   marginBottom: 'auto',
+  //   backgroundColor: 'red',
+  // },
+  // bottom: {
+  //   // flex: 1,
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   marginTop: 'auto',
+  // },
   days: {
     display: 'flex',
     flexDirection: 'column',
