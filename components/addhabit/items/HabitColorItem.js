@@ -14,6 +14,7 @@ import ColorIcon from '../../icons/ColorIcon';
 import {HabitColors} from '../../settings/Colors';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import HabitButton from '../../HabitButton';
+import ModalItem from '../../modal/ModalItem';
 
 const HabitColorItem = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
@@ -100,25 +101,11 @@ const HabitColorItem = ({navigation}) => {
     });
   };
 
-  const modalItem = () => {
-    return (
-      <Modal visible={modalVisible} animationType="fade" transparent={true}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setModalVisible(false);
-          }}>
-          <View style={styles.modalOverlay}></View>
-        </TouchableWithoutFeedback>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>{loadHabitColors()}</View>
-        </View>
-      </Modal>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      {modalItem()}
+      <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
+        <View style={styles.modalView}>{loadHabitColors()}</View>
+      </ModalItem>
       {loadListItems()}
       <View
         style={{
@@ -162,37 +149,13 @@ const styles = StyleSheet.create({
     width: 35,
     height: 25,
   },
-  modalContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '49%',
-  },
   modalView: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     backgroundColor: 'white',
     padding: 35,
-    margin: 20,
-    borderRadius: 20,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   colorIcon: {
     position: 'absolute',
