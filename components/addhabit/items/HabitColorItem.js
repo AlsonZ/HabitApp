@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 35,
     alignItems: 'center',
+    borderRadius: 5,
   },
   colorIcon: {
     position: 'absolute',
