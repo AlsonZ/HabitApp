@@ -35,7 +35,9 @@ const AddHabitMain = ({navigation}) => {
       <ModalItem
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={'Scheduled Days'}>
+        title={'Scheduled Days'}
+        modalHeader={true}
+        modalFooter={true}>
         <FlatList
           style={{marginRight: 1}}
           data={habitDetails.schedule}
