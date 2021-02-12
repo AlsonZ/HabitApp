@@ -47,20 +47,22 @@ export const HabitListProvider = (props) => {
 
       console.log(latestHabitData);
       const startNewSection = async () => {
-        //cleanup old data
-        setHabitList([]);
+        const tempHabitList = [];
         for (let i = 1; i <= 14; i++) {
           // get habit day data
           const habitDayJSON = await getDayHabit(i);
           const habitDay = JSON.parse(habitDayJSON);
-          // insert into habitlist
-          setHabitList((prevState) => [...prevState, habitDay]);
+          // insert into temp array
+          tempHabitList.push(habitDay);
         }
+        setHabitList(tempHabitList);
       };
       // data exists
       if (latestHabitData.habitDays.length > 0) {
+        console.log('>0');
         // max size
         if (latestHabitData.habitDays.length >= 14) {
+          console.log('>=14');
           startNewSection();
         }
         // is in previous section
@@ -68,10 +70,12 @@ export const HabitListProvider = (props) => {
           date <= latestHabitData.endDate &&
           date >= latestHabitData.startDate
         ) {
+          console.log('inside previous section date');
           // load previous section data
           // load new habit data
           // set loaded date as current date, dont use days as it is unreliable
         } else {
+          console.log('not inside previous section date');
           // finish off old section and begin new section
           // also need to load up from previous endDate to current date in the new section
           // It is possible that multiple sections may have passed.
@@ -79,6 +83,7 @@ export const HabitListProvider = (props) => {
         }
         // previous habit data does not exist
       } else if (latestHabitData.habitDays.length <= 0) {
+        console.log('<=0');
         startNewSection();
         // add day 1 to habitDays of latest data? or do this elsewhere such as when content has been loaded and then do it
         // that part will just be useeffect triggered on change of habitlist items and also will update the saved data
