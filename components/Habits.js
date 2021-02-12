@@ -11,33 +11,6 @@ const Habits = () => {
     <View style={styles.container}></View>,
   );
   const [scheduleIcons, setScheduleIcons] = useState([]);
-  // const loadHabits = (section) => {
-  //   if (habitList) {
-  //     let indents = [];
-  //     const habitsToLoad = 4;
-  //     const startHabitIndex = section == 'top' ? 0 : 4;
-  //     const maxLoaded = startHabitIndex + habitsToLoad;
-  //     const maximumLoadedHabits =
-  //       habitList.length > maxLoaded ? maxLoaded : habitList.length;
-  //     for (let i = startHabitIndex; i < maximumLoadedHabits; i++) {
-  //       indents.push(
-  //         <HabitButton
-  //           key={i + habitList[i].name}
-  //           title={habitList[i].name}
-  //           textColor={habitList[i].colors.textColor}
-  //           backgroundColor={habitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
-  //           textActiveColor={habitList[i].colors.textActiveColor}
-  //           backgroundActiveColor={habitList[i].colors.backgroundActiveColor}
-  //           onPress={() => {
-  //             console.log(`Pressed ${habitList[i].name}`);
-  //           }}></HabitButton>,
-  //       );
-  //     }
-  //     // return indents;
-  //     return <View style={[styles[section]]}>{indents}</View>;
-  //   }
-  //   // else return "create a new Habit now + navigation link to add habit screen"
-  // };
   const loadHabits = (index) => {
     const day = index - 1;
     const loadingHabitList = habitList[day];
@@ -58,9 +31,12 @@ const Habits = () => {
           }}></HabitButton>,
       );
     }
-    setCurrentlyLoadedHabits(<View style={styles.container}>{indents}</View>);
+    setCurrentlyLoadedHabits(
+      <View style={styles.habitContainer}>{indents}</View>,
+    );
   };
   useEffect(() => {
+    console.log('runs useEffect');
     const generateScheduleIcons = () => {
       let data = [];
       for (let i = 1; i <= 14; i++) {
@@ -76,7 +52,7 @@ const Habits = () => {
       return data;
     };
     setScheduleIcons(generateScheduleIcons());
-  }, []);
+  }, [habitList]);
   const loadDayIcons = () => {
     return (
       <FlatList
@@ -91,16 +67,13 @@ const Habits = () => {
   };
   return (
     <View style={styles.container}>
-      {/* {loadHabits('top')} */}
-      {/* {loadHabits('bottom')} */}
       {currentlyLoadedHabits}
       <View style={styles.days}>
         <Button
           title="test"
           onPress={() => {
-            habitList.forEach((habit) => {
-              // console.log(habit);
-              console.log(scheduleIcons);
+            habitList.forEach((habit, index) => {
+              console.log(index + habit);
             });
           }}></Button>
         <Text style={styles.dayTitle}>Schedule</Text>
@@ -119,25 +92,16 @@ const styles = StyleSheet.create({
   listContainer: {
     alignItems: 'center',
   },
-  // top: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginBottom: 'auto',
-  //   backgroundColor: 'red',
-  // },
-  // bottom: {
-  //   // flex: 1,
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   marginTop: 'auto',
-  // },
+  habitContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flex: 1,
+    alignItems: 'center',
+  },
   days: {
     display: 'flex',
     flexDirection: 'column',
-    // flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   dayTitle: {
