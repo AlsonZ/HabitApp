@@ -3,7 +3,7 @@ import {
   storeHabit,
   getHabit,
   getDate,
-  getLatestHabitData,
+  getLatestPastHabitData,
   getDayHabit,
 } from '../settings/Storage';
 
@@ -27,17 +27,13 @@ export const HabitListProvider = (props) => {
 
   useEffect(() => {
     const getData = async () => {
-      // let habitData = await getHabits();
-      // let parsedData = JSON.parse(habitData);
-      // setHabitList(parsedData);
-      // const fourteenDays = 12096e5;
       const date = getDate();
       // console.log(date);
-      const tempLatestHabitData = await getLatestHabitData();
+      const tempLatestPastHabitData = await getLatestPastHabitData();
       const endDate = new Date(date.toUTCString());
       endDate.setDate(endDate.getDate() + 14);
-      const latestHabitData = tempLatestHabitData
-        ? tempLatestHabitData
+      const latestPastHabitData = tempLatestPastHabitData
+        ? tempLatestPastHabitData
         : {
             startDate: date,
             endDate: endDate,
@@ -45,7 +41,7 @@ export const HabitListProvider = (props) => {
             habitDays: [],
           };
 
-      console.log(latestHabitData);
+      console.log(latestPastHabitData);
       const startNewSection = async () => {
         const tempHabitList = [];
         for (let i = 1; i <= 14; i++) {
@@ -58,17 +54,17 @@ export const HabitListProvider = (props) => {
         setHabitList(tempHabitList);
       };
       // data exists
-      if (latestHabitData.habitDays.length > 0) {
+      if (latestPastHabitData.habitDays.length > 0) {
         console.log('>0');
         // max size
-        if (latestHabitData.habitDays.length >= 14) {
+        if (latestPastHabitData.habitDays.length >= 14) {
           console.log('>=14');
           startNewSection();
         }
         // is in previous section
         if (
-          date <= latestHabitData.endDate &&
-          date >= latestHabitData.startDate
+          date <= latestPastHabitData.endDate &&
+          date >= latestPastHabitData.startDate
         ) {
           console.log('inside previous section date');
           // load previous section data
@@ -82,7 +78,7 @@ export const HabitListProvider = (props) => {
           // startNewSection();
         }
         // previous habit data does not exist
-      } else if (latestHabitData.habitDays.length <= 0) {
+      } else if (latestPastHabitData.habitDays.length <= 0) {
         console.log('<=0');
         startNewSection();
         // add day 1 to habitDays of latest data? or do this elsewhere such as when content has been loaded and then do it

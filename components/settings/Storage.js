@@ -189,7 +189,7 @@ export const editPastHabitData = async (habitData) => {
   await storeWithKey(pastHabitData, PastHabitKey);
 };
 
-export const getLatestHabitData = async () => {
+export const getLatestPastHabitData = async () => {
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
   const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
