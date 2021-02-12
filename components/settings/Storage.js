@@ -166,8 +166,32 @@ export const getDate = () => {
   return date;
 };
 
+export const storeNewPastHabitData = async (habitData) => {
+  const pastHabitDataJSON = await getWithKey(PastHabitKey);
+  const tempPastHabitData = JSON.parse(pastHabitDataJSON);
+  const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
+  pastHabitData.push(habitData);
+  await storeWithKey(pastHabitData, PastHabitKey);
+};
+
+export const editPastHabitData = async (habitData) => {
+  // get data
+  const pastHabitDataJSON = await getWithKey(PastHabitKey);
+  const pastHabitData = JSON.parse(pastHabitDataJSON);
+  // get index of old data
+  // can possibly use the last index, but index is more secure
+  let index = await pastHabitData.findIndex(
+    (pastHabit) => pastHabit.startDate === habitData.startDate,
+  );
+  // replace old index object with new object
+  pastHabitData[index] = habitData;
+  // store new data
+  await storeWithKey(pastHabitData, PastHabitKey);
+};
+
 export const getLatestHabitData = async () => {
-  const tempPastHabitData = await getWithKey(PastHabitKey);
+  const pastHabitDataJSON = await getWithKey(PastHabitKey);
+  const tempPastHabitData = JSON.parse(pastHabitDataJSON);
   const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
   const latestHabitData = pastHabitData[pastHabitData.length - 1];
   return latestHabitData;
