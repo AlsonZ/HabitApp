@@ -5,6 +5,8 @@ import {
   getDayHabit,
   editHabit,
   deleteHabit,
+  getDate,
+  storeNewPastHabitData,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 describe('Storage Tests', () => {
   const HabitListKey = 'List_Of_All_Habits';
   const HabitDayKey = 'Habit_Day_';
+  const PastHabitKey = 'Past_Habit_Data';
+
   const mockHabitDetails = {
     name: 'Testing Habit',
     category: 'Testing',
@@ -188,5 +192,25 @@ describe('Storage Tests', () => {
         );
       }
     }
+  });
+  test('Add new Past Habit Data', async () => {
+    const date = getDate();
+    const {schedule, category, ...reducedHabitData} = mockHabitDetails;
+    const endDate = new Date(date.toUTCString());
+    endDate.setDate(endDate.getDate() + 14);
+    const habitData = {
+      startDate: date,
+      endDate: endDate,
+      latestDate: date,
+      habitDays: [
+        [{name: 'day1 habit1'}, {name: 'day1 habit2'}],
+        [{name: 'day2 habit1'}, {name: 'day2 habit2'}],
+      ],
+    };
+    await storeNewPastHabitData(habitData);
+    expect(AsyncStorage.setItem).lastCalledWith(
+      PastHabitKey,
+      JSON.stringify([habitData]),
+    );
   });
 });
