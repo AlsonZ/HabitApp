@@ -243,13 +243,15 @@ describe('Storage Tests', () => {
 
     expect(latestPastHabitData).toEqual(
       expect.objectContaining({
-        startDate: date,
+        startDate: date.toISOString(),
         habitDays: expect.arrayContaining([
           expect.arrayContaining([
             expect.objectContaining({
               name: 'day1 habit1',
               active: true,
             }),
+          ]),
+          expect.arrayContaining([
             expect.objectContaining({
               name: 'day2 habit1',
               active: false,
