@@ -142,7 +142,7 @@ export const getDayHabit = async (day) => {
   return await getWithKey(key);
 };
 
-// export const setDate = async (value) => {
+// export const setLastRecordedDate = async (value) => {
 //   try {
 //     const jsonValue = JSON.stringify(value);
 //     console.log('Storing Date JSON: ' + jsonValue);
@@ -154,16 +154,7 @@ export const getDayHabit = async (day) => {
 
 export const getDate = () => {
   const date = new Date();
-  // const dateData = {
-  //   dateObject: date, // is UTC in vsCode console
-  //   toString: date.toString(),
-  //   toDateString: date.toDateString(),
-  //   toTimeString: date.toTimeString(),
-  //   localeString: date.toLocaleString(),
-  //   toUTCString: date.toUTCString(),
-  // };
-
-  return date;
+  return date.toISOString();
 };
 
 export const storeNewPastHabitData = async (habitData) => {
