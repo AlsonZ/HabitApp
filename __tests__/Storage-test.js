@@ -7,6 +7,8 @@ import {
   deleteHabit,
   getDate,
   storeNewPastHabitData,
+  getLatestPastHabitData,
+  editPastHabitData,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,7 +17,10 @@ describe('Storage Tests', () => {
   const HabitListKey = 'List_Of_All_Habits';
   const HabitDayKey = 'Habit_Day_';
   const PastHabitKey = 'Past_Habit_Data';
-
+  const date = getDate();
+  // const {schedule, category, ...reducedHabitData} = mockHabitDetails;
+  const endDate = new Date(date.toUTCString());
+  endDate.setDate(endDate.getDate() + 14);
   const mockHabitDetails = {
     name: 'Testing Habit',
     category: 'Testing',
@@ -73,6 +78,36 @@ describe('Storage Tests', () => {
       backgroundActiveColor: Colors.blue,
     },
     order: 1,
+  };
+  const habitData = {
+    startDate: date,
+    endDate: endDate,
+    latestDate: date,
+    habitDays: [
+      [
+        {name: 'day1 habit1', active: false},
+        {name: 'day1 habit2', active: true},
+      ],
+      [
+        {name: 'day2 habit1', active: true},
+        {name: 'day2 habit2', active: false},
+      ],
+    ],
+  };
+  const editedhabitData = {
+    startDate: date,
+    endDate: endDate,
+    latestDate: date,
+    habitDays: [
+      [
+        {name: 'day1 habit1', active: true},
+        {name: 'day1 habit2', active: true},
+      ],
+      [
+        {name: 'day2 habit1', active: false},
+        {name: 'day2 habit2', active: false},
+      ],
+    ],
   };
   test('Store New Habit', async () => {
     await storeNewHabit(mockHabitDetails);
@@ -194,23 +229,34 @@ describe('Storage Tests', () => {
     }
   });
   test('Add new Past Habit Data', async () => {
-    const date = getDate();
-    const {schedule, category, ...reducedHabitData} = mockHabitDetails;
-    const endDate = new Date(date.toUTCString());
-    endDate.setDate(endDate.getDate() + 14);
-    const habitData = {
-      startDate: date,
-      endDate: endDate,
-      latestDate: date,
-      habitDays: [
-        [{name: 'day1 habit1'}, {name: 'day1 habit2'}],
-        [{name: 'day2 habit1'}, {name: 'day2 habit2'}],
-      ],
-    };
     await storeNewPastHabitData(habitData);
     expect(AsyncStorage.setItem).lastCalledWith(
       PastHabitKey,
       JSON.stringify([habitData]),
+    );
+  });
+  test('Edit Past Habit Data', async () => {
+    await editPastHabitData(editedhabitData);
+
+    const latestPastHabitData = await getLatestPastHabitData();
+    console.log(latestPastHabitData);
+
+    expect(latestPastHabitData).toEqual(
+      expect.objectContaining({
+        startDate: date,
+        habitDays: expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: 'day1 habit1',
+              active: true,
+            }),
+            expect.objectContaining({
+              name: 'day2 habit1',
+              active: false,
+            }),
+          ]),
+        ]),
+      }),
     );
   });
 });
