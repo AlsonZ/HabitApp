@@ -180,9 +180,11 @@ export const editPastHabitData = async (habitData) => {
   const pastHabitData = JSON.parse(pastHabitDataJSON);
   // get index of old data
   // can possibly use the last index, but index is more secure
-  let index = await pastHabitData.findIndex(
-    (pastHabit) => pastHabit.startDate === habitData.startDate,
-  );
+  let index = await pastHabitData.findIndex((pastHabit) => {
+    pastHabitDate = new Date(pastHabit.startDate);
+    habitDataDate = new Date(habitData.startDate);
+    return pastHabitDate.getTime() === habitDataDate.getTime();
+  });
   // replace old index object with new object
   pastHabitData[index] = habitData;
   // store new data
