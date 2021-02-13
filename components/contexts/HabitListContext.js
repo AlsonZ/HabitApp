@@ -13,16 +13,8 @@ export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
 
   // const exampleData = [
-  //   {
-  //     day: 1,
-  //     date: '',
-  //     habitData: {},
-  //   },
-  //   {
-  //     day: 2,
-  //     date: '',
-  //     habitData: {},
-  //   },
+  //   [{name: 'day1 habit1'}, {name: 'day1 habit2'}],
+  //   [{name: 'day2 habit1'}, {name: 'day2 habit2'}]
   // ];
 
   useEffect(() => {
@@ -30,13 +22,13 @@ export const HabitListProvider = (props) => {
       const date = getDate();
       // console.log(date);
       const tempLatestPastHabitData = await getLatestPastHabitData();
-      const endDate = new Date(date.toUTCString());
+      const endDate = new Date(date);
       endDate.setDate(endDate.getDate() + 14);
       const latestPastHabitData = tempLatestPastHabitData
         ? tempLatestPastHabitData
         : {
             startDate: date,
-            endDate: endDate,
+            endDate: endDate.toISOString(),
             latestDate: date,
             habitDays: [],
           };

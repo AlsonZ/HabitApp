@@ -19,7 +19,7 @@ describe('Storage Tests', () => {
   const PastHabitKey = 'Past_Habit_Data';
   const date = getDate();
   // const {schedule, category, ...reducedHabitData} = mockHabitDetails;
-  const endDate = new Date(date.toUTCString());
+  const endDate = new Date(date);
   endDate.setDate(endDate.getDate() + 14);
   const mockHabitDetails = {
     name: 'Testing Habit',
@@ -81,7 +81,7 @@ describe('Storage Tests', () => {
   };
   const habitData = {
     startDate: date,
-    endDate: endDate,
+    endDate: endDate.toISOString(),
     latestDate: date,
     habitDays: [
       [
@@ -96,7 +96,7 @@ describe('Storage Tests', () => {
   };
   const editedhabitData = {
     startDate: date,
-    endDate: endDate,
+    endDate: endDate.toISOString(),
     latestDate: date,
     habitDays: [
       [
@@ -243,7 +243,7 @@ describe('Storage Tests', () => {
 
     expect(latestPastHabitData).toEqual(
       expect.objectContaining({
-        startDate: date.toISOString(),
+        startDate: date,
         habitDays: expect.arrayContaining([
           expect.arrayContaining([
             expect.objectContaining({
