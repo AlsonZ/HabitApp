@@ -287,7 +287,15 @@ describe('Date Tests', () => {
     const dateDifference = 30;
     const date1MonthLater = addDateDifference(dateDifference);
     const difference = getDateDifference(date, date1MonthLater);
-    console.log(date1MonthLater.toISOString());
     expect(difference).toEqual(dateDifference);
+  });
+  test('Get Date Difference with different hours', () => {
+    const [year, month, dayTime] = date.split('-');
+    const [day, time] = dayTime.split('T');
+    const dateWithDifferentHour = new Date(
+      Date.UTC(year, month - 1, day, 3, 24, 0),
+    );
+    const difference = getDateDifference(date, dateWithDifferentHour);
+    expect(difference).toBeLessThan(1);
   });
 });
