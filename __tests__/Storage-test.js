@@ -262,3 +262,12 @@ describe('Storage Tests', () => {
     );
   });
 });
+
+describe('Date Tests', () => {
+  test('Get Date is correct', () => {
+    const date = getDate();
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    expect(date).toEqual(today.toISOString());
+  });
+});
