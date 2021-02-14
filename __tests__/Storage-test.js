@@ -9,6 +9,7 @@ import {
   storeNewPastHabitData,
   getLatestPastHabitData,
   editPastHabitData,
+  getDateDifference,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -264,10 +265,22 @@ describe('Storage Tests', () => {
 });
 
 describe('Date Tests', () => {
+  const date = getDate();
+  const addDateDifference = (dateDifference) => {
+    const differentDate = new Date(date);
+    differentDate.setDate(differentDate.getDate() + dateDifference);
+    return differentDate;
+  };
+
   test('Get Date is correct', () => {
-    const date = getDate();
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     expect(date).toEqual(today.toISOString());
+  });
+  test('Get Date Difference', () => {
+    const dateDifference = 7;
+    const date1WeekLater = addDateDifference(dateDifference);
+    const difference = getDateDifference(date, date1WeekLater);
+    expect(difference).toEqual(dateDifference);
   });
 });
