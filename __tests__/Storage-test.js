@@ -283,4 +283,11 @@ describe('Date Tests', () => {
     const difference = getDateDifference(date, date1WeekLater);
     expect(difference).toEqual(dateDifference);
   });
+  test('Get Date Difference with more than 1 month', () => {
+    const dateDifference = 30;
+    const date1MonthLater = addDateDifference(dateDifference);
+    const difference = getDateDifference(date, date1MonthLater);
+    console.log(date1MonthLater.toISOString());
+    expect(difference).toEqual(dateDifference);
+  });
 });
