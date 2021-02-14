@@ -154,7 +154,20 @@ export const getDayHabit = async (day) => {
 
 export const getDate = () => {
   const date = new Date();
+  // set to midnight of the current day (past, not future)
+  date.setUTCHours(0, 0, 0, 0);
   return date.toISOString();
+};
+
+const treatAsUTC = (date) => {
+  const result = new Date(date);
+  result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+  return result;
+};
+
+export const getDateDifference = (startDate, endDate) => {
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
 };
 
 export const storeNewPastHabitData = async (habitData) => {
