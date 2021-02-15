@@ -298,4 +298,10 @@ describe('Date Tests', () => {
     const difference = getDateDifference(date, dateWithDifferentHour);
     expect(difference).toBeLessThan(1);
   });
+  test('Get Date Difference with future date as startDate', () => {
+    const dateDifference = -7;
+    const date1WeekPrev = addDateDifference(dateDifference);
+    const difference = getDateDifference(date, date1WeekPrev);
+    expect(difference).toEqual(dateDifference);
+  });
 });
