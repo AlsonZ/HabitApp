@@ -10,6 +10,8 @@ import {
   getLatestPastHabitData,
   editPastHabitData,
   getDateDifference,
+  getPastHabitData,
+  deleteAllPastHabitData,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -201,6 +203,22 @@ describe('Storage Tests', () => {
       }
     }
   });
+  test('Store another New Habit', async () => {
+    const {...mockHabitDetails2} = mockHabitDetails;
+    mockHabitDetails2.name = 'Testing Second Habit';
+    await storeNewHabit(mockHabitDetails2);
+
+    const habitDetailsJSON = await getAllHabits();
+    const habitDetails = JSON.parse(habitDetailsJSON);
+
+    expect(habitDetails).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: mockHabitDetails2.name,
+        }),
+      ]),
+    );
+  });
   test('Delete Habit', async () => {
     await deleteHabit(mockHabitDetails); // same name
     const storedHabitsJSON = await getAllHabits();
@@ -240,7 +258,7 @@ describe('Storage Tests', () => {
     await editPastHabitData(editedhabitData);
 
     const latestPastHabitData = await getLatestPastHabitData();
-    console.log(latestPastHabitData);
+    // console.log(latestPastHabitData);
 
     expect(latestPastHabitData).toEqual(
       expect.objectContaining({
