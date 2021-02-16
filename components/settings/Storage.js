@@ -65,7 +65,7 @@ const deleteScheduledHabits = async (habitDetails) => {
     );
     // delete object from array
     if (index !== -1) {
-      habitDayData.pop(index);
+      habitDayData.splice(index, 1);
       await storeWithKey(habitDayData, key);
     }
   }
@@ -86,15 +86,18 @@ export const storeNewHabit = async (habitDetails) => {
   }
   const habitList = await tempHabitList;
   // make sure name is not repeated
-  let matchingName = false;
-  for (habit in habitList) {
-    if (habit.name == habitDetails.name) {
-      matchingName = true;
-      break;
+  if (tempHabitList) {
+    // console.log(habitList);
+    let matchingName = false;
+    for (habit in habitList) {
+      if (habit.name == habitDetails.name) {
+        matchingName = true;
+        break;
+      }
     }
-  }
-  if (matchingName) {
-    return 'Name Matches Existing Habit';
+    if (matchingName) {
+      return 'Name Matches Existing Habit';
+    }
   }
 
   // add habit to general list of habits array
@@ -127,8 +130,8 @@ export const deleteHabit = async (habitDetails) => {
   let index = await habitList.findIndex(
     (habit) => habit.name === habitDetails.name,
   );
-  // pop from array
-  await habitList.pop(index);
+  // remove from array
+  await habitList.splice(index, 1);
   // store
   await storeWithKey(habitList, HabitListKey);
   // remove from days
@@ -195,10 +198,30 @@ export const editPastHabitData = async (habitData) => {
   await storeWithKey(pastHabitData, PastHabitKey);
 };
 
+export const getPastHabitData = async () => {
+  const pastHabitDataJSON = await getWithKey(PastHabitKey);
+  const tempPastHabitData = JSON.parse(pastHabitDataJSON);
+  const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
+  return pastHabitData;
+};
+
 export const getLatestPastHabitData = async () => {
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
   const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
   const latestHabitData = pastHabitData[pastHabitData.length - 1];
+  // console.log('this is past habit data: ' + pastHabitDataJSON);
+  // console.log(latestHabitData);
   return latestHabitData;
+};
+
+export const deleteAllPastHabitData = async () => {
+  // await storeWithKey([], PastHabitKey);
+  try {
+    console.log('deleting all habit data');
+    await AsyncStorage.removeItem(PastHabitKey);
+    console.log('finished deleting');
+  } catch (e) {
+    console.log('delete past habit data error: ' + e);
+  }
 };
