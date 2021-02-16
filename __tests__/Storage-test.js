@@ -203,6 +203,11 @@ describe('Storage Tests', () => {
       }
     }
   });
+  test('Store duplicate habit', async () => {
+    const success = await storeNewHabit(mockHabitDetails);
+
+    expect(success).toEqual('Name Matches Existing Habit');
+  });
   test('Store another New Habit', async () => {
     const {...mockHabitDetails2} = mockHabitDetails;
     mockHabitDetails2.name = 'Testing Second Habit';
