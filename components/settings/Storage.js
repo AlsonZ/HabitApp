@@ -89,7 +89,7 @@ export const storeNewHabit = async (habitDetails) => {
   if (tempHabitList) {
     // console.log(habitList);
     let matchingName = false;
-    for (habit in habitList) {
+    for (habit of habitList) {
       if (habit.name == habitDetails.name) {
         matchingName = true;
         break;
@@ -106,6 +106,7 @@ export const storeNewHabit = async (habitDetails) => {
   await storeWithKey(habitList, HabitListKey);
   // this then calls a function to store new habit into mutliple smaller scheduled day storages
   await storeScheduledHabits(habitDetails);
+  return 'Success';
 };
 export const editHabit = async (habitDetails) => {
   // get stored data
