@@ -172,13 +172,16 @@ const AddHabitMain = ({navigation}) => {
 
       <Button
         title="Create New Habit"
-        onPress={() => {
-          // if (habitList) {
-          //   setHabitList((prevState) => [...prevState, habitDetails]);
-          // } else {
-          //   setHabitList([habitDetails]);
-          // }
-          storeNewHabit(habitDetails);
+        onPress={async () => {
+          const success = await storeNewHabit(habitDetails);
+          if (success === 'Success') {
+            // show modal popup for success with 3 buttons
+            // one to go to home, other to continue making duplicate habit
+            // one to start new
+          } else if (success === 'Name Matches Existing Habit') {
+            //show modal popup for error
+            console.log(success);
+          }
         }}></Button>
       <Button
         title="Log Details"
