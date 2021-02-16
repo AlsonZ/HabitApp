@@ -14,6 +14,9 @@ export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
+  const [prevHabitList, setPrevHabitList] = useState([]);
+  const [newHabitList, setNewHabitList] = useState([]);
+  const [currentDay, setCurrentDay] = useState(0);
   const [pastHabitData, setPastHabitData] = useState({});
   const [isNewPastHabitData, setIsNewPastHabitData] = useState(true);
   const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
@@ -28,22 +31,27 @@ export const HabitListProvider = (props) => {
 
   const storeDayInPastData = async () => {
     if (pastHabitData) {
-      console.log('storing in past data' + pastHabitData);
+      // clone pastHabitData as it should be immutable
+      const pastHabitDataClone = pastHabitData;
+      console.log('storing in past data: ' + pastHabitDataClone);
       // get dates and convert into date Object
       const today = new Date(date);
-      const startDate = new Date(pastHabitData.startDate);
       // compare today to startDate of latestPastHabitData
+      const startDate = new Date(pastHabitDataClone.startDate);
       const difference = getDateDifference(startDate, today);
+      // set new latest date for past habit data
+      pastHabitDataClone.latestDate = date;
+
       // negative = startDate is in the future, positive = today is n days ahead of startDate
       // replace habitDays array in previous data with new array
       // this allows modification of previous days
-      // >= 0 means it also stores today
+      // >= 0 means it also stores up until today
       if (difference >= 0) {
         let newHabitDays = [];
         for (let i = 0; i <= difference; i++) {
           newHabitDays.push(habitList[i]);
         }
-        pastHabitData.habitDays = newHabitDays;
+        pastHabitDataClone.habitDays = newHabitDays;
       } else {
         // this should not happen
         // error message?
@@ -51,10 +59,10 @@ export const HabitListProvider = (props) => {
       }
       if (isNewPastHabitData) {
         console.log('New past data');
-        storeNewPastHabitData(pastHabitData);
+        storeNewPastHabitData(pastHabitDataClone);
       } else if (!isNewPastHabitData) {
         console.log('edit past data');
-        editPastHabitData(pastHabitData);
+        editPastHabitData(pastHabitDataClone);
       }
     }
   };
@@ -93,9 +101,37 @@ export const HabitListProvider = (props) => {
         setHabitList(tempHabitList);
         // store the newly created day
       };
+      // const calculateDateDifferenceToday = () => {
+      //   const today = new Date(date);
+      //   const startDate = new Date(latestPastHabitData.startDate);
+      //   // compare today to startDate of latestPastHabitData
+      //   const difference = getDateDifference(startDate, today);
+      //   setCurrentDay(difference);
+      //   return difference;
+      // };
+      const generatePrevHabitList = async (pastHabitData) => {
+        const tempList = [];
+        for (let i = 0; i < pastHabitData.habitDays.length; i++) {
+          tempList.push(pastHabitData.habitDays[i]);
+        }
+        setPrevHabitList(tempList);
+      };
+      const generateNewHabitList = async (pastHabitData) => {
+        const length = pastHabitData.habitDays
+          ? pastHabitData.habitDays.length
+          : 1;
+        const tempList = [];
+        for (let day = length + 1; day <= 14; day++) {
+          const habitDayJSON = await getDayHabit(day);
+          const habitDay = JSON.parse(habitDayJSON);
+          tempList.push(habitDay);
+        }
+        setNewHabitList(tempList);
+      };
       // data exists
       if (latestPastHabitData.habitDays.length > 0) {
         console.log('>0');
+        // const difference = calculateDateDifferenceToday();
         // max size
         if (latestPastHabitData.habitDays.length >= 14) {
           console.log('>=14');
@@ -107,15 +143,19 @@ export const HabitListProvider = (props) => {
           date >= latestPastHabitData.startDate
         ) {
           console.log('inside previous section date');
-          // load previous section data
-          // load new habit data
+          await generatePrevHabitList(latestPastHabitData);
+          await generateNewHabitList(latestPastHabitData);
+          // const tempHabitList = await createCombinedSection(difference);
+          // setHabitList(tempHabitList);
           // set loaded date as current date, dont use days as it is unreliable
         } else {
           console.log('not inside previous section date');
           // finish off old section and begin new section
+          await generatePrevHabitList(latestPastHabitData);
+          await generateNewHabitList(latestPastHabitData);
           // also need to load up from previous endDate to current date in the new section
           // It is possible that multiple sections may have passed.
-          // startNewSection();
+          startNewSection();
         }
         // previous habit data does not exist
       } else if (latestPastHabitData.habitDays.length <= 0) {
@@ -131,13 +171,20 @@ export const HabitListProvider = (props) => {
   }, []);
 
   useEffect(() => {
+    if (initialUseEffectHasRun && newHabitList) {
+      console.log(!!newHabitList);
+      const tempList = prevHabitList.concat(newHabitList);
+      setHabitList(tempList);
+    }
+  }, [newHabitList]);
+
+  useEffect(() => {
     if (initialUseEffectHasRun) {
       storeDayInPastData();
     }
   }, [habitList]);
-
   return (
-    <HabitListContext.Provider value={[habitList, setHabitList]}>
+    <HabitListContext.Provider value={[habitList, setHabitList, currentDay]}>
       {props.children}
     </HabitListContext.Provider>
   );
