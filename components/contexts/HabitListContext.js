@@ -47,8 +47,13 @@ export const HabitListProvider = (props) => {
       // this allows modification of previous days
       // >= 0 means it also stores up until today
       if (difference >= 0) {
+        // const maxDays = 14;
+        // if(difference<=14) {
+        //   maxDays = difference;
+        // }
+        const maxDays = difference <= 14 ? difference : 14;
         let newHabitDays = [];
-        for (let i = 0; i <= difference; i++) {
+        for (let i = 0; i <= maxDays; i++) {
           newHabitDays.push(habitList[i]);
         }
         pastHabitDataClone.habitDays = newHabitDays;
