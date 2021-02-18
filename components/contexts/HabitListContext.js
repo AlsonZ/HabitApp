@@ -151,6 +151,26 @@ export const HabitListProvider = (props) => {
           await storeEditedPastData(latestPastHabitData, comboList);
           // also need to load up from previous endDate to current date in the new section
           // It is possible that multiple sections may have passed.
+          // check difference by every 14 days
+          // then multiply 14x to get new startDate
+          const oldStartDate = new Date(latestPastHabitData.startDate);
+          const today = new Date(date);
+          const difference = getDateDifference(oldStartDate, today);
+          const multiplier = parseInt(difference / 14);
+          // create new start date
+          const newStartDate = new Date(oldStartDate.toISOString());
+          newStartDate.setDate(newStartDate.getDate() + 14 * multiplier);
+          // create new end date
+          const newEndDate = new Date(newStartDate.toISOString());
+          newEndDate.setDate(newEndDate.getDate() + 14);
+
+          const newHabitData = {
+            startDate: newStartDate.toISOString(),
+            endDate: newEndDate.toISOString(),
+            latestDate: date,
+            habitDays: [],
+          };
+          setPastHabitData(newHabitData);
 
           startNewSection();
         }
