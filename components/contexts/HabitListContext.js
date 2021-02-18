@@ -14,8 +14,6 @@ export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
-  const [prevHabitList, setPrevHabitList] = useState([]);
-  const [newHabitList, setNewHabitList] = useState([]);
   const [currentDay, setCurrentDay] = useState(0);
   const [pastHabitData, setPastHabitData] = useState({});
   const [isNewPastHabitData, setIsNewPastHabitData] = useState(true);
@@ -29,45 +27,45 @@ export const HabitListProvider = (props) => {
   //   [{name: 'day2 habit1'}, {name: 'day2 habit2'}]
   // ];
 
-  const storeDayInPastData = async () => {
-    if (pastHabitData) {
+  const loadHabitList = async (prevList, newList) => {
+    const tempList = prevList.concat(newList);
+    setHabitList(tempList);
+  };
+
+  const storeEditedPastData = async (pastData, habitListData) => {
+    if (pastData) {
       // clone pastHabitData as it should be immutable
-      const pastHabitDataClone = pastHabitData;
-      console.log('storing in past data: ' + pastHabitDataClone);
+      const pastHabitDataCopy = pastData;
+      console.log('storing in past data: ' + pastHabitDataCopy);
       // get dates and convert into date Object
       const today = new Date(date);
       // compare today to startDate of latestPastHabitData
-      const startDate = new Date(pastHabitDataClone.startDate);
+      const startDate = new Date(pastHabitDataCopy.startDate);
       const difference = getDateDifference(startDate, today);
       // set new latest date for past habit data
-      pastHabitDataClone.latestDate = date;
+      pastHabitDataCopy.latestDate = date;
 
       // negative = startDate is in the future, positive = today is n days ahead of startDate
       // replace habitDays array in previous data with new array
       // this allows modification of previous days
       // >= 0 means it also stores up until today
       if (difference >= 0) {
-        // const maxDays = 14;
-        // if(difference<=14) {
-        //   maxDays = difference;
-        // }
         const maxDays = difference <= 14 ? difference : 14;
         let newHabitDays = [];
         for (let i = 0; i <= maxDays; i++) {
-          newHabitDays.push(habitList[i]);
+          newHabitDays.push(habitListData[i]);
         }
-        pastHabitDataClone.habitDays = newHabitDays;
+        pastHabitDataCopy.habitDays = newHabitDays;
       } else {
         // this should not happen
-        // error message?
         // contact admin
       }
       if (isNewPastHabitData) {
         console.log('New past data');
-        storeNewPastHabitData(pastHabitDataClone);
+        storeNewPastHabitData(pastHabitDataCopy);
       } else if (!isNewPastHabitData) {
         console.log('edit past data');
-        editPastHabitData(pastHabitDataClone);
+        editPastHabitData(pastHabitDataCopy);
       }
     }
   };
@@ -89,9 +87,6 @@ export const HabitListProvider = (props) => {
         setIsNewPastHabitData(false);
       }
 
-      console.log(
-        'temp latest past habit data is: ' + !!tempLatestPastHabitData,
-      );
       console.log(latestPastHabitData);
       setPastHabitData(latestPastHabitData);
       const startNewSection = async () => {
@@ -106,20 +101,13 @@ export const HabitListProvider = (props) => {
         setHabitList(tempHabitList);
         // store the newly created day
       };
-      // const calculateDateDifferenceToday = () => {
-      //   const today = new Date(date);
-      //   const startDate = new Date(latestPastHabitData.startDate);
-      //   // compare today to startDate of latestPastHabitData
-      //   const difference = getDateDifference(startDate, today);
-      //   setCurrentDay(difference);
-      //   return difference;
-      // };
       const generatePrevHabitList = async (pastHabitData) => {
         const tempList = [];
         for (let i = 0; i < pastHabitData.habitDays.length; i++) {
           tempList.push(pastHabitData.habitDays[i]);
         }
-        setPrevHabitList(tempList);
+        // setPrevHabitList(tempList);
+        return tempList;
       };
       const generateNewHabitList = async (pastHabitData) => {
         const length = pastHabitData.habitDays
@@ -131,8 +119,10 @@ export const HabitListProvider = (props) => {
           const habitDay = JSON.parse(habitDayJSON);
           tempList.push(habitDay);
         }
-        setNewHabitList(tempList);
+        // setNewHabitList(tempList);
+        return tempList;
       };
+
       // data exists
       if (latestPastHabitData.habitDays.length > 0) {
         console.log('>0');
@@ -143,23 +133,25 @@ export const HabitListProvider = (props) => {
           startNewSection();
         }
         // is in previous section
+        const prevList = await generatePrevHabitList(latestPastHabitData);
+        const newList = await generateNewHabitList(latestPastHabitData);
         if (
           date <= latestPastHabitData.endDate &&
           date >= latestPastHabitData.startDate
         ) {
-          console.log('inside previous section date');
-          await generatePrevHabitList(latestPastHabitData);
-          await generateNewHabitList(latestPastHabitData);
-          // const tempHabitList = await createCombinedSection(difference);
-          // setHabitList(tempHabitList);
+          console.log('Date is in previous Section');
+          // load the created lists.
+          await loadHabitList(prevList, newList);
           // set loaded date as current date, dont use days as it is unreliable
         } else {
-          console.log('not inside previous section date');
-          // finish off old section and begin new section
-          await generatePrevHabitList(latestPastHabitData);
-          await generateNewHabitList(latestPastHabitData);
+          console.log('Date is outside previous Section');
+          // create combined list to update
+          const comboList = prevList.concat(newList);
+          // update old data to complete previous section
+          await storeEditedPastData(latestPastHabitData, comboList);
           // also need to load up from previous endDate to current date in the new section
           // It is possible that multiple sections may have passed.
+
           startNewSection();
         }
         // previous habit data does not exist
@@ -176,16 +168,8 @@ export const HabitListProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    if (initialUseEffectHasRun && newHabitList) {
-      console.log(!!newHabitList);
-      const tempList = prevHabitList.concat(newHabitList);
-      setHabitList(tempList);
-    }
-  }, [newHabitList]);
-
-  useEffect(() => {
     if (initialUseEffectHasRun) {
-      storeDayInPastData();
+      storeEditedPastData(pastHabitData, habitList);
     }
   }, [habitList]);
   return (
