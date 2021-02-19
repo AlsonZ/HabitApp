@@ -117,11 +117,18 @@ export const HabitListProvider = (props) => {
         // setNewHabitList(tempList);
         return tempList;
       };
+      const generateCurrentDay = (startDate, today) => {
+        const difference = getDateDifference(
+          new Date(startDate),
+          new Date(today),
+        );
+        setCurrentDay(difference);
+      };
 
       // data exists
       if (latestPastHabitData.habitDays.length > 0) {
         console.log('>0');
-        // const difference = calculateDateDifferenceToday();
+        generateCurrentDay(latestPastHabitData.startDate, date);
         // max size
         if (latestPastHabitData.habitDays.length >= 14) {
           console.log('>=14');
@@ -165,7 +172,7 @@ export const HabitListProvider = (props) => {
             habitDays: [],
           };
           setPastHabitData(newHabitData);
-
+          generateCurrentDay(newStartDate.toISOString(), today.toISOString());
           startNewSection();
         }
         // previous habit data does not exist
