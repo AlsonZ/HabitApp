@@ -22,11 +22,6 @@ export const HabitListProvider = (props) => {
   const endDate = new Date(date);
   endDate.setDate(endDate.getDate() + 14);
 
-  // const exampleData = [
-  //   [{name: 'day1 habit1'}, {name: 'day1 habit2'}],
-  //   [{name: 'day2 habit1'}, {name: 'day2 habit2'}]
-  // ];
-
   const loadHabitList = async (prevList, newList) => {
     const tempList = prevList.concat(newList);
     setHabitList(tempList);
@@ -142,7 +137,6 @@ export const HabitListProvider = (props) => {
           console.log('Date is in previous Section');
           // load the created lists.
           await loadHabitList(prevList, newList);
-          // set loaded date as current date, dont use days as it is unreliable
         } else {
           console.log('Date is outside previous Section');
           // create combined list to update
@@ -178,9 +172,6 @@ export const HabitListProvider = (props) => {
       } else if (latestPastHabitData.habitDays.length <= 0) {
         console.log('<=0');
         startNewSection();
-        // add day 1 to habitDays of latest data? or do this elsewhere such as when content has been loaded and then do it
-        // that part will just be useeffect triggered on change of habitlist items and also will update the saved data
-        // my habit object also need an active/not active variable to show previously completed habits
       }
     };
     getData();
