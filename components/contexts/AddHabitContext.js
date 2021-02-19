@@ -33,6 +33,7 @@ export const AddHabitProvider = (props) => {
       textActiveColor: Colors.white,
       backgroundActiveColor: Colors.blue,
     },
+    completed: false,
     order: 1,
   });
 
