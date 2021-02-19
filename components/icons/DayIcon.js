@@ -7,14 +7,17 @@ const DayIcon = ({item, index}) => {
   if (!item.textColor) {
     item.textColor = 'black';
   }
+  const backgroundColor = item.currentDay
+    ? item.activeColor
+    : item.style.backgroundColor;
 
   return (
     <TouchableOpacity
       onPress={item.onPress}
       style={[
         styles.icon,
-        {borderColor: item.borderColor, backgroundColor: item.backgroundColor},
         item.style,
+        {borderColor: item.borderColor, backgroundColor: backgroundColor},
       ]}>
       <Text style={({color: item.textColor}, item.textStyle)}>
         {item.number}
@@ -28,9 +31,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 19,
     // backgroundColor: 'red',
-    // borderRadius: 3,
-    // borderColor: 'black',
-    // borderWidth: 1.9,
+    borderRadius: 3,
+    borderColor: 'black',
+    borderWidth: 1.9,
   },
 });
 
