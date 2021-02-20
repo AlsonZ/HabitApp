@@ -4,16 +4,18 @@ import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
 import DayIcon from './icons/DayIcon';
+import {deleteAllPastHabitData} from './settings/Storage';
 
 const Habits = () => {
-  const [habitList, setHabitList] = useContext(HabitListContext);
+  const [habitList, setHabitList, passedDays] = useContext(HabitListContext);
+  const [currentlyViewingDay, setCurrentlyViewingDay] = useState(1);
   const [currentlyLoadedHabits, setCurrentlyLoadedHabits] = useState(
     <View style={styles.container}></View>,
   );
   const [scheduleIcons, setScheduleIcons] = useState([]);
-  const loadHabits = (index) => {
-    const day = index - 1;
-    const loadingHabitList = habitList[day];
+  const loadHabits = (day) => {
+    const index = day - 1;
+    const loadingHabitList = habitList[index];
     let indents = [];
     for (let i = 0; i < loadingHabitList.length; i++) {
       indents.push(
@@ -34,34 +36,50 @@ const Habits = () => {
     setCurrentlyLoadedHabits(
       <View style={styles.habitContainer}>{indents}</View>,
     );
+    setCurrentlyViewingDay(day);
   };
   useEffect(() => {
-    console.log('runs useEffect');
+    console.log('Passed Days: ' + passedDays);
+    setCurrentlyViewingDay(passedDays + 1);
+  }, [passedDays]);
+
+  useEffect(() => {
     const generateScheduleIcons = () => {
       let data = [];
-      for (let i = 1; i <= 14; i++) {
+      for (let day = 1; day <= 14; day++) {
         data.push({
-          number: i,
-          textStyle: styles.iconText,
-          style: styles.icon,
-          onPress: () => {
-            loadHabits(i);
-          },
+          number: day,
+          activeColor: 'red',
         });
       }
       return data;
     };
     setScheduleIcons(generateScheduleIcons());
   }, [habitList]);
+
   const loadDayIcons = () => {
     return (
       <FlatList
         contentContainerStyle={styles.listContainer}
         numColumns={7}
         data={scheduleIcons}
-        renderItem={(props) => <DayIcon {...props} />}
+        renderItem={({item, index}) => (
+          <DayIcon
+            index={index}
+            number={item.number}
+            activeColor={item.activeColor}
+            textStyle={styles.iconText}
+            style={styles.icon}
+            isCurrentDay={index === passedDays ? true : false} // where index is day -1
+            currentlyViewingDay={currentlyViewingDay}
+            onPress={() => {
+              const day = index + 1;
+              loadHabits(day);
+            }}
+          />
+        )}
         keyExtractor={(item) => `${item.number}`}
-        extraData={scheduleIcons}
+        extraData={[currentlyViewingDay, scheduleIcons]}
       />
     );
   };
@@ -70,10 +88,16 @@ const Habits = () => {
       {currentlyLoadedHabits}
       <View style={styles.days}>
         <Button
+          title="delete"
+          onPress={async () => {
+            await deleteAllPastHabitData();
+          }}></Button>
+        <Button
           title="test"
           onPress={() => {
             habitList.forEach((habit, index) => {
               console.log(index + habit);
+              console.log(habit);
             });
           }}></Button>
         <Text style={styles.dayTitle}>Schedule</Text>
