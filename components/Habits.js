@@ -49,12 +49,20 @@ const Habits = () => {
       for (let day = 1; day <= 14; day++) {
         data.push({
           number: day,
-          activeColor: 'red',
+          activeColor: 'lightblue',
         });
       }
       return data;
     };
     setScheduleIcons(generateScheduleIcons());
+    let loading = false;
+    if (habitList.length > 0) {
+      if (!loading) {
+        loading = true;
+        loadHabits(passedDays + 1);
+        loading = false;
+      }
+    }
   }, [habitList]);
 
   const loadDayIcons = () => {
