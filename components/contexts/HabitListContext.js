@@ -14,7 +14,7 @@ export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
-  const [currentDay, setCurrentDay] = useState(0);
+  const [passedDays, setPassedDays] = useState(0);
   const [pastHabitData, setPastHabitData] = useState({});
   const [isNewPastHabitData, setIsNewPastHabitData] = useState(true);
   const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
@@ -117,18 +117,18 @@ export const HabitListProvider = (props) => {
         // setNewHabitList(tempList);
         return tempList;
       };
-      const generateCurrentDay = (startDate, today) => {
+      const generatePassedDays = (startDate, today) => {
         const difference = getDateDifference(
           new Date(startDate),
           new Date(today),
         );
-        setCurrentDay(difference);
+        setPassedDays(difference);
       };
 
       // data exists
       if (latestPastHabitData.habitDays.length > 0) {
         console.log('>0');
-        generateCurrentDay(latestPastHabitData.startDate, date);
+        generatePassedDays(latestPastHabitData.startDate, date);
         // max size
         if (latestPastHabitData.habitDays.length >= 14) {
           console.log('>=14');
@@ -172,7 +172,7 @@ export const HabitListProvider = (props) => {
             habitDays: [],
           };
           setPastHabitData(newHabitData);
-          generateCurrentDay(newStartDate.toISOString(), today.toISOString());
+          generatePassedDays(newStartDate.toISOString(), today.toISOString());
           startNewSection();
         }
         // previous habit data does not exist
@@ -191,7 +191,7 @@ export const HabitListProvider = (props) => {
     }
   }, [habitList]);
   return (
-    <HabitListContext.Provider value={[habitList, setHabitList, currentDay]}>
+    <HabitListContext.Provider value={[habitList, setHabitList, passedDays]}>
       {props.children}
     </HabitListContext.Provider>
   );
