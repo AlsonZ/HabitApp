@@ -27,7 +27,13 @@ import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const AddHabitMain = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
-  // const [habitList, setHabitList] = useContext(HabitListContext);
+  const [
+    habitList,
+    setHabitList,
+    passedDays,
+    reloadContext,
+    setReloadContext,
+  ] = useContext(HabitListContext);
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -174,10 +180,13 @@ const AddHabitMain = ({navigation}) => {
         title="Create New Habit"
         onPress={async () => {
           const success = await storeNewHabit(habitDetails);
+          // const success = 'Success';
           if (success === 'Success') {
             // show modal popup for success with 3 buttons
             // one to go to home, other to continue making duplicate habit
             // one to start new
+            // reload habitListContext when new habit is added
+            setReloadContext(!reloadContext);
           } else if (success === 'Name Matches Existing Habit') {
             //show modal popup for error
             console.log(success);
