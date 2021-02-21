@@ -1,7 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {
-  storeHabit,
-  getHabit,
   getDate,
   getLatestPastHabitData,
   getDayHabit,
@@ -17,6 +15,7 @@ export const HabitListProvider = (props) => {
   const [passedDays, setPassedDays] = useState(0);
   const [pastHabitData, setPastHabitData] = useState({});
   const [isNewPastHabitData, setIsNewPastHabitData] = useState(true);
+  const [reloadContext, setReloadContext] = useState(false);
   const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
   const date = getDate();
   const endDate = new Date(date);
@@ -66,7 +65,9 @@ export const HabitListProvider = (props) => {
   };
 
   useEffect(() => {
+    let loading = false;
     const getData = async () => {
+      console.log('getData is running');
       const tempLatestPastHabitData = await getLatestPastHabitData();
       const latestPastHabitData = (await tempLatestPastHabitData)
         ? tempLatestPastHabitData
@@ -150,13 +151,11 @@ export const HabitListProvider = (props) => {
           const comboList = prevList.concat(newList);
           // update old data to complete previous section
           await storeEditedPastData(latestPastHabitData, comboList);
-          // also need to load up from previous endDate to current date in the new section
           // It is possible that multiple sections may have passed.
-          // check difference by every 14 days
-          // then multiply 14x to get new startDate
           const oldStartDate = new Date(latestPastHabitData.startDate);
           const today = new Date(date);
           const difference = getDateDifference(oldStartDate, today);
+          // divide difference by every 14 days
           const multiplier = parseInt(difference / 14);
           // create new start date
           const newStartDate = new Date(oldStartDate.toISOString());
@@ -180,18 +179,31 @@ export const HabitListProvider = (props) => {
         console.log('<=0');
         startNewSection();
       }
+      loading = false;
+      setInitialUseEffectHasRun(true);
     };
-    getData();
-    setInitialUseEffectHasRun(true);
-  }, []);
+    console.log('Reloading Context');
+    if (!loading) {
+      loading = true;
+      getData();
+    }
+  }, [reloadContext]);
 
   useEffect(() => {
     if (initialUseEffectHasRun) {
+      console.log('Did this run');
       storeEditedPastData(pastHabitData, habitList);
     }
   }, [habitList]);
   return (
-    <HabitListContext.Provider value={[habitList, setHabitList, passedDays]}>
+    <HabitListContext.Provider
+      value={[
+        habitList,
+        setHabitList,
+        passedDays,
+        reloadContext,
+        setReloadContext,
+      ]}>
       {props.children}
     </HabitListContext.Provider>
   );
