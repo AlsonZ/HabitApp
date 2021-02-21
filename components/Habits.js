@@ -56,7 +56,7 @@ const Habits = () => {
     };
     setScheduleIcons(generateScheduleIcons());
     let loading = false;
-    if (habitList.length > 0) {
+    if (habitList.length > 0 && habitList[0] !== null) {
       if (!loading) {
         loading = true;
         loadHabits(passedDays + 1);
