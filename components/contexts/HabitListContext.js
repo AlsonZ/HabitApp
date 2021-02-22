@@ -24,7 +24,7 @@ export const HabitListProvider = (props) => {
   const storeEditedPastData = async (pastData, habitListData) => {
     if (pastData) {
       // clone pastHabitData as it should be immutable
-      const pastHabitDataCopy = pastData;
+      const pastHabitDataCopy = JSON.parse(JSON.stringify(pastData));
       console.log('storing in past data: ' + pastHabitDataCopy);
       // get dates and convert into date Object
       const today = new Date(date);
