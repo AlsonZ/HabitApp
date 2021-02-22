@@ -21,11 +21,6 @@ export const HabitListProvider = (props) => {
   const endDate = new Date(date);
   endDate.setDate(endDate.getDate() + 14);
 
-  const loadHabitList = async (prevList, newList) => {
-    const tempList = prevList.concat(newList);
-    setHabitList(tempList);
-  };
-
   const storeEditedPastData = async (pastData, habitListData) => {
     if (pastData) {
       // clone pastHabitData as it should be immutable
@@ -108,7 +103,7 @@ export const HabitListProvider = (props) => {
       const generateNewHabitList = async (pastHabitData) => {
         const length = pastHabitData.habitDays
           ? pastHabitData.habitDays.length
-          : 1;
+          : 0;
         const tempList = [];
         for (let day = length + 1; day <= 14; day++) {
           const habitDayJSON = await getDayHabit(day);
@@ -143,8 +138,26 @@ export const HabitListProvider = (props) => {
           date >= latestPastHabitData.startDate
         ) {
           console.log('Date is in previous Section');
-          // load the created lists.
-          await loadHabitList(prevList, newList);
+          // create combo list
+          const tempList = prevList.concat(newList);
+          // replace today with getDay of today
+          const habitDayJSON = await getDayHabit(
+            latestPastHabitData.habitDays.length,
+          );
+          const habitDay = JSON.parse(habitDayJSON);
+          tempList[prevList.length - 1] = habitDay;
+          // change active state for today's habits by looking at prevHabits
+          for (let i = 0; i < tempList[prevList.length].length; i++) {
+            if (
+              tempList[prevList.length - 1][i].name ===
+              prevList[prevList.length - 1][i].name
+            ) {
+              tempList[prevList.length - 1][i].completed =
+                prevList[prevList.length - 1][i].completed;
+            }
+          }
+
+          setHabitList(tempList);
         } else {
           console.log('Date is outside previous Section');
           // create combined list to update
