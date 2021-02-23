@@ -15,7 +15,8 @@ const Habits = () => {
   const [scheduleIcons, setScheduleIcons] = useState([]);
   const loadHabits = (day) => {
     const index = day - 1;
-    const loadingHabitList = habitList[index];
+    // const loadingHabitList = habitList[index];
+    const loadingHabitList = JSON.parse(JSON.stringify(habitList[index]));
     let indents = [];
     for (let i = 0; i < loadingHabitList.length; i++) {
       indents.push(
@@ -28,8 +29,14 @@ const Habits = () => {
           backgroundActiveColor={
             loadingHabitList[i].colors.backgroundActiveColor
           }
+          completed={loadingHabitList[i].completed}
           onPress={() => {
-            console.log(`Pressed ${loadingHabitList[i].name}`);
+            loadingHabitList[i].completed = !loadingHabitList[i].completed;
+            // clone habitlist and replace index with deep cloned index item
+            const habitListClone = [...habitList];
+            habitListClone[index] = loadingHabitList;
+            // update habits list
+            setHabitList(habitListClone);
           }}></HabitButton>,
       );
     }
@@ -103,10 +110,7 @@ const Habits = () => {
         <Button
           title="test"
           onPress={() => {
-            habitList.forEach((habit, index) => {
-              console.log(index + habit);
-              console.log(habit);
-            });
+            console.log(habitList[passedDays][7]);
           }}></Button>
         <Text style={styles.dayTitle}>Schedule</Text>
         {loadDayIcons()}

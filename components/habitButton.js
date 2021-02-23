@@ -11,8 +11,9 @@ const HabitButton = ({
   textActiveColor,
   backgroundActiveColor,
   onPress,
+  completed,
 }) => {
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(completed ? completed : false);
 
   const svgProps = {
     width: '30',
