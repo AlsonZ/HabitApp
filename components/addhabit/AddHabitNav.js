@@ -5,9 +5,9 @@ import AddHabitMain from './AddHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 
-import CategoryItem from './items/CategoryItem';
-import ScheduleItem from './items/ScheduleItem';
-import HabitColorItem from './items/HabitColorItem';
+import CategoryItem from '../items/CategoryItem';
+import ScheduleItem from '../items/ScheduleItem';
+import HabitColorItem from '../items/HabitColorItem';
 
 const Stack = createStackNavigator();
 

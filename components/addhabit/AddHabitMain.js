@@ -11,7 +11,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import ScheduleItem from './items/ScheduleItem';
+import ScheduleItem from '../items/ScheduleItem';
 
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
 import ModalItem from '../modal/ModalItem';
