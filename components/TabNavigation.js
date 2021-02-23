@@ -6,6 +6,7 @@ import {DefaultColors as Colors} from './settings/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddHabitNav from './addhabit/AddHabitNav';
+import EditHabitNav from './edithabit/EditHabitNav';
 import {HabitListProvider} from './contexts/HabitListContext';
 const Tab = createMaterialBottomTabNavigator();
 
@@ -43,7 +44,7 @@ const TabNavigation = () => {
         />
         <Tab.Screen
           name="Edit"
-          component={EditHabit}
+          component={EditHabitNav}
           options={{
             tabBarLabel: 'Edit',
             tabBarIcon: ({color}) => (
