@@ -25,7 +25,6 @@ export const HabitListProvider = (props) => {
     if (pastData) {
       // clone pastHabitData as it should be immutable
       const pastHabitDataCopy = JSON.parse(JSON.stringify(pastData));
-      console.log('storing in past data: ' + pastHabitDataCopy);
       // get dates and convert into date Object
       const today = new Date(date);
       // compare today to startDate of latestPastHabitData
@@ -50,19 +49,20 @@ export const HabitListProvider = (props) => {
         // contact admin
       }
       if (isNewPastHabitData) {
-        console.log('New past data');
+        console.log('Store New past data in HabitListContext');
         storeNewPastHabitData(pastHabitDataCopy);
       } else if (!isNewPastHabitData) {
-        console.log('edit past data');
+        console.log('Store Edit past data in HabitListContext');
         editPastHabitData(pastHabitDataCopy);
       }
+      setIsNewPastHabitData(false);
     }
   };
 
   useEffect(() => {
     let loading = false;
     const getData = async () => {
-      console.log('getData is running');
+      console.log('Currently Getting Data, loading: ' + loading);
       const tempLatestPastHabitData = await getLatestPastHabitData();
       const latestPastHabitData = (await tempLatestPastHabitData)
         ? tempLatestPastHabitData
@@ -78,7 +78,7 @@ export const HabitListProvider = (props) => {
         setIsNewPastHabitData(false);
       }
 
-      console.log(latestPastHabitData);
+      console.log('This is latestPastHabitData: ' + latestPastHabitData);
       setPastHabitData(latestPastHabitData);
       const startNewSection = async () => {
         const tempHabitList = [];
@@ -123,11 +123,11 @@ export const HabitListProvider = (props) => {
 
       // data exists
       if (latestPastHabitData.habitDays.length > 0) {
-        console.log('>0');
+        console.log('PastHabitData.habitDays.length is: >0');
         generatePassedDays(latestPastHabitData.startDate, date);
         // max size
         if (latestPastHabitData.habitDays.length >= 14) {
-          console.log('>=14');
+          console.log('PastHabitData.habitDays.length is: >=14');
           startNewSection();
         }
         // is in previous section
@@ -137,7 +137,7 @@ export const HabitListProvider = (props) => {
           date <= latestPastHabitData.endDate &&
           date >= latestPastHabitData.startDate
         ) {
-          console.log('Date is in previous Section');
+          console.log('Date is inside previous Section');
           // create combo list
           const tempList = prevList.concat(newList);
           // replace today with getDay of today
@@ -147,7 +147,7 @@ export const HabitListProvider = (props) => {
           const habitDay = JSON.parse(habitDayJSON);
           tempList[prevList.length - 1] = habitDay;
           // change active state for today's habits by looking at prevHabits
-          for (let i = 0; i < tempList[prevList.length].length; i++) {
+          for (let i = 0; i < tempList[prevList.length - 1].length; i++) {
             if (
               tempList[prevList.length - 1][i].name ===
               prevList[prevList.length - 1][i].name
@@ -189,13 +189,13 @@ export const HabitListProvider = (props) => {
         }
         // previous habit data does not exist
       } else if (latestPastHabitData.habitDays.length <= 0) {
-        console.log('<=0');
+        console.log('PastHabitData.habitDays.length is: <=0');
         startNewSection();
       }
       loading = false;
       setInitialUseEffectHasRun(true);
     };
-    console.log('Reloading Context');
+    console.log('Reloading Context in HabitListContext');
     if (!loading) {
       loading = true;
       getData();
@@ -204,7 +204,7 @@ export const HabitListProvider = (props) => {
 
   useEffect(() => {
     if (initialUseEffectHasRun) {
-      console.log('Did this run');
+      console.log('HabitList has been modified and is storing data again');
       storeEditedPastData(pastHabitData, habitList);
     }
   }, [habitList]);

@@ -29,7 +29,6 @@ const CategoryItem = ({navigation}) => {
   };
 
   const createCategory = () => {
-    console.log(categoryName);
     if (categoryName.trim() != '') {
       setCategories([...categories, {name: categoryName}]);
       setCategoryName('');
@@ -38,7 +37,6 @@ const CategoryItem = ({navigation}) => {
 
   const selectCategory = (category) => {
     setHabitDetails({...habitDetails, category: category});
-    console.log('test');
     navigation.navigate('Main');
   };
 

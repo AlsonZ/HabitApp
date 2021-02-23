@@ -16,7 +16,6 @@ const ScheduleItem = ({item, index}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
 
   const onPress = (val) => {
-    console.log(item);
     setHabitDetails((prevState) => {
       const scheduleCopy = prevState.schedule;
       scheduleCopy[index].active = val;

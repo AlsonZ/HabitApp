@@ -196,9 +196,6 @@ const AddHabitMain = ({navigation}) => {
         title="Log Details"
         onPress={async () => {
           console.log(habitDetails);
-          // console.log(habitList);
-          let habits = await getAllHabits();
-          console.log('Getting all Habits: ' + habits[0]);
         }}></Button>
     </View>
   );

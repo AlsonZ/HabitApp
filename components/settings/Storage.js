@@ -8,7 +8,6 @@ const storeWithKey = async (value, key) => {
   try {
     key = key ? key : 'Key-Not-Found';
     const jsonValue = JSON.stringify(value);
-    // console.log(`Storing JSON with key ${key}: ` + jsonValue);
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
     console.log('Storage STORE_WITH_KEY Error: ' + e);
@@ -18,7 +17,6 @@ const storeWithKey = async (value, key) => {
 const getWithKey = async (key) => {
   try {
     key = key ? key : 'Key-Not-Found';
-    // console.log('Called with: ' + key);
     const jsonValue = await AsyncStorage.getItem(key);
     if (jsonValue != null) {
       return jsonValue;
@@ -87,7 +85,6 @@ export const storeNewHabit = async (habitDetails) => {
   const habitList = await tempHabitList;
   // make sure name is not repeated
   if (tempHabitList) {
-    // console.log(habitList);
     let matchingName = false;
     for (habit of habitList) {
       if (habit.name == habitDetails.name) {
@@ -146,16 +143,6 @@ export const getDayHabit = async (day) => {
   return await getWithKey(key);
 };
 
-// export const setLastRecordedDate = async (value) => {
-//   try {
-//     const jsonValue = JSON.stringify(value);
-//     console.log('Storing Date JSON: ' + jsonValue);
-//     await AsyncStorage.setItem('HabitDate', jsonValue);
-//   } catch (e) {
-//     console.log('Storage STORE Error: ' + e);
-//   }
-// };
-
 export const getDate = () => {
   const date = new Date();
   // set to midnight of the current day (past, not future)
@@ -189,8 +176,8 @@ export const editPastHabitData = async (habitData) => {
   // get index of old data
   // can possibly use the last index, but index is more secure
   let index = await pastHabitData.findIndex((pastHabit) => {
-    pastHabitDate = new Date(pastHabit.startDate);
-    habitDataDate = new Date(habitData.startDate);
+    const pastHabitDate = new Date(pastHabit.startDate);
+    const habitDataDate = new Date(habitData.startDate);
     return pastHabitDate.getTime() === habitDataDate.getTime();
   });
   // replace old index object with new object
@@ -211,18 +198,15 @@ export const getLatestPastHabitData = async () => {
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
   const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
   const latestHabitData = pastHabitData[pastHabitData.length - 1];
-  // console.log('this is past habit data: ' + pastHabitDataJSON);
-  // console.log(latestHabitData);
   return latestHabitData;
 };
 
 export const deleteAllPastHabitData = async () => {
-  // await storeWithKey([], PastHabitKey);
   try {
-    console.log('deleting all habit data');
+    console.log('Deleting all habit data');
     await AsyncStorage.removeItem(PastHabitKey);
-    console.log('finished deleting');
+    console.log('Finished deleting');
   } catch (e) {
-    console.log('delete past habit data error: ' + e);
+    console.log('Delete past habit data error: ' + e);
   }
 };
