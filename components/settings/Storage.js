@@ -136,7 +136,8 @@ export const deleteHabit = async (habitDetails) => {
   await deleteScheduledHabits(habitDetails);
 };
 export const getAllHabits = async () => {
-  return await getWithKey(HabitListKey);
+  const habitListJSON = await getWithKey(HabitListKey);
+  return JSON.parse(habitListJSON);
 };
 export const getDayHabit = async (day) => {
   const key = HabitDayKey + day;
