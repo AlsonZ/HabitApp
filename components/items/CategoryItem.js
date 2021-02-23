@@ -8,9 +8,9 @@ import {
   ScrollView,
 } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {DefaultColors as Colors} from '../../settings/Colors';
-import {CategoriesContext} from '../../contexts/CategoriesContext';
-import {AddHabitContext} from '../../contexts/AddHabitContext';
+import {DefaultColors as Colors} from '../settings/Colors';
+import {CategoriesContext} from '../contexts/CategoriesContext';
+import {AddHabitContext} from '../contexts/AddHabitContext';
 
 const CategoryItem = ({navigation}) => {
   const [categories, setCategories] = useContext(CategoriesContext);

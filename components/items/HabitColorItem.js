@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AddHabitContext} from '../../contexts/AddHabitContext';
-import ColorIcon from '../../icons/ColorIcon';
-import {HabitColors} from '../../settings/Colors';
+import {AddHabitContext} from '../contexts/AddHabitContext';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import HabitButton from '../../HabitButton';
-import ModalItem from '../../modal/ModalItem';
+import ColorIcon from '../icons/ColorIcon';
+import {HabitColors} from '../settings/Colors';
+import HabitButton from '../HabitButton';
+import ModalItem from '../modal/ModalItem';
 
 const HabitColorItem = ({navigation}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);

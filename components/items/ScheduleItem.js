@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {AddHabitContext} from '../../contexts/AddHabitContext';
-import {DefaultColors} from '../../settings/Colors';
+import {AddHabitContext} from '../contexts/AddHabitContext';
+import {DefaultColors} from '../settings/Colors';
 
 const ScheduleItem = ({item, index}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
