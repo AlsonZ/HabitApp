@@ -88,12 +88,12 @@ describe('Storage Tests', () => {
     latestDate: date,
     habitDays: [
       [
-        {name: 'day1 habit1', active: false},
-        {name: 'day1 habit2', active: true},
+        {name: 'day1 habit1', completed: false},
+        {name: 'day1 habit2', completed: true},
       ],
       [
-        {name: 'day2 habit1', active: true},
-        {name: 'day2 habit2', active: false},
+        {name: 'day2 habit1', completed: true},
+        {name: 'day2 habit2', completed: false},
       ],
     ],
   };
@@ -103,12 +103,12 @@ describe('Storage Tests', () => {
     latestDate: date,
     habitDays: [
       [
-        {name: 'day1 habit1', active: true},
-        {name: 'day1 habit2', active: true},
+        {name: 'day1 habit1', completed: true},
+        {name: 'day1 habit2', completed: true},
       ],
       [
-        {name: 'day2 habit1', active: false},
-        {name: 'day2 habit2', active: false},
+        {name: 'day2 habit1', completed: false},
+        {name: 'day2 habit2', completed: false},
       ],
     ],
   };
@@ -263,7 +263,6 @@ describe('Storage Tests', () => {
     await editPastHabitData(editedhabitData);
 
     const latestPastHabitData = await getLatestPastHabitData();
-    // console.log(latestPastHabitData);
 
     expect(latestPastHabitData).toEqual(
       expect.objectContaining({
@@ -272,13 +271,13 @@ describe('Storage Tests', () => {
           expect.arrayContaining([
             expect.objectContaining({
               name: 'day1 habit1',
-              active: true,
+              completed: true,
             }),
           ]),
           expect.arrayContaining([
             expect.objectContaining({
               name: 'day2 habit1',
-              active: false,
+              completed: false,
             }),
           ]),
         ]),
