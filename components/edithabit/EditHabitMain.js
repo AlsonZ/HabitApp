@@ -48,7 +48,17 @@ const EditHabitMain = ({navigation}) => {
         data={allHabits}
         renderItem={({item, index}) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate('Category')}
+            onPress={() =>
+              navigation.navigate('EditHabitItem', {
+                name: item.name,
+                category: item.category,
+                description: item.description,
+                schedule: item.schedule,
+                dailySchedule: item.dailySchedule,
+                colors: item.colors,
+                order: item.order,
+              })
+            }
             style={styles.habitItem}>
             <AntIcon
               style={styles.habitIcon}
