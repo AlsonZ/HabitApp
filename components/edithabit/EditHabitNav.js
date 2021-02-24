@@ -3,8 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import EditHabitMain from './EditHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
-
-import CategoryItem from '../items/CategoryItem';
+import EditHabitItem from './EditHabitItem';
 
 const Stack = createStackNavigator();
 
@@ -12,13 +11,17 @@ const EditHabitNav = () => {
   return (
     <CategoriesProvider>
       <AddHabitProvider>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="EditHabitMain">
           <Stack.Screen
-            name="Main"
-            options={{title: 'Edit Your Habits'}}
+            name="EditHabitMain"
+            options={{title: 'List of Habits'}}
             component={EditHabitMain}
           />
-          <Stack.Screen name="Category" component={CategoryItem} />
+          <Stack.Screen
+            options={{title: 'Edit Your Habit'}}
+            name="EditHabitItem"
+            component={EditHabitItem}
+          />
         </Stack.Navigator>
       </AddHabitProvider>
     </CategoriesProvider>
