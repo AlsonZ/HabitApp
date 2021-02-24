@@ -42,6 +42,9 @@ const storeScheduledHabits = async (habitDetails) => {
       const habitDay = await tempHabitData;
       // make habit data smaller for individual days
       const {category, schedule, ...reducedHabitDetails} = habitDetails;
+      if (!reducedHabitDetails.completed) {
+        reducedHabitDetails.completed = false;
+      }
       // add new data
       habitDay.push(reducedHabitDetails);
       // store into storage
