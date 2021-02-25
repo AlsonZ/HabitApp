@@ -1,20 +1,9 @@
-import React, {useContext} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {AddHabitContext} from '../contexts/AddHabitContext';
 import {DefaultColors} from '../settings/Colors';
 
-const ScheduleItem = ({item, index}) => {
-  const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
-
+const ScheduleItem = ({day, active, habitDetails, setHabitDetails, index}) => {
   const onPress = (val) => {
     setHabitDetails((prevState) => {
       const scheduleCopy = prevState.schedule;
@@ -31,17 +20,17 @@ const ScheduleItem = ({item, index}) => {
     <TouchableHighlight
       underlayColor={DefaultColors.touchableHightlightUnderlay}
       onPress={() => {
-        onPress(!item.active);
+        onPress(!active);
       }}>
       <View style={styles.container}>
         <CheckBox
           disable={false}
-          value={item.active}
+          value={active}
           onValueChange={(val) => {
             onPress(val);
           }}
         />
-        <Text style={styles.checkBoxText}>Day {item.day}</Text>
+        <Text style={styles.checkBoxText}>Day {day}</Text>
       </View>
     </TouchableHighlight>
   );
