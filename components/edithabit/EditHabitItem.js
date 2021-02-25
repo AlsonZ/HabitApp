@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {AddHabitContext} from '../contexts/AddHabitContext';
+import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {
   Button,
@@ -26,17 +26,10 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const EditHabitItem = ({route, navigation}) => {
-  // const {
-  //   name,
-  //   category,
-  //   description,
-  //   schedule,
-  //   dailySchedule,
-  //   colors,
-  //   order,
-  // } = route.params;
+  const [allHabits, setAllHabits] = useContext(EditHabitContext);
   const [modalVisible, setModalVisible] = useState(false);
-  const [habitDetails, setHabitDetails] = useState(route.params);
+  const {index, ...rest} = route.params;
+  const [habitDetails, setHabitDetails] = useState(allHabits[index]);
 
   return (
     <View style={styles.container}>
@@ -49,7 +42,15 @@ const EditHabitItem = ({route, navigation}) => {
         <FlatList
           style={{marginRight: 1}}
           data={habitDetails.schedule}
-          renderItem={(props) => <ScheduleItem {...props} />}
+          renderItem={({item, index}) => (
+            <ScheduleItem
+              index={index}
+              day={item.day}
+              active={item.active}
+              habitDetails={habitDetails}
+              setHabitDetails={setHabitDetails}
+            />
+          )}
           keyExtractor={(item) => `${item.day}`}
           extraData={habitDetails.schedule}
         />
@@ -211,7 +212,13 @@ const EditHabitItem = ({route, navigation}) => {
         title="Log Details"
         onPress={async () => {
           // console.log(habitDetails);
-          console.log(name, description);
+          console.log(habitDetails.name, habitDetails.description);
+        }}></Button>
+      <Button
+        title="Log schedule"
+        onPress={() => {
+          // console.log(habitDetails);
+          console.log(habitDetails.schedule);
         }}></Button>
     </View>
   );
