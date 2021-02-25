@@ -47,7 +47,15 @@ const AddHabitMain = ({navigation}) => {
         <FlatList
           style={{marginRight: 1}}
           data={habitDetails.schedule}
-          renderItem={(props) => <ScheduleItem {...props} />}
+          renderItem={({item, index}) => (
+            <ScheduleItem
+              index={index}
+              day={item.day}
+              active={item.active}
+              habitDetails={habitDetails}
+              setHabitDetails={setHabitDetails}
+            />
+          )}
           keyExtractor={(item) => `${item.day}`}
           extraData={habitDetails.schedule.active}
         />
