@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import EditHabitMain from './EditHabitMain.js';
-import {AddHabitProvider} from '../contexts/AddHabitContext';
+import {EditHabitProvider} from '../contexts/EditHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 import EditHabitItem from './EditHabitItem';
 
@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 const EditHabitNav = () => {
   return (
     <CategoriesProvider>
-      <AddHabitProvider>
+      <EditHabitProvider>
         <Stack.Navigator initialRouteName="EditHabitMain">
           <Stack.Screen
             name="EditHabitMain"
@@ -23,7 +23,7 @@ const EditHabitNav = () => {
             component={EditHabitItem}
           />
         </Stack.Navigator>
-      </AddHabitProvider>
+      </EditHabitProvider>
     </CategoriesProvider>
   );
 };

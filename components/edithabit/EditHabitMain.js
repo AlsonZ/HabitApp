@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {AddHabitContext} from '../contexts/AddHabitContext';
-import {HabitListContext} from '../contexts/HabitListContext';
+import {EditHabitContext} from '../contexts/EditHabitContext';
 import {
   Button,
   FlatList,
@@ -19,27 +18,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const EditHabitMain = ({navigation}) => {
-  const [allHabits, setAllHabits] = useState(false);
-
-  useEffect(() => {
-    let loading = false;
-    const getData = async () => {
-      const allHabitsData = await getAllHabits();
-      // console.log(
-      //   'This is allHabits length: ' + JSON.stringify(allHabitsData[0]),
-      // );
-      setAllHabits(allHabitsData);
-      loading = false;
-    };
-    if (!loading) {
-      loading = true;
-      getData();
-    }
-  }, []);
-
-  // useEffect(() => {
-
-  // }, [allHabits])
+  const [allHabits, setAllHabits] = useContext(EditHabitContext);
 
   return (
     <View style={styles.container}>
@@ -50,13 +29,7 @@ const EditHabitMain = ({navigation}) => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('EditHabitItem', {
-                name: item.name,
-                category: item.category,
-                description: item.description,
-                schedule: item.schedule,
-                dailySchedule: item.dailySchedule,
-                colors: item.colors,
-                order: item.order,
+                index: index,
               })
             }
             style={styles.habitItem}>
