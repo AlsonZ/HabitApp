@@ -13,7 +13,7 @@ import {CategoriesContext} from '../contexts/CategoriesContext';
 
 const CategoryItem = ({route, navigation}) => {
   const [categories, setCategories] = useContext(CategoriesContext);
-  const {selectedCategory, habitDetails, setHabitDetails} = route.params;
+  const {selectedCategory, parentRoute} = route.params;
   const [categoryColor, setCategoryColor] = useState(Colors.red);
   const [categoryName, setCategoryName] = useState('');
 
@@ -34,14 +34,9 @@ const CategoryItem = ({route, navigation}) => {
   };
 
   const selectCategory = (category) => {
-    // setHabitDetails({...habitDetails, category: category});
-    setHabitDetails((prevState) => {
-      return {
-        ...prevState,
-        category: category,
-      };
+    navigation.navigate(parentRoute, {
+      category: category,
     });
-    navigation.goBack();
   };
 
   const CategoryListItem = ({category}) => {
