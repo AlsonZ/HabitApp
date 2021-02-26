@@ -40,7 +40,15 @@ const EditHabitItem = ({route, navigation}) => {
         };
       });
     }
-  }, [route.params?.category]);
+    if (route.params?.colors) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          colors: route.params.colors,
+        };
+      });
+    }
+  }, [route.params?.category, route.params?.colors]);
 
   return (
     <View style={styles.container}>
@@ -153,11 +161,9 @@ const EditHabitItem = ({route, navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('HabitColorItem', {
-            onPress: () => {
-              console.log('testing onPress route passing');
-            },
+          navigation.navigate('EditHabitColors', {
             colors: habitDetails.colors,
+            parentRoute: route.name,
           })
         }
         style={styles.habitItem}>

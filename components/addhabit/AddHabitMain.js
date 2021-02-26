@@ -45,7 +45,15 @@ const AddHabitMain = ({navigation, route}) => {
         };
       });
     }
-  }, [route.params?.category]);
+    if (route.params?.colors) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          colors: route.params.colors,
+        };
+      });
+    }
+  }, [route.params?.category, route.params?.colors]);
 
   return (
     <View style={styles.container}>
@@ -154,7 +162,12 @@ const AddHabitMain = ({navigation, route}) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('HabitColorItem')}
+        onPress={() =>
+          navigation.navigate('HabitColorItem', {
+            colors: habitDetails.colors,
+            parentRoute: route.name,
+          })
+        }
         style={styles.habitItem}>
         <IonIcon
           style={styles.habitIcon}
