@@ -71,8 +71,10 @@ const EditHabitItem = ({route, navigation}) => {
       </View>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('Category', {
+          navigation.navigate('EditCategories', {
             selectedCategory: habitDetails.category,
+            habitDetails: habitDetails,
+            setHabitDetails: setHabitDetails,
           })
         }
         style={styles.habitItem}>
