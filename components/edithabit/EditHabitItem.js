@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {
@@ -30,6 +30,17 @@ const EditHabitItem = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const {index, ...rest} = route.params;
   const [habitDetails, setHabitDetails] = useState(allHabits[index]);
+
+  useEffect(() => {
+    if (route.params?.category) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          category: route.params.category,
+        };
+      });
+    }
+  }, [route.params?.category]);
 
   return (
     <View style={styles.container}>
@@ -73,8 +84,7 @@ const EditHabitItem = ({route, navigation}) => {
         onPress={() =>
           navigation.navigate('EditCategories', {
             selectedCategory: habitDetails.category,
-            habitDetails: habitDetails,
-            setHabitDetails: setHabitDetails,
+            parentRoute: route.name,
           })
         }
         style={styles.habitItem}>

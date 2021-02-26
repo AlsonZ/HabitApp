@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {AddHabitContext} from '../contexts/AddHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {
@@ -25,7 +25,7 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
-const AddHabitMain = ({navigation}) => {
+const AddHabitMain = ({navigation, route}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
   const [
     habitList,
@@ -35,6 +35,17 @@ const AddHabitMain = ({navigation}) => {
     setReloadContext,
   ] = useContext(HabitListContext);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (route.params?.category) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          category: route.params.category,
+        };
+      });
+    }
+  }, [route.params?.category]);
 
   return (
     <View style={styles.container}>
@@ -74,7 +85,11 @@ const AddHabitMain = ({navigation}) => {
           }></TextInput>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Category')}
+        onPress={() =>
+          navigation.navigate('Category', {
+            parentRoute: route.name,
+          })
+        }
         style={styles.habitItem}>
         <AntIcon
           style={styles.habitIcon}
