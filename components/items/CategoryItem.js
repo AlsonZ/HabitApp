@@ -10,12 +10,10 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DefaultColors as Colors} from '../settings/Colors';
 import {CategoriesContext} from '../contexts/CategoriesContext';
-import {AddHabitContext} from '../contexts/AddHabitContext';
 
-const CategoryItem = ({navigation}) => {
+const CategoryItem = ({route, navigation}) => {
   const [categories, setCategories] = useContext(CategoriesContext);
-  const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
-
+  const {selectedCategory, habitDetails, setHabitDetails} = route.params;
   const [categoryColor, setCategoryColor] = useState(Colors.red);
   const [categoryName, setCategoryName] = useState('');
 
@@ -36,8 +34,14 @@ const CategoryItem = ({navigation}) => {
   };
 
   const selectCategory = (category) => {
-    setHabitDetails({...habitDetails, category: category});
-    navigation.navigate('Main');
+    // setHabitDetails({...habitDetails, category: category});
+    setHabitDetails((prevState) => {
+      return {
+        ...prevState,
+        category: category,
+      };
+    });
+    navigation.goBack();
   };
 
   const CategoryListItem = ({category}) => {
@@ -125,6 +129,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '60%',
+  },
+  selectedCategory: {
+    backgroundColor: 'lightblue',
   },
 });
 
