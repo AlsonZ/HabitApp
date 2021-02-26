@@ -4,6 +4,8 @@ import EditHabitMain from './EditHabitMain.js';
 import {EditHabitProvider} from '../contexts/EditHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 import EditHabitItem from './EditHabitItem';
+import CategoryItem from '../items/CategoryItem';
+import HabitColorItem from '../items/HabitColorItem';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +23,16 @@ const EditHabitNav = () => {
             options={{title: 'Edit Your Habit'}}
             name="EditHabitItem"
             component={EditHabitItem}
+          />
+          <Stack.Screen
+            options={{title: 'Categories'}}
+            name="EditCategories"
+            component={CategoryItem}
+          />
+          <Stack.Screen
+            options={{title: 'Select Colors'}}
+            name="EditHabitColors"
+            component={HabitColorItem}
           />
         </Stack.Navigator>
       </EditHabitProvider>
