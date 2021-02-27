@@ -122,6 +122,7 @@ export const editHabit = async (habitDetails) => {
   await storeWithKey(habitList, HabitListKey);
   // edit/replace the day storages
   await editScheduledHabits(habitDetails);
+  return 'Success';
 };
 export const deleteHabit = async (habitDetails) => {
   // get stored data

@@ -8,7 +8,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
   View,
 } from 'react-native';
 import ScheduleItem from '../items/ScheduleItem';
@@ -23,10 +22,12 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {getAllHabits, storeNewHabit} from '../settings/Storage';
+import {editHabit} from '../settings/Storage';
 
 const EditHabitItem = ({route, navigation}) => {
-  const [allHabits, setAllHabits] = useContext(EditHabitContext);
+  const [allHabits, setAllHabits, reloadContext, setReloadContext] = useContext(
+    EditHabitContext,
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const {index, ...rest} = route.params;
   const [habitDetails, setHabitDetails] = useState(allHabits[index]);
@@ -213,18 +214,17 @@ const EditHabitItem = ({route, navigation}) => {
       <Button
         title="Save Edit"
         onPress={async () => {
-          // const success = await storeNewHabit(habitDetails);
-          // // const success = 'Success';
-          // if (success === 'Success') {
-          //   // show modal popup for success with 3 buttons
-          //   // one to go to home, other to continue making duplicate habit
-          //   // one to start new
-          //   // reload habitListContext when new habit is added
-          //   setReloadContext(!reloadContext);
-          // } else if (success === 'Name Matches Existing Habit') {
-          //   //show modal popup for error
-          //   console.log(success);
-          // }
+          const success = await editHabit(habitDetails);
+          // const success = 'Success';
+          if (success === 'Success') {
+            console.log('Successfully Edited Habit');
+            // reload EditHabitContext when new habit is added
+            navigation.navigate('EditHabitMain');
+            // send to main screen
+            setReloadContext(!reloadContext);
+          } else {
+            // show error
+          }
         }}></Button>
       <Button
         title="Log Details"
@@ -235,8 +235,8 @@ const EditHabitItem = ({route, navigation}) => {
       <Button
         title="Log schedule"
         onPress={() => {
-          // console.log(habitDetails);
-          console.log(habitDetails.schedule);
+          console.log(allHabits[index]);
+          console.log(habitDetails);
         }}></Button>
     </View>
   );
