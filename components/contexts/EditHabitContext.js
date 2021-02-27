@@ -5,6 +5,7 @@ export const EditHabitContext = createContext();
 
 export const EditHabitProvider = (props) => {
   const [allHabits, setAllHabits] = useState([]);
+  const [reloadContext, setReloadContext] = useState(false);
 
   useEffect(() => {
     let loading = false;
@@ -17,10 +18,11 @@ export const EditHabitProvider = (props) => {
       loading = true;
       getData();
     }
-  }, []);
+  }, [reloadContext]);
 
   return (
-    <EditHabitContext.Provider value={[allHabits, setAllHabits]}>
+    <EditHabitContext.Provider
+      value={[allHabits, setAllHabits, reloadContext, setReloadContext]}>
       {props.children}
     </EditHabitContext.Provider>
   );
