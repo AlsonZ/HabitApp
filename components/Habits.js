@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View, Text, Button} from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  ScrollView,
+} from 'react-native';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
@@ -13,6 +20,10 @@ const Habits = () => {
     <View style={styles.container}></View>,
   );
   const [scheduleIcons, setScheduleIcons] = useState([]);
+  const [habitInnerContainerWidth, setHabitInnerContainerWidth] = useState(
+    null,
+  );
+
   const loadHabits = (day) => {
     const index = day - 1;
     // const loadingHabitList = habitList[index];
@@ -40,11 +51,21 @@ const Habits = () => {
           }}></HabitButton>,
       );
     }
-    setCurrentlyLoadedHabits(
-      <View style={styles.habitContainer}>{indents}</View>,
-    );
+    setCurrentlyLoadedHabits(indents);
     setCurrentlyViewingDay(day);
   };
+
+  const calculateWidth = (e) => {
+    const habitButtonTotalWidth = 84;
+    const newWidth = parseInt(
+      e.nativeEvent.layout.width / habitButtonTotalWidth,
+    );
+    const newContainerWidth = newWidth * habitButtonTotalWidth;
+    console.log('native width: ' + e.nativeEvent.layout.width);
+    console.log('newWidth: ' + newContainerWidth);
+    setHabitInnerContainerWidth(newContainerWidth);
+  };
+
   useEffect(() => {
     console.log('Passed Days: ' + passedDays);
     setCurrentlyViewingDay(passedDays + 1);
@@ -100,7 +121,15 @@ const Habits = () => {
   };
   return (
     <View style={styles.container}>
-      {currentlyLoadedHabits}
+      <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
+        <ScrollView
+          contentContainerStyle={[
+            styles.habitContainer,
+            {width: habitInnerContainerWidth},
+          ]}>
+          {currentlyLoadedHabits}
+        </ScrollView>
+      </View>
       <View style={styles.days}>
         <Button
           title="delete"
@@ -124,15 +153,20 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    padding: 10,
   },
   listContainer: {
+    alignItems: 'center',
+  },
+  habitOuterContainer: {
+    display: 'flex',
+    flex: 1,
     alignItems: 'center',
   },
   habitContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flex: 1,
     alignItems: 'center',
   },
   days: {
