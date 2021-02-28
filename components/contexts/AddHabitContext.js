@@ -1,10 +1,14 @@
 import React, {createContext, useState} from 'react';
 import {DefaultColors as Colors} from '../settings/Colors';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 export const AddHabitContext = createContext();
 
 export const AddHabitProvider = (props) => {
+  const id = uuidv4();
   const [habitDetails, setHabitDetails] = useState({
+    id: id,
     name: '',
     category: 'Category', // placeholder text
     description: '',
