@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import {DefaultColors as Colors} from '../settings/Colors';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -6,8 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 export const AddHabitContext = createContext();
 
 export const AddHabitProvider = (props) => {
-  const id = uuidv4();
-  const [habitDetails, setHabitDetails] = useState({
+  const initialHabitDetails = (id) => ({
     id: id,
     name: '',
     category: 'Category', // placeholder text
@@ -40,9 +39,18 @@ export const AddHabitProvider = (props) => {
     // completed: false,
     order: 1,
   });
+  const [habitDetails, setHabitDetails] = useState(
+    initialHabitDetails(uuidv4()),
+  );
+  const [reloadContext, setReloadContext] = useState(false);
+
+  useEffect(() => {
+    setHabitDetails(initialHabitDetails(uuidv4()));
+  }, [reloadContext]);
 
   return (
-    <AddHabitContext.Provider value={[habitDetails, setHabitDetails]}>
+    <AddHabitContext.Provider
+      value={[habitDetails, setHabitDetails, reloadContext, setReloadContext]}>
       {props.children}
     </AddHabitContext.Provider>
   );
