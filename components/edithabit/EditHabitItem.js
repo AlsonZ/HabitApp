@@ -1,6 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {EditHabitContext} from '../contexts/EditHabitContext';
-import {HabitListContext} from '../contexts/HabitListContext';
 import {
   Button,
   FlatList,
@@ -10,9 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ScheduleItem from '../items/ScheduleItem';
-
+import {EditHabitContext} from '../contexts/EditHabitContext';
+import {HabitListContext} from '../contexts/HabitListContext';
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
+import {deleteHabit, editHabit} from '../settings/Storage';
+
+import ScheduleItem from '../items/ScheduleItem';
 import ModalItem from '../modal/ModalItem';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
@@ -22,12 +23,17 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {editHabit} from '../settings/Storage';
-
 const EditHabitItem = ({route, navigation}) => {
-  const [allHabits, setAllHabits, reloadContext, setReloadContext] = useContext(
+  const [allHabits, , reloadContext, setReloadContext] = useContext(
     EditHabitContext,
   );
+  const [
+    habitList,
+    setHabitList,
+    passedDays,
+    reloadHabitListContext,
+    setReloadHabitListContext,
+  ] = useContext(HabitListContext);
   const [modalVisible, setModalVisible] = useState(false);
   const {index, ...rest} = route.params;
   const [habitDetails, setHabitDetails] = useState(allHabits[index]);
@@ -59,21 +65,23 @@ const EditHabitItem = ({route, navigation}) => {
         title={'Scheduled Days'}
         modalHeader={true}
         modalFooter={true}>
-        <FlatList
-          style={{marginRight: 1}}
-          data={habitDetails.schedule}
-          renderItem={({item, index}) => (
-            <ScheduleItem
-              index={index}
-              day={item.day}
-              active={item.active}
-              habitDetails={habitDetails}
-              setHabitDetails={setHabitDetails}
-            />
-          )}
-          keyExtractor={(item) => `${item.day}`}
-          extraData={habitDetails.schedule}
-        />
+        {habitDetails && (
+          <FlatList
+            style={{marginRight: 1}}
+            data={habitDetails.schedule}
+            renderItem={({item, index}) => (
+              <ScheduleItem
+                index={index}
+                day={item.day}
+                active={item.active}
+                habitDetails={habitDetails}
+                setHabitDetails={setHabitDetails}
+              />
+            )}
+            keyExtractor={(item) => `${item.day}`}
+            extraData={habitDetails.schedule}
+          />
+        )}
       </ModalItem>
       <View style={styles.habitItem}>
         <MCIcon
@@ -210,7 +218,30 @@ const EditHabitItem = ({route, navigation}) => {
         <Text style={styles.habitText}>Order</Text>
         <NumberIcon number={habitDetails.order} />
       </TouchableOpacity> */}
-
+      <TouchableOpacity
+        onPress={async () => {
+          const success = await deleteHabit(habitDetails);
+          if (success === 'Success') {
+            setReloadContext(!reloadContext);
+            setReloadHabitListContext(!reloadHabitListContext);
+            navigation.navigate('EditHabitMain');
+          }
+        }}
+        style={styles.habitItem}>
+        <IonIcon
+          style={styles.habitIcon}
+          name="trash-outline"
+          color={'black'}
+          size={24}
+        />
+        <Text style={[styles.habitText, {color: 'black'}]}>Delete Habit</Text>
+        {/* <MCIcon
+          style={styles.rightIcon}
+          name="code-greater-than"
+          color={'black'}
+          size={26}
+        /> */}
+      </TouchableOpacity>
       <Button
         title="Save Edit"
         onPress={async () => {
@@ -235,8 +266,9 @@ const EditHabitItem = ({route, navigation}) => {
       <Button
         title="Log schedule"
         onPress={() => {
-          console.log(allHabits[index]);
-          console.log(habitDetails);
+          // console.log(allHabits[index]);
+          // console.log(habitDetails);
+          // console.log(uuidv4());
         }}></Button>
     </View>
   );
