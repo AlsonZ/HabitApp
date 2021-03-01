@@ -15,8 +15,6 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {getAllHabits, storeNewHabit} from '../settings/Storage';
-
 const EditHabitMain = ({navigation}) => {
   const [allHabits, setAllHabits] = useContext(EditHabitContext);
 
@@ -51,12 +49,6 @@ const EditHabitMain = ({navigation}) => {
         keyExtractor={(item, index) => `${item.name}${index}`}
         extraData={allHabits}
       />
-
-      {/* <Button
-        title="Log Details"
-        onPress={async () => {
-          console.log(habitDetails);
-        }}></Button> */}
     </View>
   );
 };
