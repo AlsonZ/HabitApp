@@ -147,7 +147,10 @@ export const HabitListProvider = (props) => {
           const habitDay = JSON.parse(habitDayJSON);
           tempList[prevList.length - 1] = habitDay;
           // change active state for today's habits by looking at prevHabits
-          for (let i = 0; i < tempList[prevList.length - 1].length; i++) {
+          // using prevList length due to new habits list being longer than previous list if a new habit is added
+          // should replace this with a nested for loop or an algo with less than n^2 time complexity for matching 'completed"
+          // for (let i = 0; i < tempList[prevList.length - 1].length; i++) {
+          for (let i = 0; i < prevList[prevList.length - 1].length; i++) {
             if (
               tempList[prevList.length - 1][i].name ===
               prevList[prevList.length - 1][i].name
