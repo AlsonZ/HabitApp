@@ -27,17 +27,16 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const AddHabitMain = ({navigation, route}) => {
-  const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
+  const [
+    habitDetails,
+    setHabitDetails,
+    reloadAddHabitContext,
+    setReloadAddHabitContext,
+  ] = useContext(AddHabitContext);
   const [, , reloadEditContext, setReloadEditContext] = useContext(
     EditHabitContext,
   );
-  const [
-    habitList,
-    setHabitList,
-    passedDays,
-    reloadContext,
-    setReloadContext,
-  ] = useContext(HabitListContext);
+  const [, , , reloadContext, setReloadContext] = useContext(HabitListContext);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -80,7 +79,7 @@ const AddHabitMain = ({navigation, route}) => {
             />
           )}
           keyExtractor={(item) => `${item.day}`}
-          extraData={habitDetails.schedule.active}
+          extraData={habitDetails.schedule}
         />
       </ModalItem>
       <View style={styles.habitItem}>
@@ -225,8 +224,9 @@ const AddHabitMain = ({navigation, route}) => {
             // show modal popup for success with 3 buttons
             // one to go to home, other to continue making duplicate habit
             // one to start new
-            // reload habitListContext when new habit is added
+            // reload Context's when new habit is added
             setReloadContext(!reloadContext);
+            setReloadAddHabitContext(!reloadAddHabitContext);
             setReloadEditContext(!reloadEditContext);
           } else if (success === 'Name Matches Existing Habit') {
             //show modal popup for error
