@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {AddHabitContext} from '../contexts/AddHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
+import {EditHabitContext} from '../contexts/EditHabitContext';
 import {
   Button,
   FlatList,
@@ -27,6 +28,9 @@ import {getAllHabits, storeNewHabit} from '../settings/Storage';
 
 const AddHabitMain = ({navigation, route}) => {
   const [habitDetails, setHabitDetails] = useContext(AddHabitContext);
+  const [, , reloadEditContext, setReloadEditContext] = useContext(
+    EditHabitContext,
+  );
   const [
     habitList,
     setHabitList,
@@ -223,6 +227,7 @@ const AddHabitMain = ({navigation, route}) => {
             // one to start new
             // reload habitListContext when new habit is added
             setReloadContext(!reloadContext);
+            setReloadEditContext(!reloadEditContext);
           } else if (success === 'Name Matches Existing Habit') {
             //show modal popup for error
             console.log(success);
