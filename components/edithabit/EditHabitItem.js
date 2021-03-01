@@ -246,13 +246,13 @@ const EditHabitItem = ({route, navigation}) => {
         title="Save Edit"
         onPress={async () => {
           const success = await editHabit(habitDetails);
-          // const success = 'Success';
           if (success === 'Success') {
             console.log('Successfully Edited Habit');
-            // reload EditHabitContext when new habit is added
-            navigation.navigate('EditHabitMain');
             // send to main screen
+            navigation.navigate('EditHabitMain');
+            // reload Context's when habit is edited
             setReloadContext(!reloadContext);
+            setReloadHabitListContext(!reloadHabitListContext);
           } else {
             // show error
           }
