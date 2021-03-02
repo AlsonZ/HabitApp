@@ -147,20 +147,23 @@ export const HabitListProvider = (props) => {
           const habitDay = JSON.parse(habitDayJSON);
           tempList[prevList.length - 1] = habitDay;
           // change active state for today's habits by looking at prevHabits
-          tempList[prevList.length - 1].forEach((newHabitItem) => {
-            for (let i = 0; i < prevList[prevList.length - 1].length; i++) {
-              if (newHabitItem.name === prevList[prevList.length - 1][i].name) {
-                // set completed
-                newHabitItem.completed =
-                  prevList[prevList.length - 1][i].completed;
-                // splice habit from prevList
-                prevList[prevList.length - 1].splice(i, 1);
-                // break out of inner loop
-                break;
+          if (tempList[prevList.length - 1]) {
+            tempList[prevList.length - 1].forEach((newHabitItem) => {
+              for (let i = 0; i < prevList[prevList.length - 1].length; i++) {
+                if (
+                  newHabitItem.name === prevList[prevList.length - 1][i].name
+                ) {
+                  // set completed
+                  newHabitItem.completed =
+                    prevList[prevList.length - 1][i].completed;
+                  // splice habit from prevList
+                  prevList[prevList.length - 1].splice(i, 1);
+                  // break out of inner loop
+                  break;
+                }
               }
-            }
-          });
-
+            });
+          }
           setHabitList(tempList);
         } else {
           console.log('Date is outside previous Section');
