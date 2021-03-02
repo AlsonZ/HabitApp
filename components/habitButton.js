@@ -42,7 +42,8 @@ const HabitButton = ({
           style={[
             styles.buttonText,
             {color: isActive ? textActiveColor : textColor},
-          ]}>
+          ]}
+          numberOfLines={3}>
           {title}
         </Text>
       </View>
@@ -53,7 +54,7 @@ const HabitButton = ({
 const styles = StyleSheet.create({
   touchable: {
     width: 64,
-    height: 81,
+    maxHeight: 95,
     margin: 10,
     borderRadius: 8,
     display: 'flex',
