@@ -150,9 +150,7 @@ export const HabitListProvider = (props) => {
           if (tempList[prevList.length - 1]) {
             tempList[prevList.length - 1].forEach((newHabitItem) => {
               for (let i = 0; i < prevList[prevList.length - 1].length; i++) {
-                if (
-                  newHabitItem.name === prevList[prevList.length - 1][i].name
-                ) {
+                if (newHabitItem.id === prevList[prevList.length - 1][i].id) {
                   // set completed
                   newHabitItem.completed =
                     prevList[prevList.length - 1][i].completed;

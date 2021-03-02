@@ -62,7 +62,7 @@ const deleteScheduledHabits = async (habitDetails) => {
     const habitDayData = (await tempHabitDayData) ? tempHabitDayData : [];
     // find matching name
     let index = await habitDayData.findIndex(
-      (habit) => habit.name === habitDetails.name,
+      (habit) => habit.id === habitDetails.id,
     );
     // delete object from array
     if (index !== -1) {
@@ -88,14 +88,14 @@ export const storeNewHabit = async (habitDetails) => {
   const habitList = await tempHabitList;
   // make sure name is not repeated
   if (tempHabitList) {
-    let matchingName = false;
+    let matchingId = false;
     for (habit of habitList) {
-      if (habit.name == habitDetails.name) {
-        matchingName = true;
+      if (habit.id === habitDetails.id) {
+        matchingId = true;
         break;
       }
     }
-    if (matchingName) {
+    if (matchingId) {
       return 'Name Matches Existing Habit';
     }
   }
@@ -114,7 +114,7 @@ export const editHabit = async (habitDetails) => {
   const habitList = await JSON.parse(habitsListJSON);
   // get index of old habit data
   let index = await habitList.findIndex(
-    (habit) => habit.name === habitDetails.name,
+    (habit) => habit.id === habitDetails.id,
   );
   // replace old index object with new object
   habitList[index] = habitDetails;
@@ -130,7 +130,7 @@ export const deleteHabit = async (habitDetails) => {
   const habitList = await JSON.parse(habitsListJSON);
   // get index
   let index = await habitList.findIndex(
-    (habit) => habit.name === habitDetails.name,
+    (habit) => habit.id === habitDetails.id,
   );
   // remove from array
   await habitList.splice(index, 1);
