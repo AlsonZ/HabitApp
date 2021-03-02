@@ -91,6 +91,7 @@ const EditHabitItem = ({route, navigation}) => {
           size={26}
         />
         <TextInput
+          style={{flex: 1}}
           placeholder="Habit Name"
           value={habitDetails.name}
           onChangeText={(text) =>
@@ -126,6 +127,7 @@ const EditHabitItem = ({route, navigation}) => {
           color={'black'}
           size={24}></AntIcon>
         <TextInput
+          style={{flex: 1}}
           placeholder="Description"
           value={habitDetails.description}
           onChangeText={(text) =>

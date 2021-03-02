@@ -37,7 +37,9 @@ const EditHabitMain = ({navigation}) => {
               color={'black'}
               size={26}
             />
-            <Text style={styles.habitText}>{item.name}</Text>
+            <Text numberOfLines={1} style={styles.habitText}>
+              {item.name}
+            </Text>
             <MCIcon
               style={styles.rightIcon}
               name="code-greater-than"
@@ -82,6 +84,7 @@ const styles = StyleSheet.create({
   },
   habitText: {
     margin: 3,
+    flex: 1,
   },
   rightIcon: {
     marginLeft: 'auto',
