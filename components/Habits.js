@@ -35,7 +35,7 @@ const Habits = () => {
       for (let i = 0; i < loadingHabitList.length; i++) {
         indents.push(
           <HabitButton
-            key={loadingHabitList[i].name + i}
+            key={loadingHabitList[i].name + i + index}
             title={loadingHabitList[i].name}
             textColor={loadingHabitList[i].colors.textColor}
             backgroundColor={loadingHabitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
@@ -48,6 +48,7 @@ const Habits = () => {
               loadingHabitList[i].completed = !loadingHabitList[i].completed;
               // clone habitlist and replace index with deep cloned index item
               const habitListClone = [...habitList];
+              // console.log(habitList)
               habitListClone[index] = loadingHabitList;
               // update habits list
               setHabitList(habitListClone);
