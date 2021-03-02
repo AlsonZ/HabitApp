@@ -11,7 +11,10 @@ import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
 import DayIcon from './icons/DayIcon';
-import {deleteAllPastHabitData} from './settings/Storage';
+import {
+  deleteAllPastHabitData,
+  deleteAllScheduledHabits,
+} from './settings/Storage';
 
 const Habits = () => {
   const [habitList, setHabitList, passedDays] = useContext(HabitListContext);
@@ -138,8 +141,9 @@ const Habits = () => {
           }}></Button>
         <Button
           title="test"
-          onPress={() => {
-            console.log(habitList[passedDays][7]);
+          onPress={async () => {
+            // console.log(habitList[passedDays][7]);
+            await deleteAllScheduledHabits();
           }}></Button>
         <Text style={styles.dayTitle}>Schedule</Text>
         {loadDayIcons()}

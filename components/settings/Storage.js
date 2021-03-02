@@ -216,3 +216,14 @@ export const deleteAllPastHabitData = async () => {
     console.log('Delete past habit data error: ' + e);
   }
 };
+export const deleteAllScheduledHabits = async () => {
+  for (let i = 1; i <= 14; i++) {
+    try {
+      console.log('Deleting all scheduled habit');
+      await AsyncStorage.removeItem(HabitDayKey + i);
+      console.log('Finished deleting');
+    } catch (e) {
+      console.log('Delete scheduled habit error: ' + e);
+    }
+  }
+};
