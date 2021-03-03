@@ -37,6 +37,7 @@ const Habits = () => {
         indents.push(
           <HabitButton
             key={loadingHabitList[i].name + i + index}
+            disabled={day > passedDays + 1 ? true : false}
             title={loadingHabitList[i].name}
             textColor={loadingHabitList[i].colors.textColor}
             backgroundColor={loadingHabitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here

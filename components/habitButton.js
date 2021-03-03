@@ -5,6 +5,7 @@ import XSvg from './svgs/XSvg';
 import TickSvg from './svgs/TickSvg';
 
 const HabitButton = ({
+  disabled,
   title,
   textColor,
   backgroundColor,
@@ -31,7 +32,10 @@ const HabitButton = ({
   };
 
   return (
-    <TouchableOpacity onPress={buttonPress} style={styles.touchable}>
+    <TouchableOpacity
+      onPress={buttonPress}
+      style={styles.touchable}
+      disabled={disabled}>
       <View
         style={[
           styles.button,
