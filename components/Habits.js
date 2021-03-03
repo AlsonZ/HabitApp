@@ -26,6 +26,7 @@ const Habits = () => {
   const [habitInnerContainerWidth, setHabitInnerContainerWidth] = useState(
     null,
   );
+  const [currentlyActiveScreen, setCurrentlyActiveScreen] = useState(0);
 
   const loadHabits = (day) => {
     const index = day - 1;
@@ -58,6 +59,7 @@ const Habits = () => {
     }
     setCurrentlyLoadedHabits(indents);
     setCurrentlyViewingDay(day);
+    setCurrentlyActiveScreen(day);
   };
 
   const calculateWidth = (e) => {
@@ -92,7 +94,11 @@ const Habits = () => {
     if (habitList.length > 0 && habitList[0] !== null) {
       if (!loading) {
         loading = true;
-        loadHabits(passedDays + 1);
+        if (currentlyActiveScreen !== 0) {
+          loadHabits(currentlyActiveScreen);
+        } else {
+          loadHabits(passedDays + 1);
+        }
         loading = false;
       }
     }
