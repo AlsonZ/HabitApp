@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const HabitListKey = 'List_Of_All_Habits';
 const HabitDayKey = 'Habit_Day_';
 const PastHabitKey = 'Past_Habit_Data';
+const CategoriesKey = 'Categories';
 
 const storeWithKey = async (value, key) => {
   try {
@@ -28,6 +29,7 @@ const getWithKey = async (key) => {
   }
 };
 
+// Scheduled Habits
 const storeScheduledHabits = async (habitDetails) => {
   // check array of schedule for active days
   for (let i = 0; i < habitDetails.schedule.length; i++) {
@@ -77,7 +79,19 @@ const editScheduledHabits = async (habitDetails) => {
   // store new
   await storeScheduledHabits(habitDetails);
 };
+export const deleteAllScheduledHabits = async () => {
+  for (let i = 1; i <= 14; i++) {
+    try {
+      console.log('Deleting all scheduled habit');
+      await AsyncStorage.removeItem(HabitDayKey + i);
+      console.log('Finished deleting');
+    } catch (e) {
+      console.log('Delete scheduled habit error: ' + e);
+    }
+  }
+};
 
+// Habits
 export const storeNewHabit = async (habitDetails) => {
   // get habits list to modify
   const habitsListJSON = await getWithKey(HabitListKey);
@@ -149,24 +163,24 @@ export const getDayHabit = async (day) => {
   return await getWithKey(key);
 };
 
+// Dates
 export const getDate = () => {
   const date = new Date();
   // set to midnight of the current day (past, not future)
   date.setUTCHours(0, 0, 0, 0);
   return date.toISOString();
 };
-
-const treatAsUTC = (date) => {
-  const result = new Date(date);
-  result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
-  return result;
-};
-
 export const getDateDifference = (startDate, endDate) => {
+  const treatAsUTC = (date) => {
+    const result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
+  };
   const millisecondsPerDay = 1000 * 60 * 60 * 24;
   return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
 };
 
+// Past Habit Data
 export const storeNewPastHabitData = async (habitData) => {
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
@@ -174,7 +188,6 @@ export const storeNewPastHabitData = async (habitData) => {
   pastHabitData.push(habitData);
   await storeWithKey(pastHabitData, PastHabitKey);
 };
-
 export const editPastHabitData = async (habitData) => {
   // get data
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
@@ -191,14 +204,12 @@ export const editPastHabitData = async (habitData) => {
   // store new data
   await storeWithKey(pastHabitData, PastHabitKey);
 };
-
 export const getPastHabitData = async () => {
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
   const pastHabitData = tempPastHabitData ? tempPastHabitData : [];
   return pastHabitData;
 };
-
 export const getLatestPastHabitData = async () => {
   const pastHabitDataJSON = await getWithKey(PastHabitKey);
   const tempPastHabitData = JSON.parse(pastHabitDataJSON);
@@ -206,7 +217,6 @@ export const getLatestPastHabitData = async () => {
   const latestHabitData = pastHabitData[pastHabitData.length - 1];
   return latestHabitData;
 };
-
 export const deleteAllPastHabitData = async () => {
   try {
     console.log('Deleting all habit data');
@@ -216,14 +226,19 @@ export const deleteAllPastHabitData = async () => {
     console.log('Delete past habit data error: ' + e);
   }
 };
-export const deleteAllScheduledHabits = async () => {
-  for (let i = 1; i <= 14; i++) {
-    try {
-      console.log('Deleting all scheduled habit');
-      await AsyncStorage.removeItem(HabitDayKey + i);
-      console.log('Finished deleting');
-    } catch (e) {
-      console.log('Delete scheduled habit error: ' + e);
-    }
-  }
+
+// Categories
+export const storeNewCategory = async (category) => {
+  const categoriesJSON = await getWithKey(CategoriesKey);
+  const tempCategories = JSON.parse(categoriesJSON);
+  const categories = tempCategories ? tempCategories : [];
+  categories.push(category);
+  await storeWithKey(CategoriesKey, categories);
+  return 'Success';
+};
+export const getAllCategories = async () => {
+  const categoriesJSON = await getWithKey(CategoriesKey);
+  const tempCategories = JSON.parse(categoriesJSON);
+  const categories = tempCategories ? tempCategories : [];
+  return categories;
 };
