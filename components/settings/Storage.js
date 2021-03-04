@@ -228,17 +228,26 @@ export const deleteAllPastHabitData = async () => {
 };
 
 // Categories
-export const storeNewCategory = async (category) => {
-  const categoriesJSON = await getWithKey(CategoriesKey);
-  const tempCategories = JSON.parse(categoriesJSON);
-  const categories = tempCategories ? tempCategories : [];
-  categories.push(category);
-  await storeWithKey(categories, CategoriesKey);
-  return 'Success';
-};
 export const getAllCategories = async () => {
   const categoriesJSON = await getWithKey(CategoriesKey);
   const tempCategories = JSON.parse(categoriesJSON);
   const categories = tempCategories ? tempCategories : [];
   return categories;
+};
+export const storeNewCategory = async (category) => {
+  const categories = await getAllCategories();
+  categories.push(category);
+  await storeWithKey(categories, CategoriesKey);
+  return 'Success';
+};
+
+export const deleteCategory = async (category) => {
+  const categories = await getAllCategories();
+  let index = await categories.findIndex(
+    (categoryItem) => categoryItem.id === category.id,
+  );
+  await categories.splice(index, 1);
+  await storeWithKey(categories, CategoriesKey);
+
+  return 'Success';
 };
