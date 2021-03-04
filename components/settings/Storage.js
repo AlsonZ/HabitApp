@@ -233,7 +233,7 @@ export const storeNewCategory = async (category) => {
   const tempCategories = JSON.parse(categoriesJSON);
   const categories = tempCategories ? tempCategories : [];
   categories.push(category);
-  await storeWithKey(CategoriesKey, categories);
+  await storeWithKey(categories, CategoriesKey);
   return 'Success';
 };
 export const getAllCategories = async () => {
