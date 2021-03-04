@@ -10,9 +10,12 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DefaultColors as Colors} from '../settings/Colors';
 import {CategoriesContext} from '../contexts/CategoriesContext';
+import {storeNewCategory} from '../settings/Storage';
 
 const CategoryItem = ({route, navigation}) => {
-  const [categories, setCategories] = useContext(CategoriesContext);
+  const [categories, setCategories, reloadContext] = useContext(
+    CategoriesContext,
+  );
   const {selectedCategory, parentRoute} = route.params;
   const [categoryColor, setCategoryColor] = useState(Colors.red);
   const [categoryName, setCategoryName] = useState('');
@@ -26,9 +29,11 @@ const CategoryItem = ({route, navigation}) => {
     }
   };
 
-  const createCategory = () => {
-    if (categoryName.trim() != '') {
-      setCategories([...categories, {name: categoryName}]);
+  const createCategory = async () => {
+    if (categoryName.trim() !== '') {
+      // setCategories([...categories, {name: categoryName}]);
+      await storeNewCategory({name: categoryName});
+      reloadContext();
       setCategoryName('');
     }
   };
