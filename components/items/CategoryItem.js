@@ -11,6 +11,8 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DefaultColors as Colors} from '../settings/Colors';
 import {CategoriesContext} from '../contexts/CategoriesContext';
 import {storeNewCategory} from '../settings/Storage';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 const CategoryItem = ({route, navigation}) => {
   const [categories, setCategories, reloadContext] = useContext(
@@ -32,7 +34,7 @@ const CategoryItem = ({route, navigation}) => {
   const createCategory = async () => {
     if (categoryName.trim() !== '') {
       // setCategories([...categories, {name: categoryName}]);
-      await storeNewCategory({name: categoryName});
+      await storeNewCategory({name: categoryName, id: uuidv4()});
       reloadContext();
       setCategoryName('');
     }
