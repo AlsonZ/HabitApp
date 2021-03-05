@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
     margin: 2,
+    marginBottom: 0,
     marginLeft: 20,
   },
   checkBoxText: {

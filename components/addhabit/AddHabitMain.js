@@ -16,7 +16,7 @@ import {
 import ScheduleItem from '../items/ScheduleItem';
 
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
-import ModalItem from '../modal/ModalItem';
+import OkModal from '../modal/OkModal';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
 
@@ -62,7 +62,7 @@ const AddHabitMain = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ModalItem
+        <OkModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           title={'Scheduled Days'}
@@ -83,7 +83,7 @@ const AddHabitMain = ({navigation, route}) => {
             keyExtractor={(item) => `${item.day}`}
             extraData={habitDetails.schedule}
           />
-        </ModalItem>
+        </OkModal>
         <View style={styles.habitItem}>
           <MCIcon
             style={styles.habitIcon}

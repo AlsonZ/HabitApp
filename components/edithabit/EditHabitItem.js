@@ -13,8 +13,8 @@ import {HabitListContext} from '../contexts/HabitListContext';
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
 import {deleteHabit, editHabit} from '../settings/Storage';
 
+import OkModal from '../modal/OkModal';
 import ScheduleItem from '../items/ScheduleItem';
-import ModalItem from '../modal/ModalItem';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
 
@@ -59,7 +59,7 @@ const EditHabitItem = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ModalItem
+      <OkModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={'Scheduled Days'}
@@ -82,7 +82,7 @@ const EditHabitItem = ({route, navigation}) => {
             extraData={habitDetails.schedule}
           />
         )}
-      </ModalItem>
+      </OkModal>
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
