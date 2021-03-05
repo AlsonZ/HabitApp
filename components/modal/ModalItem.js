@@ -1,25 +1,7 @@
-import React, {useContext, useState} from 'react';
-import {
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import {DefaultColors} from '../settings/Colors';
+import React from 'react';
+import {Modal, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 
-const ModalItem = ({
-  children,
-  modalVisible,
-  setModalVisible,
-  // title,
-  modalHeader,
-  modalFooter,
-}) => {
-  const modalHeaderActive = modalHeader ? modalHeader : false;
-  const modalFooterActive = modalFooter ? modalFooter : false;
+const ModalItem = ({children, modalVisible, setModalVisible}) => {
   return (
     <Modal visible={modalVisible} animationType="fade" transparent={true}>
       <TouchableWithoutFeedback
@@ -29,25 +11,7 @@ const ModalItem = ({
         <View style={styles.modalOverlay}></View>
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
-        <View style={styles.modalView}>
-          {/* <View> */}
-          {/* {modalHeaderActive && (
-              <Text style={styles.modalHeader}>{title}</Text>
-            )} */}
-          {children}
-          {/* {modalFooterActive && (
-              <View style={styles.modalFooter}>
-                <TouchableHighlight
-                  underlayColor={DefaultColors.touchableHightlightUnderlay}
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}>
-                  <Text style={styles.modalButton}>OK</Text>
-                </TouchableHighlight>
-              </View>
-            )} */}
-          {/* </View> */}
-        </View>
+        <View style={styles.modalView}>{children}</View>
       </View>
     </Modal>
   );
@@ -62,7 +26,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     display: 'flex',
-    // flexDirection: 'row',
     flexWrap: 'wrap',
     maxHeight: '60%',
     backgroundColor: 'white',
@@ -86,25 +49,6 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  // modalHeader: {
-  //   // display: 'flex',
-  //   alignItems: 'center',
-  //   // width: '100%',
-  //   margin: 5,
-  //   marginLeft: 20,
-  //   fontSize: 18,
-  // },
-  // modalFooter: {
-  //   display: 'flex',
-  //   flexDirection: 'row-reverse',
-  //   margin: 3,
-  // },
-  // modalButton: {
-  //   padding: 8,
-  //   paddingHorizontal: 15,
-  //   marginRight: 5,
-  //   fontSize: 15,
-  // },
 });
 
 export default ModalItem;
