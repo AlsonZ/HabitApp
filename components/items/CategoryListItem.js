@@ -2,11 +2,14 @@ import React from 'react';
 import {Pressable, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const CategoryListItem = ({category, selectCategory}) => {
+const CategoryListItem = ({category, selectCategory, deleteCategory}) => {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => {
         selectCategory(category);
+      }}
+      onLongPress={() => {
+        deleteCategory(category);
       }}
       style={styles.categoryItem}>
       <Text style={styles.categoryText}>{category}</Text>
@@ -16,7 +19,7 @@ const CategoryListItem = ({category, selectCategory}) => {
         color={'black'}
         size={26}
       />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

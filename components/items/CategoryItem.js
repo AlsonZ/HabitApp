@@ -5,13 +5,14 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
   ScrollView,
 } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {DefaultColors as Colors} from '../settings/Colors';
+import {DefaultColors} from '../settings/Colors';
 import {CategoriesContext} from '../contexts/CategoriesContext';
-import {storeNewCategory} from '../settings/Storage';
-import ModalItem from '../modal/ModalItem';
+import {deleteCategory, storeNewCategory} from '../settings/Storage';
+import DeleteModal from '../modal/DeleteModal';
 import CategoryListItem from './CategoryListItem';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -21,16 +22,17 @@ const CategoryItem = ({route, navigation}) => {
     CategoriesContext,
   );
   const {selectedCategory, parentRoute} = route.params;
-  const [categoryColor, setCategoryColor] = useState(Colors.red);
+  const [categoryColor, setCategoryColor] = useState(DefaultColors.red);
   const [categoryName, setCategoryName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState('');
 
   const onCategoryNameChange = (text) => {
     setCategoryName(text);
     if (text.trim() != '') {
-      setCategoryColor(Colors.green);
+      setCategoryColor(DefaultColors.green);
     } else {
-      setCategoryColor(Colors.red);
+      setCategoryColor(DefaultColors.red);
     }
   };
 
@@ -56,22 +58,30 @@ const CategoryItem = ({route, navigation}) => {
           category={name}
           key={index}
           selectCategory={selectCategory}
-          // deleteCategory={}
+          deleteCategory={(category) => {
+            setCurrentCategory(category);
+            setModalVisible();
+          }}
         />
       ));
     }
   };
 
+  const deleteCategoryItem = async () => {
+    const success = await deleteCategory(currentCategory);
+    if (success === 'Success') {
+      reloadContext();
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
-      <ModalItem
+      <DeleteModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={'Delete Category?'}
-        modalHeader={true}
-        modalFooter={true}>
-        <View></View>
-      </ModalItem>
+        title={`Delete ${currentCategory}?`}
+        onPress={deleteCategoryItem}
+      />
       {loadCategories()}
       <View style={styles.categoryItem}>
         <MCIcon
