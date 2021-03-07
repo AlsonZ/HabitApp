@@ -8,28 +8,23 @@ import {CategoriesProvider} from '../contexts/CategoriesContext';
 import CategoryItem from '../items/CategoryItem';
 import ScheduleItem from '../items/ScheduleItem';
 import HabitColorItem from '../items/HabitColorItem';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
-const testPage = () => {
-  return (
-    <View>
-      <Text>Testing</Text>
-    </View>
-  );
-};
-
 const AddHabitNav = () => {
+  const insets = useSafeAreaInsets();
   return (
     <CategoriesProvider>
       <AddHabitProvider>
-        <Stack.Navigator>
+        <Stack.Navigator
+          headerMode="screen"
+          screenOptions={{headerStatusBarHeight: insets.top}}>
           <Stack.Screen
             name="Main"
-            options={{title: 'Create a new Habit'}}
+            options={{title: 'Create a new Habit', headerTransparent: false}}
             component={AddHabitMain}
           />
-          <Stack.Screen name="test" component={testPage} />
           <Stack.Screen name="Category" component={CategoryItem} />
           <Stack.Screen
             name="Schedule"
