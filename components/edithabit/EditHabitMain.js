@@ -51,6 +51,14 @@ const EditHabitMain = ({navigation}) => {
         keyExtractor={(item, index) => `${item.name}${index}`}
         extraData={allHabits}
       />
+      <TouchableOpacity
+        activeOpacity={0.6}
+        style={styles.addButton}
+        onPress={() => {
+          navigation.navigate('AddNewHabit');
+        }}>
+        <AntIcon name="plus" color={'white'} size={26} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -58,6 +66,7 @@ const EditHabitMain = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    flex: 1,
     justifyContent: 'center',
     margin: 2,
   },
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
-    marginLeft: 15,
+    marginLeft: 7,
     marginRight: 5,
   },
   habitItem: {
@@ -73,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 44,
-    marginBottom: 6,
+    marginVertical: 3,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
     width: '100%',
@@ -88,6 +97,27 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 'auto',
+  },
+  addButton: {
+    position: 'absolute',
+    margin: 10,
+    bottom: 0,
+    right: 0,
+    width: 64,
+    height: 64,
+    backgroundColor: 'lightblue',
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
