@@ -19,15 +19,15 @@ const HabitButton = ({
   const [isActive, setIsActive] = useState(completed ? completed : false);
 
   const iconBackgroundSvgProps = {
-    width: '58',
-    height: '58',
+    width: listView ? '30' : '58',
+    height: listView ? '30' : '58',
     viewBox: '-304 -304 608 608',
     //rgba(0,0,0,0.4)
     fill: isActive ? 'lightgray' : 'rgba(0,0,0,0.04)',
   };
   const appSvgProps = {
-    width: '58',
-    height: '58',
+    width: listView ? '30' : '58',
+    height: listView ? '30' : '58',
     viewBox: '0 0 20 20',
     //rgba(0,0,0,0.4)
     fill: isActive ? backgroundActiveColor : backgroundColor,
@@ -66,7 +66,7 @@ const HabitButton = ({
         </View>
         <Text
           style={[
-            appStyles.buttonText,
+            listView ? listStyles.buttonText : appStyles.buttonText,
             {color: isActive ? textActiveColor : textColor},
           ]}
           numberOfLines={3}
@@ -81,13 +81,21 @@ const HabitButton = ({
 const listStyles = StyleSheet.create({
   touchable: {
     flex: 1,
-    // backgroundColor: 'red',
+    width: '100%',
+    paddingVertical: 10,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   button: {
     flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
     flexDirection: 'row-reverse',
   },
   iconPadding: {},
+  buttonText: {
+    flexGrow: 1,
+  },
 });
 
 const appStyles = StyleSheet.create({
