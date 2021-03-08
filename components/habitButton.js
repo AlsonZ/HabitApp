@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import XSvg from './svgs/XSvg';
@@ -14,6 +14,7 @@ const HabitButton = ({
   backgroundActiveColor,
   onPress,
   completed,
+  listView,
 }) => {
   const [isActive, setIsActive] = useState(completed ? completed : false);
 
@@ -49,14 +50,14 @@ const HabitButton = ({
   return (
     <TouchableOpacity
       onPress={buttonPress}
-      style={appStyles.touchable}
+      style={listView ? listStyles.touchable : appStyles.touchable}
       disabled={disabled}>
       <View
         style={[
-          appStyles.button,
+          listView ? listStyles.button : appStyles.button,
           // {backgroundColor: isActive ? backgroundActiveColor : backgroundColor},
         ]}>
-        <View style={appStyles.iconPadding}>
+        <View style={listView ? listStyles.iconPadding : appStyles.iconPadding}>
           <IconBackgroundSvg
             style={appStyles.iconBackground}
             {...iconBackgroundSvgProps}
@@ -77,7 +78,17 @@ const HabitButton = ({
   );
 };
 
-const listStyles = StyleSheet.create({});
+const listStyles = StyleSheet.create({
+  touchable: {
+    flex: 1,
+    // backgroundColor: 'red',
+  },
+  button: {
+    flex: 1,
+    flexDirection: 'row-reverse',
+  },
+  iconPadding: {},
+});
 
 const appStyles = StyleSheet.create({
   touchable: {
