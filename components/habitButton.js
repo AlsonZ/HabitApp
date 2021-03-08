@@ -53,32 +53,28 @@ const HabitButton = ({
       onPress={buttonPress}
       style={listView ? listStyles.touchable : appStyles.touchable}
       disabled={disabled}>
-      <View
-        style={[
-          listView ? listStyles.button : appStyles.button,
-          // {backgroundColor: isActive ? backgroundActiveColor : backgroundColor},
-        ]}>
-        <View style={listView ? listStyles.iconPadding : appStyles.iconPadding}>
+      <View style={[listView ? listStyles.button : appStyles.button]}>
+        <View>
           <IconBackgroundSvg
             style={appStyles.iconBackground}
             {...iconBackgroundSvgProps}
           />
           {isActive ? <TickSvg {...appSvgProps} /> : <XSvg {...appSvgProps} />}
         </View>
-        <Text
-          style={[
-            listView ? listStyles.buttonText : appStyles.buttonText,
-            {color: isActive ? textActiveColor : textColor},
-          ]}
-          numberOfLines={3}
-          textBreakStrategy="highQuality">
-          {title}
-        </Text>
-        {listView && (
-          // <View style={listStyles.descriptionContainer}>
-          <Text style={listStyles.description}>{description}</Text>
-          // </View>
-        )}
+        <View style={listView ? listStyles.textContainer : {}}>
+          <Text
+            style={[
+              listView ? listStyles.buttonText : appStyles.buttonText,
+              {color: isActive ? textActiveColor : textColor},
+            ]}
+            numberOfLines={3}
+            textBreakStrategy="highQuality">
+            {title}
+          </Text>
+          {listView && (
+            <Text style={listStyles.description}>{description}</Text>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -94,21 +90,15 @@ const listStyles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     flexDirection: 'row-reverse',
     position: 'relative',
   },
-  iconPadding: {},
-  buttonText: {
-    flexGrow: 1,
-  },
   description: {
-    position: 'absolute',
-    right: 5,
-    bottom: 0,
-    fontSize: 10,
     color: 'gray',
+    fontSize: 10,
+  },
+  textContainer: {
+    flexGrow: 1,
   },
 });
 
@@ -119,9 +109,6 @@ const appStyles = StyleSheet.create({
     margin: 10,
     borderRadius: 8,
     display: 'flex',
-  },
-  iconPadding: {
-    position: 'relative',
   },
   iconBackground: {
     position: 'absolute',
