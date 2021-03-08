@@ -8,6 +8,7 @@ import IconBackgroundSvg from './svgs/IconBackgroundSvg';
 const HabitButton = ({
   disabled,
   title,
+  description,
   textColor,
   backgroundColor,
   textActiveColor,
@@ -19,15 +20,15 @@ const HabitButton = ({
   const [isActive, setIsActive] = useState(completed ? completed : false);
 
   const iconBackgroundSvgProps = {
-    width: listView ? '30' : '58',
-    height: listView ? '30' : '58',
+    width: listView ? '40' : '58',
+    height: listView ? '40' : '58',
     viewBox: '-304 -304 608 608',
     //rgba(0,0,0,0.4)
     fill: isActive ? 'lightgray' : 'rgba(0,0,0,0.04)',
   };
   const appSvgProps = {
-    width: listView ? '30' : '58',
-    height: listView ? '30' : '58',
+    width: listView ? '40' : '58',
+    height: listView ? '40' : '58',
     viewBox: '0 0 20 20',
     //rgba(0,0,0,0.4)
     fill: isActive ? backgroundActiveColor : backgroundColor,
@@ -73,6 +74,11 @@ const HabitButton = ({
           textBreakStrategy="highQuality">
           {title}
         </Text>
+        {listView && (
+          // <View style={listStyles.descriptionContainer}>
+          <Text style={listStyles.description}>{description}</Text>
+          // </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -82,7 +88,7 @@ const listStyles = StyleSheet.create({
   touchable: {
     flex: 1,
     width: '100%',
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -91,10 +97,18 @@ const listStyles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     flexDirection: 'row-reverse',
+    position: 'relative',
   },
   iconPadding: {},
   buttonText: {
     flexGrow: 1,
+  },
+  description: {
+    position: 'absolute',
+    right: 5,
+    bottom: 0,
+    fontSize: 10,
+    color: 'gray',
   },
 });
 
