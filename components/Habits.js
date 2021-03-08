@@ -48,6 +48,7 @@ const Habits = () => {
             key={loadingHabitList[i].name + i + index}
             disabled={day > passedDays + 1 ? true : false}
             title={loadingHabitList[i].name}
+            description={loadingHabitList[i].description}
             textColor={loadingHabitList[i].colors.textColor}
             backgroundColor={loadingHabitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
             textActiveColor={loadingHabitList[i].colors.textActiveColor}
