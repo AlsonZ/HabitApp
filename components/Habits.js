@@ -7,6 +7,7 @@ import {
   Button,
   ScrollView,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
@@ -17,8 +18,15 @@ import {
 } from './settings/Storage';
 
 const Habits = () => {
-  const [habitList, setHabitList, passedDays] = useContext(HabitListContext);
+  const [
+    habitList,
+    setHabitList,
+    passedDays,
+    reloadContext,
+    setReloadContext,
+  ] = useContext(HabitListContext);
   const [currentlyViewingDay, setCurrentlyViewingDay] = useState(1);
+  const [listView, setListView] = useState(false);
   const [currentlyLoadedHabits, setCurrentlyLoadedHabits] = useState(
     <View style={styles.container}></View>,
   );
@@ -36,6 +44,7 @@ const Habits = () => {
       for (let i = 0; i < loadingHabitList.length; i++) {
         indents.push(
           <HabitButton
+            listView={listView}
             key={loadingHabitList[i].name + i + index}
             disabled={day > passedDays + 1 ? true : false}
             title={loadingHabitList[i].name}
@@ -69,8 +78,8 @@ const Habits = () => {
       e.nativeEvent.layout.width / habitButtonTotalWidth,
     );
     const newContainerWidth = newWidth * habitButtonTotalWidth;
-    console.log('native width: ' + e.nativeEvent.layout.width);
-    console.log('newWidth: ' + newContainerWidth);
+    // console.log('native width: ' + e.nativeEvent.layout.width);
+    // console.log('newWidth: ' + newContainerWidth);
     setHabitInnerContainerWidth(newContainerWidth);
   };
 
@@ -132,18 +141,19 @@ const Habits = () => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
         <ScrollView
           contentContainerStyle={[
             styles.habitContainer,
             {width: habitInnerContainerWidth},
+            {flexDirection: listView ? 'column' : 'row'},
           ]}>
           {currentlyLoadedHabits}
         </ScrollView>
       </View>
       <View style={styles.days}>
-        <Button
+        {/* <Button
           title="delete"
           onPress={async () => {
             await deleteAllPastHabitData();
@@ -153,11 +163,18 @@ const Habits = () => {
           onPress={async () => {
             // console.log(habitList[passedDays][7]);
             await deleteAllScheduledHabits();
+          }}></Button> */}
+        <Button
+          title="listView"
+          onPress={() => {
+            setListView(!listView);
+            console.log('change listview' + listView);
+            setReloadContext(!reloadContext);
           }}></Button>
         <Text style={styles.dayTitle}>Schedule</Text>
         {loadDayIcons()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -178,7 +195,6 @@ const styles = StyleSheet.create({
   },
   habitContainer: {
     display: 'flex',
-    flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
   },
@@ -186,6 +202,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    borderTopColor: 'lightgray',
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   dayTitle: {
     textAlign: 'center',
