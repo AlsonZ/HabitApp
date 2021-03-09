@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   navbar: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: 'darkgray',
+    backgroundColor: 'black',
     paddingVertical: 5,
     paddingHorizontal: 15,
   },
