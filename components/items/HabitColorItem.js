@@ -94,7 +94,7 @@ const HabitColorItem = ({navigation, route}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
         <View style={styles.modalView}>{loadHabitColors()}</View>
       </ModalItem>
@@ -124,9 +124,9 @@ const HabitColorItem = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     flexGrow: 1,
-    marginHorizontal: 17,
+    padding: 17,
   },
   listItem: {
     display: 'flex',
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
   },
   saveButtonContainer: {
     flex: 1,
+    paddingTop: 17,
     justifyContent: 'flex-end',
-    marginVertical: 17,
   },
 });
 
