@@ -6,6 +6,7 @@ import {
   Text,
   Button,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import HabitButton from './HabitButton';
@@ -16,6 +17,8 @@ import {
   deleteAllPastHabitData,
   deleteAllScheduledHabits,
 } from './settings/Storage';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 const Habits = () => {
   const [
@@ -142,19 +145,50 @@ const Habits = () => {
     );
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
-        <ScrollView
-          contentContainerStyle={[
-            styles.habitContainer,
-            {width: habitInnerContainerWidth},
-            {flexDirection: listView ? 'column' : 'row'},
-          ]}>
-          {currentlyLoadedHabits}
-        </ScrollView>
+    <SafeAreaView style={styles.safeAreaContainer}>
+      <View style={styles.navbar}>
+        <View style={styles.rightNavContainer}>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => {
+              setListView(true);
+              setReloadContext(!reloadContext);
+            }}>
+            <IonIcon
+              style={styles.habitIcon}
+              name="ios-menu"
+              color={'white'}
+              size={32}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => {
+              setListView(false);
+              setReloadContext(!reloadContext);
+            }}>
+            <AntIcon
+              style={styles.habitIcon}
+              name="appstore-o"
+              color={'white'}
+              size={26}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.days}>
-        {/* <Button
+      <View style={styles.container}>
+        <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
+          <ScrollView
+            contentContainerStyle={[
+              styles.habitContainer,
+              {width: habitInnerContainerWidth},
+              {flexDirection: listView ? 'column' : 'row'},
+            ]}>
+            {currentlyLoadedHabits}
+          </ScrollView>
+        </View>
+        <View style={styles.days}>
+          {/* <Button
           title="delete"
           onPress={async () => {
             await deleteAllPastHabitData();
@@ -165,26 +199,31 @@ const Habits = () => {
             // console.log(habitList[passedDays][7]);
             await deleteAllScheduledHabits();
           }}></Button> */}
-        <Button
-          title="listView"
-          onPress={() => {
-            setListView(!listView);
-            console.log('change listview' + listView);
-            setReloadContext(!reloadContext);
-          }}></Button>
-        <Text style={styles.dayTitle}>Schedule</Text>
-        {loadDayIcons()}
+          {/* <Button
+            title="listView"
+            onPress={() => {
+              setListView(!listView);
+              console.log('change listview' + listView);
+              setReloadContext(!reloadContext);
+            }}></Button> */}
+          <Text style={styles.dayTitle}>Schedule</Text>
+          {loadDayIcons()}
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: 10,
+    paddingHorizontal: 17,
+    paddingBottom: 17,
   },
   listContainer: {
     alignItems: 'center',
@@ -198,6 +237,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
+    paddingBottom: 17,
   },
   days: {
     display: 'flex',
@@ -223,6 +263,23 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: 'white',
+  },
+  navbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: 'darkgray',
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+  },
+  rightNavContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+  navButton: {
+    paddingHorizontal: 10,
+    display: 'flex',
   },
 });
 
