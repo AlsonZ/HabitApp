@@ -111,7 +111,7 @@ const CategoryItem = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    margin: 17,
+    padding: 17,
     marginRight: 1,
   },
   categoryItem: {
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 44,
     marginBottom: 6,
-    marginRight: 16,
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   textInput: {
-    width: '60%',
+    flex: 1,
   },
   selectedCategory: {
     backgroundColor: 'lightblue',
