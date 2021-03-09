@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import EditHabitMain from './EditHabitMain.js';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 import EditHabitItem from './EditHabitItem';
@@ -19,22 +19,33 @@ const EditHabitNav = () => {
           component={EditHabitMain}
         />
         <Stack.Screen
-          options={{title: 'Edit Your Habit'}}
+          options={{
+            title: 'Edit Your Habit',
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
           name="EditHabitItem"
           component={EditHabitItem}
         />
         <Stack.Screen
-          options={{title: 'Categories'}}
+          options={{
+            title: 'Categories',
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
           name="EditCategories"
           component={CategoryItem}
         />
         <Stack.Screen
-          options={{title: 'Select Colors'}}
+          options={{
+            title: 'Select Colors',
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
           name="EditHabitColors"
           component={HabitColorItem}
         />
         <Stack.Screen
-          options={{header: () => null}}
+          options={{
+            header: () => null,
+          }}
           name="AddNewHabit"
           component={AddHabitNav}
         />
