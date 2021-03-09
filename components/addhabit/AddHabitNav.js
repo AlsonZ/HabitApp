@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import AddHabitMain from './AddHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
@@ -21,19 +21,29 @@ const AddHabitNav = () => {
           headerMode="screen"
           screenOptions={{headerStatusBarHeight: insets.top}}>
           <Stack.Screen
-            name="Main"
+            name="AddHabitMain"
             options={{title: 'Create a new Habit', headerTransparent: false}}
             component={AddHabitMain}
           />
-          <Stack.Screen name="Category" component={CategoryItem} />
           <Stack.Screen
+            name="AddHabitCategory"
+            component={CategoryItem}
+            options={{
+              title: 'Categories',
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
+          />
+          {/* <Stack.Screen
             name="Schedule"
             options={{title: 'Repeat every'}}
             component={ScheduleItem}
-          />
+          /> */}
           <Stack.Screen
-            name="HabitColorItem"
-            options={{title: 'Select Colors'}}
+            name="AddHabitColors"
+            options={{
+              title: 'Select Colors',
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
             component={HabitColorItem}
           />
         </Stack.Navigator>

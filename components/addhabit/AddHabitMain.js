@@ -101,7 +101,7 @@ const AddHabitMain = ({navigation, route}) => {
         </View>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('Category', {
+            navigation.navigate('AddHabitCategory', {
               parentRoute: route.name,
             })
           }
@@ -174,7 +174,7 @@ const AddHabitMain = ({navigation, route}) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('HabitColorItem', {
+            navigation.navigate('AddHabitColors', {
               colors: habitDetails.colors,
               parentRoute: route.name,
             })
@@ -222,32 +222,33 @@ const AddHabitMain = ({navigation, route}) => {
         <Text style={styles.habitText}>Order</Text>
         <NumberIcon number={habitDetails.order} />
       </TouchableOpacity> */}
-
-        <Button
-          title="Create New Habit"
-          onPress={async () => {
-            const success = await storeNewHabit(habitDetails);
-            // const success = 'Success';
-            if (success === 'Success') {
-              // show modal popup for success with 3 buttons
-              // one to go to home, other to continue making duplicate habit
-              // one to start new
-              // reload Context's when new habit is added
-              setReloadContext(!reloadContext);
-              setReloadAddHabitContext(!reloadAddHabitContext);
-              setReloadEditContext(!reloadEditContext);
-              // send to main screen
-              navigation.navigate('Home');
-            } else if (success === 'Name Matches Existing Habit') {
-              //show modal popup for error
-              console.log(success);
-            }
-          }}></Button>
-        <Button
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Create New Habit"
+            onPress={async () => {
+              const success = await storeNewHabit(habitDetails);
+              // const success = 'Success';
+              if (success === 'Success') {
+                // show modal popup for success with 3 buttons
+                // one to go to home, other to continue making duplicate habit
+                // one to start new
+                // reload Context's when new habit is added
+                setReloadContext(!reloadContext);
+                setReloadAddHabitContext(!reloadAddHabitContext);
+                setReloadEditContext(!reloadEditContext);
+                // send to main screen
+                navigation.navigate('Home');
+              } else if (success === 'Name Matches Existing Habit') {
+                //show modal popup for error
+                console.log(success);
+              }
+            }}></Button>
+          {/* <Button
           title="Log Details"
           onPress={async () => {
             console.log(habitDetails);
-          }}></Button>
+          }}></Button> */}
+        </View>
       </ScrollView>
     </View>
   );
@@ -262,6 +263,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     display: 'flex',
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 10,
   },
@@ -290,24 +292,10 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     right: 0,
   },
-  modalHeader: {
-    // display: 'flex',
-    alignItems: 'center',
-    // width: '100%',
-    margin: 5,
-    marginLeft: 20,
-    fontSize: 18,
-  },
-  modalFooter: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    margin: 3,
-  },
-  modalButton: {
-    padding: 8,
-    paddingHorizontal: 15,
-    marginRight: 5,
-    fontSize: 15,
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginVertical: 17,
   },
 });
 
