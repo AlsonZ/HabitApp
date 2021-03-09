@@ -1,9 +1,16 @@
 import React from 'react';
-import {Modal, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  StatusBar,
+} from 'react-native';
 
 const ModalItem = ({children, modalVisible, setModalVisible}) => {
   return (
     <Modal visible={modalVisible} animationType="fade" transparent={true}>
+      <StatusBar backgroundColor="rgba(0, 0, 0, 0.5)" animated={true} />
       <TouchableWithoutFeedback
         onPress={() => {
           setModalVisible(false);
@@ -23,13 +30,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 20,
   },
   modalView: {
     display: 'flex',
     flexWrap: 'wrap',
     maxHeight: '60%',
     backgroundColor: 'white',
-    margin: 20,
+    marginHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
     shadowColor: '#000',
