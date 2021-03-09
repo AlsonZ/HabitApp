@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
@@ -58,7 +59,7 @@ const EditHabitItem = ({route, navigation}) => {
   }, [route.params?.category, route.params?.colors]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <OkModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -244,43 +245,45 @@ const EditHabitItem = ({route, navigation}) => {
           size={26}
         /> */}
       </TouchableOpacity>
-      <Button
-        title="Save Edit"
-        onPress={async () => {
-          const success = await editHabit(habitDetails);
-          if (success === 'Success') {
-            console.log('Successfully Edited Habit');
-            // send to main screen
-            navigation.navigate('EditHabitMain');
-            // reload Context's when habit is edited
-            setReloadContext(!reloadContext);
-            setReloadHabitListContext(!reloadHabitListContext);
-          } else {
-            // show error
-          }
-        }}></Button>
-      <Button
-        title="Log Details"
-        onPress={async () => {
-          // console.log(habitDetails);
-          console.log(habitDetails.name, habitDetails.description);
-        }}></Button>
-      <Button
-        title="Log schedule"
-        onPress={() => {
-          // console.log(allHabits[index]);
-          // console.log(habitDetails);
-          // console.log(uuidv4());
-        }}></Button>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Save Edit"
+          onPress={async () => {
+            const success = await editHabit(habitDetails);
+            if (success === 'Success') {
+              console.log('Successfully Edited Habit');
+              // send to main screen
+              navigation.navigate('EditHabitMain');
+              // reload Context's when habit is edited
+              setReloadContext(!reloadContext);
+              setReloadHabitListContext(!reloadHabitListContext);
+            } else {
+              // show error
+            }
+          }}></Button>
+        {/* <Button
+          title="Log Details"
+          onPress={async () => {
+            // console.log(habitDetails);
+            console.log(habitDetails.name, habitDetails.description);
+          }}></Button>
+        <Button
+          title="Log schedule"
+          onPress={() => {
+            // console.log(allHabits[index]);
+            // console.log(habitDetails);
+            // console.log(uuidv4());
+          }}></Button> */}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     display: 'flex',
-    justifyContent: 'center',
-    margin: 17,
+    flexGrow: 1,
+    padding: 17,
   },
   habitItem: {
     display: 'flex',
@@ -325,6 +328,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginRight: 5,
     fontSize: 15,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginVertical: 17,
   },
 });
 
