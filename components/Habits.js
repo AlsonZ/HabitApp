@@ -19,6 +19,7 @@ import {
 } from './settings/Storage';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import Clock from './Clock';
 
 const Habits = () => {
   const [
@@ -147,6 +148,7 @@ const Habits = () => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.navbar}>
+        <Clock />
         <View style={styles.rightNavContainer}>
           <TouchableOpacity
             style={styles.navButton}
