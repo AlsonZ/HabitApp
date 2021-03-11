@@ -4,17 +4,13 @@ import Habits from './Habits';
 import {DefaultColors as Colors} from './settings/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AddHabitNav from './addhabit/AddHabitNav';
+import SettingsNav from './settings/SettingsNav';
 import EditHabitNav from './edithabit/EditHabitNav';
 import {HabitListProvider} from './contexts/HabitListContext';
 import {EditHabitProvider} from './contexts/EditHabitContext';
 import {View} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
-
-const Settings = () => {
-  return <View></View>;
-};
 
 const TabNavigation = () => {
   return (
@@ -47,7 +43,7 @@ const TabNavigation = () => {
           />
           <Tab.Screen
             name="Settings"
-            component={Settings}
+            component={SettingsNav}
             options={{
               tabBarLabel: 'Settings',
               tabBarIcon: ({color}) => (
