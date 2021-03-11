@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const Clock = () => {
+const Clock = ({
+  showHour = true,
+  showMinute = true,
+  showSecond = false,
+  showDayTime = false,
+  militaryTime = false,
+}) => {
   const [hour, setHour] = useState('00');
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
@@ -57,10 +63,10 @@ const Clock = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}> {hour} :</Text>
-      <Text style={styles.text}> {minutes} :</Text>
-      <Text style={styles.text}> {seconds}</Text>
-      <Text style={styles.text}> {dayTime}</Text>
+      {showHour && <Text style={styles.text}>{hour} </Text>}
+      {showMinute && <Text style={styles.text}>: {minutes} </Text>}
+      {showSecond && <Text style={styles.text}>: {seconds}</Text>}
+      {showDayTime && <Text style={styles.text}> {dayTime}</Text>}
     </View>
   );
 };

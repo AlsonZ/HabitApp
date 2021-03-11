@@ -148,7 +148,7 @@ const Habits = () => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.navbar}>
-        <Clock />
+        <Clock showDayTime={true} />
         <View style={styles.rightNavContainer}>
           <TouchableOpacity
             style={styles.navButton}
