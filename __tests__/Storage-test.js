@@ -338,6 +338,7 @@ describe('Date Tests', () => {
 });
 
 describe('Calendar Habit Tests', () => {
+  const CALENDAR_HABIT_LIST_KEY = 'Calendar-Habit-List-Key';
   const formatDate = (dateObj) => {
     return format(dateObj, 'dd/MM/yyyy');
   };
@@ -386,5 +387,11 @@ describe('Calendar Habit Tests', () => {
     const habitList = await getCalendarHabitList();
     // expect habit to be in list
     expect(habitList[0]).toEqual(testCalendarHabits[0]);
+  });
+  test('Get Calendar Habit List', async () => {
+    // get list of habits
+    const habitList = await getCalendarHabitList();
+    // expect habit to be in list
+    expect(AsyncStorage.getItem).lastCalledWith(CALENDAR_HABIT_LIST_KEY);
   });
 });
