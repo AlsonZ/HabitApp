@@ -3,15 +3,11 @@ import {ScrollView, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ColorIcon from '../icons/ColorIcon';
 
-const SettingsMainScreen = () => {
+const SettingsMainScreen = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('ThemeScreen', {
-            index: index,
-          })
-        }
+        onPress={() => navigation.navigate('SettingsThemeScreen')}
         style={styles.habitItem}>
         <ColorIcon
           activeColor={'black'}
