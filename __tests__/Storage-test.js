@@ -336,3 +336,55 @@ describe('Date Tests', () => {
     expect(difference).toEqual(dateDifference);
   });
 });
+
+describe('Calendar Habit Tests', () => {
+  const formatDate = (dateObj) => {
+    return format(dateObj, 'dd/MM/yyyy');
+  };
+  const config = {
+    scheduleType: {
+      everyday: {name: 'everyday', duration: {days: 1}},
+      weekly: {name: 'weekly', duration: {weeks: 1}},
+      fortnightly: {name: 'fortnightly', duration: {weeks: 2}},
+      monthly: {name: 'monthly', duration: {months: 1}},
+      yearly: {name: 'yearly', duration: {years: 1}},
+      singleTime: {name: 'singleTime'},
+      weekday: {name: 'weekday'},
+      custom: {
+        name: 'custom',
+        duration: {days: 1, weeks: 0, months: 0, years: 0},
+      }, // this will be added/changed by user
+    },
+  };
+  const testCalendarHabits = [
+    {
+      id: 1,
+      name: 'daily',
+      description: 'test1',
+      colors: {
+        textColor: 'gray',
+        backgroundColor: 'transparent',
+        textActiveColor: 'black',
+        backgroundActiveColor: 'lightblue',
+      },
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.everyday,
+      startDate: formatDate(new Date()), // will be chosen by user
+      endDate: null,
+      lastOccuranceDate: null,
+      // will be startdate by default then changes later,
+      // stays current day if loaded until next day,
+      // where today will be > nextoccurdate in which then it will be updated
+      nextOccuranceDate: formatDate(new Date()), // should be editable for user as it might screw up
+    },
+  ];
+  test('Add new Calendar Habit', async () => {
+    // store habit
+    await storeCalendarHabit(testCalendarHabits[0]);
+    // get list of habits
+    const habitList = await getCalendarHabitList();
+    // expect habit to be in list
+    expect(habitList[0]).toEqual(testCalendarHabits[0]);
+  });
+});
