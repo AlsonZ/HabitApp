@@ -260,3 +260,22 @@ export const getCalendarHabitList = async () => {
   const habitList = temp ? temp : [];
   return habitList;
 };
+export const storeCalenderHabit = async (habit) => {
+  // get habit list
+  // no need to clone as it is a new array anyways
+  const habitList = await getCalenderHabitList();
+  // find index by id
+  let index = await habitList.findIndex((habitInList) => {
+    return habitInList.id === habit.id;
+  });
+  // index should be -1
+  if (index !== -1) {
+    return 'Error, Habit with this id already exists!';
+  }
+  // push
+  habitList.push(habit);
+  // store
+  await storeWithKey(habitList, CALENDER_HABIT_LIST_KEY);
+  // return success
+  return 'Success';
+};
