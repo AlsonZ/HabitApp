@@ -149,19 +149,7 @@ const Habits = () => {
   };
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-      <CalendarStrip
-        scrollable
-        style={{height: 70, paddingTop: 2, paddingBottom: 2}}
-        calendarColor={'black'}
-        calendarHeaderStyle={{color: 'white', fontSize: 12}}
-        dateNumberStyle={{color: 'white', fontSize: 12}}
-        dateNameStyle={{color: 'white', fontSize: 12}}
-        iconContainer={{flex: 0.1, paddingBottom: 10}}
-        iconStyle={{height: 25}}
-        iconLeft={require('../imgs/left-arrow-white.png')}
-        iconRight={require('../imgs/right-arrow-white.png')}
-      />
-      {/* <View style={styles.navbar}>
+      <View style={styles.navbar}>
         <Clock showDayTime={true} />
         <View style={styles.rightNavContainer}>
           <TouchableOpacity
@@ -191,7 +179,7 @@ const Habits = () => {
             />
           </TouchableOpacity>
         </View>
-      </View> */}
+      </View>
       <View style={styles.container}>
         <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
           <ScrollView
@@ -222,8 +210,8 @@ const Habits = () => {
               console.log('change listview' + listView);
               setReloadContext(!reloadContext);
             }}></Button> */}
-          {/* <Text style={styles.dayTitle}>Schedule</Text> */}
-          {/* {loadDayIcons()} */}
+          <Text style={styles.dayTitle}>Schedule</Text>
+          {loadDayIcons()}
         </View>
       </View>
     </SafeAreaView>
