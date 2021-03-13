@@ -260,10 +260,10 @@ export const getCalendarHabitList = async () => {
   const habitList = temp ? temp : [];
   return habitList;
 };
-export const storeCalenderHabit = async (habit) => {
+export const storeCalendarHabit = async (habit) => {
   // get habit list
   // no need to clone as it is a new array anyways
-  const habitList = await getCalenderHabitList();
+  const habitList = await getCalendarHabitList();
   // find index by id
   let index = await habitList.findIndex((habitInList) => {
     return habitInList.id === habit.id;
@@ -275,7 +275,24 @@ export const storeCalenderHabit = async (habit) => {
   // push
   habitList.push(habit);
   // store
-  await storeWithKey(habitList, CALENDER_HABIT_LIST_KEY);
+  await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
+  // return success
+  return 'Success';
+};
+export const editCalendarHabit = async (habit) => {
+  // get habit list
+  const habitList = await getCalendarHabitList();
+  // find index
+  let index = await habitList.findIndex((habitInList) => {
+    return habitInList.id === habit.id;
+  });
+  if (index === -1) {
+    return 'Error, No Habit of this id was found!';
+  }
+  // replace habit list object of index with new habit
+  habitList[index] = habit;
+  // store list
+  await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
   // return success
   return 'Success';
 };
