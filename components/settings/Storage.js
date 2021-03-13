@@ -240,7 +240,6 @@ export const storeNewCategory = async (category) => {
   await storeWithKey(categories, CategoriesKey);
   return 'Success';
 };
-
 export const deleteCategory = async (category) => {
   const categories = await getAllCategories();
   let index = await categories.findIndex(
@@ -250,4 +249,14 @@ export const deleteCategory = async (category) => {
   await storeWithKey(categories, CategoriesKey);
 
   return 'Success';
+};
+
+// Calendar Storage
+const CALENDAR_HABIT_LIST_KEY = 'Calendar-Habit-List-Key';
+
+export const getCalendarHabitList = async () => {
+  const habitListJSON = await getWithKey(CALENDAR_HABIT_LIST_KEY);
+  const temp = JSON.parse(habitListJSON);
+  const habitList = temp ? temp : [];
+  return habitList;
 };
