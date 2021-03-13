@@ -12,9 +12,12 @@ import {
   getDateDifference,
   getPastHabitData,
   deleteAllPastHabitData,
+  storeCalendarHabit,
+  getCalendarHabitList,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {format} from 'date-fns';
 
 describe('Storage Tests', () => {
   const HabitListKey = 'List_Of_All_Habits';
@@ -25,6 +28,7 @@ describe('Storage Tests', () => {
   const endDate = new Date(date);
   endDate.setDate(endDate.getDate() + 14);
   const mockHabitDetails = {
+    id: 1,
     name: 'Testing Habit',
     category: 'Testing',
     description: 'This is a mock testing habit',
@@ -54,6 +58,7 @@ describe('Storage Tests', () => {
     order: 1,
   };
   const editedHabit = {
+    id: 1,
     name: 'Testing Habit', // name cannot be changed
     category: 'Testing',
     description: 'This is a mock edited testing habit',
@@ -128,6 +133,9 @@ describe('Storage Tests', () => {
           schedule,
           ...reducedMockHabitDetails
         } = mockHabitDetails;
+        if (!reducedMockHabitDetails.completed) {
+          reducedMockHabitDetails.completed = false;
+        }
         expect(AsyncStorage.setItem).nthCalledWith(
           nthCall++,
           HabitDayKey + mockHabitDetails.schedule[i].day,
@@ -158,8 +166,8 @@ describe('Storage Tests', () => {
 
     await editHabit(editedHabit);
     // view habit and check if it has been edited in habitlist
-    const storedHabitsJSON = await getAllHabits();
-    const storedHabits = JSON.parse(storedHabitsJSON);
+    const storedHabits = await getAllHabits();
+    // const storedHabits = JSON.parse(storedHabitsJSON);
     // expect edited data here
     expect(storedHabits).toEqual(
       expect.arrayContaining([
@@ -211,10 +219,11 @@ describe('Storage Tests', () => {
   test('Store another New Habit', async () => {
     const {...mockHabitDetails2} = mockHabitDetails;
     mockHabitDetails2.name = 'Testing Second Habit';
+    mockHabitDetails2.id = 2;
     await storeNewHabit(mockHabitDetails2);
 
-    const habitDetailsJSON = await getAllHabits();
-    const habitDetails = JSON.parse(habitDetailsJSON);
+    const habitDetails = await getAllHabits();
+    // const habitDetails = JSON.parse(habitDetailsJSON);
 
     expect(habitDetails).toEqual(
       expect.arrayContaining([
@@ -226,8 +235,8 @@ describe('Storage Tests', () => {
   });
   test('Delete Habit', async () => {
     await deleteHabit(mockHabitDetails); // same name
-    const storedHabitsJSON = await getAllHabits();
-    const storedHabits = JSON.parse(storedHabitsJSON);
+    const storedHabits = await getAllHabits();
+    // const storedHabits = JSON.parse(storedHabitsJSON);
     expect(storedHabits).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
