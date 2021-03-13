@@ -14,6 +14,7 @@ import {
   deleteAllPastHabitData,
   storeCalendarHabit,
   getCalendarHabitList,
+  editCalendarHabit,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -357,8 +358,8 @@ describe('Calendar Habit Tests', () => {
       }, // this will be added/changed by user
     },
   };
-  const testCalendarHabits = [
-    {
+  const testCalendarHabits = {
+    daily: {
       id: 1,
       name: 'daily',
       description: 'test1',
@@ -379,19 +380,45 @@ describe('Calendar Habit Tests', () => {
       // where today will be > nextoccurdate in which then it will be updated
       nextOccuranceDate: formatDate(new Date()), // should be editable for user as it might screw up
     },
-  ];
+    editedDaily: {
+      id: 1,
+      name: 'edited daily',
+      description: 'edited daily test1 description',
+      colors: {
+        textColor: 'gray',
+        backgroundColor: 'transparent',
+        textActiveColor: 'black',
+        backgroundActiveColor: 'lightblue',
+      },
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.everyday,
+      startDate: formatDate(new Date()),
+      endDate: null,
+      lastOccuranceDate: null,
+      nextOccuranceDate: formatDate(new Date()),
+    },
+  };
   test('Add new Calendar Habit', async () => {
     // store habit
-    await storeCalendarHabit(testCalendarHabits[0]);
+    await storeCalendarHabit(testCalendarHabits.daily);
     // get list of habits
     const habitList = await getCalendarHabitList();
     // expect habit to be in list
-    expect(habitList[0]).toEqual(testCalendarHabits[0]);
+    expect(habitList[0]).toEqual(testCalendarHabits.daily);
   });
   test('Get Calendar Habit List', async () => {
     // get list of habits
     const habitList = await getCalendarHabitList();
     // expect habit to be in list
     expect(AsyncStorage.getItem).lastCalledWith(CALENDAR_HABIT_LIST_KEY);
+  });
+  test('Edit previous Calendar Habit', async () => {
+    // store habit
+    await editCalendarHabit(testCalendarHabits.editedDaily);
+    // get list of habits
+    const habitList = await getCalendarHabitList();
+    // expect habit to be in list
+    expect(habitList[0]).toEqual(testCalendarHabits.editedDaily);
   });
 });
