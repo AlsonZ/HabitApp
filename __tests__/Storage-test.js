@@ -342,6 +342,8 @@ describe('Date Tests', () => {
 
 describe('Calendar Habit Tests', () => {
   const CALENDAR_HABIT_LIST_KEY = 'Calendar-Habit-List-Key';
+  const CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR =
+    'Calendar-Past-Habit-List-Key-Of-Year:';
   const formatDate = (dateObj) => {
     return format(dateObj, 'dd/MM/yyyy');
   };
@@ -441,6 +443,14 @@ describe('Calendar Habit Tests', () => {
           name: testCalendarHabits.daily.name,
         }),
       ]),
+    );
+  });
+  test('Get Calendar Past Habit Data', async () => {
+    const today = formatDate(new Date());
+    const [day, month, year] = today.split('/');
+    const pastHabitData = await getCalendarPastHabitDataOfDate(today);
+    expect(AsyncStorage.getItem).lastCalledWith(
+      CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year,
     );
   });
 });
