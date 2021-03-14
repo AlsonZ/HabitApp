@@ -90,7 +90,7 @@ const Habits = () => {
             backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
             textActiveColor={item.colors.textActiveColor}
             backgroundActiveColor={item.colors.backgroundActiveColor}
-            // completed={item.completed} // need to add this to data
+            completed={item.completed} // need to add this to data
           />
         )}
       />
