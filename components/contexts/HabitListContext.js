@@ -7,6 +7,7 @@ import {
   getDateDifference,
   editPastHabitData,
   getCalendarHabitList,
+  storeCalendarHabit,
 } from '../settings/Storage';
 import {add, format, isBefore, isAfter, isEqual, parse, sub} from 'date-fns';
 import {config} from '../config/config';
@@ -130,8 +131,99 @@ export const HabitListProvider = (props) => {
   };
 
   useEffect(() => {
+    let loading = false;
     const day = getToday();
-    loadCurrentlyActiveDayHabits(day); // for today, is date obj
+    const createPlaceholderHabits = async () => {
+      const defaultColors = {
+        textColor: 'gray',
+        backgroundColor: 'transparent',
+        textActiveColor: 'black',
+        backgroundActiveColor: 'lightblue',
+      };
+      const habitList = [
+        {
+          id: 1,
+          name: 'daily',
+          description: 'test1',
+          colors: defaultColors,
+          archived: false,
+          frequency: 1,
+          scheduleType: config.scheduleType.everyday,
+          startDate: formatDate(new Date()), // will be chosen by user
+          endDate: null,
+          lastOccuranceDate: null,
+          // will be startdate by default then changes later,
+          // stays current day if loaded until next day,
+          // where today will be > nextoccurdate in which then it will be updated
+          nextOccuranceDate: formatDate(new Date()), // should be editable for user as it might screw up
+        },
+        {
+          id: 2,
+          name: 'weekly',
+          description: 'test2',
+          colors: defaultColors,
+          archived: false,
+          frequency: 1,
+          scheduleType: config.scheduleType.weekly,
+          startDate: formatDate(new Date()),
+          endDate: null,
+          lastOccuranceDate: null,
+          nextOccuranceDate: formatDate(new Date()),
+        },
+        {
+          id: 3,
+          name: 'weeklyNew',
+          description: 'test3',
+          colors: defaultColors,
+          archived: false,
+          frequency: 1,
+          scheduleType: config.scheduleType.weekly,
+          startDate: formatDate(add(new Date(), {days: 2})),
+          endDate: null,
+          lastOccuranceDate: null,
+          nextOccuranceDate: formatDate(add(new Date(), {days: 2})),
+        },
+        {
+          id: 4,
+          name: 'weeklyOld',
+          description: 'test3',
+          colors: defaultColors,
+          archived: false,
+          frequency: 1,
+          scheduleType: config.scheduleType.weekly,
+          startDate: formatDate(sub(new Date(), {days: 14})),
+          endDate: null,
+          lastOccuranceDate: null,
+          nextOccuranceDate: formatDate(sub(new Date(), {days: 7})),
+        },
+        {
+          id: 5,
+          name: 'monthly',
+          description: 'test4',
+          colors: defaultColors,
+          archived: false,
+          frequency: 1,
+          scheduleType: config.scheduleType.monthly,
+          startDate: formatDate(new Date()),
+          endDate: null,
+          lastOccuranceDate: null,
+          nextOccuranceDate: formatDate(new Date()),
+        },
+      ];
+      for (let i = 0; i < habitList.length; i++) {
+        const success = await storeCalendarHabit(habitList[i]);
+        console.log('Added: ', habitList[i].name, success);
+      }
+    };
+    const getData = async () => {
+      loading = true;
+      await createPlaceholderHabits();
+      await loadCurrentlyActiveDayHabits(day); // for today, is date obj
+      loading = false;
+    };
+    if (!loading) {
+      getData();
+    }
   }, []);
 
   return (
