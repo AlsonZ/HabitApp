@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {format, add, sub} from 'date-fns';
 
 const HabitListKey = 'List_Of_All_Habits';
 const HabitDayKey = 'Habit_Day_';
@@ -253,11 +254,107 @@ export const deleteCategory = async (category) => {
 
 // Calendar Storage
 const CALENDAR_HABIT_LIST_KEY = 'Calendar-Habit-List-Key';
+const CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR =
+  'Calendar-Past-Habit-List-Key-Of-Year:';
 
 export const getCalendarHabitList = async () => {
   const habitListJSON = await getWithKey(CALENDAR_HABIT_LIST_KEY);
   const temp = JSON.parse(habitListJSON);
-  const habitList = temp ? temp : [];
+  // const habitList = temp ? temp : [];
+  const defaultColors = {
+    textColor: 'gray',
+    backgroundColor: 'transparent',
+    textActiveColor: 'black',
+    backgroundActiveColor: 'lightblue',
+  };
+  const config = {
+    scheduleType: {
+      everyday: {name: 'everyday', duration: {days: 1}},
+      weekly: {name: 'weekly', duration: {weeks: 1}},
+      fortnightly: {name: 'fortnightly', duration: {weeks: 2}},
+      monthly: {name: 'monthly', duration: {months: 1}},
+      yearly: {name: 'yearly', duration: {years: 1}},
+      singleTime: {name: 'singleTime'},
+      weekday: {name: 'weekday'},
+      custom: {
+        name: 'custom',
+        duration: {days: 1, weeks: 0, months: 0, years: 0},
+      }, // this will be added/changed by user
+    },
+  };
+  const formatDate = (dateObj) => {
+    return format(dateObj, 'dd/MM/yyyy');
+  };
+  const habitList = [
+    {
+      id: 1,
+      name: 'daily',
+      description: 'test1',
+      colors: defaultColors,
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.everyday,
+      startDate: formatDate(new Date()), // will be chosen by user
+      endDate: null,
+      lastOccuranceDate: null,
+      // will be startdate by default then changes later,
+      // stays current day if loaded until next day,
+      // where today will be > nextoccurdate in which then it will be updated
+      nextOccuranceDate: formatDate(new Date()), // should be editable for user as it might screw up
+    },
+    {
+      id: 2,
+      name: 'weekly',
+      description: 'test2',
+      colors: defaultColors,
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.weekly,
+      startDate: formatDate(new Date()),
+      endDate: null,
+      lastOccuranceDate: null,
+      nextOccuranceDate: formatDate(new Date()),
+    },
+    {
+      id: 3,
+      name: 'weeklyNew',
+      description: 'test3',
+      colors: defaultColors,
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.weekly,
+      startDate: formatDate(add(new Date(), {days: 2})),
+      endDate: null,
+      lastOccuranceDate: null,
+      nextOccuranceDate: formatDate(add(new Date(), {days: 2})),
+    },
+    {
+      id: 4,
+      name: 'weeklyOld',
+      description: 'test3',
+      colors: defaultColors,
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.weekly,
+      startDate: formatDate(sub(new Date(), {days: 14})),
+      endDate: null,
+      lastOccuranceDate: null,
+      nextOccuranceDate: formatDate(sub(new Date(), {days: 7})),
+    },
+    {
+      id: 5,
+      name: 'monthly',
+      description: 'test4',
+      colors: defaultColors,
+      archived: false,
+      frequency: 1,
+      scheduleType: config.scheduleType.monthly,
+      startDate: formatDate(new Date()),
+      endDate: null,
+      lastOccuranceDate: null,
+      nextOccuranceDate: formatDate(new Date()),
+    },
+  ];
   return habitList;
 };
 export const storeCalendarHabit = async (habit) => {
@@ -295,4 +392,18 @@ export const editCalendarHabit = async (habit) => {
   await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
   // return success
   return 'Success';
+};
+
+// Calendar Past Storage
+export const getCalendarPastHabitDataOfDate = async (dateString) => {
+  const [day, month, year] = dateString.split('/');
+
+  const habitListJSON = await getWithKey(
+    CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year,
+  );
+  const temp = JSON.parse(habitListJSON);
+  const yearListData = temp ? temp : {};
+  const pastHabitData = yearListData.dateString ? yearListData.dateString : {};
+
+  return pastHabitData;
 };
