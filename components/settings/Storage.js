@@ -275,13 +275,14 @@ export const storeCalendarHabit = async (habit) => {
   // index should be -1
   if (index !== -1) {
     return 'Error, Habit with this id already exists!';
+  } else {
+    // push
+    habitList.push(habit);
+    // store
+    await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
+    // return success
+    return 'Success';
   }
-  // push
-  habitList.push(habit);
-  // store
-  await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
-  // return success
-  return 'Success';
 };
 export const editCalendarHabit = async (habit) => {
   // get habit list
@@ -292,13 +293,18 @@ export const editCalendarHabit = async (habit) => {
   });
   if (index === -1) {
     return 'Error, No Habit of this id was found!';
+  } else {
+    // replace habit list object of index with new habit
+    habitList[index] = habit;
+    // store list
+    await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
+    // return success
+    return 'Success';
   }
-  // replace habit list object of index with new habit
-  habitList[index] = habit;
-  // store list
-  await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
-  // return success
-  return 'Success';
+};
+export const deleteAllCalendarHabits = async () => {
+  console.log('Deleting All Calendar Habits');
+  await AsyncStorage.removeItem(CALENDAR_HABIT_LIST_KEY);
 };
 
 // Calendar Past Storage
