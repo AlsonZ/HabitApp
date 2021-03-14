@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -22,198 +22,78 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clock from './Clock';
+import {format, parse, add, sub} from 'date-fns';
 
 const Habits = () => {
-  const [
-    habitList,
-    setHabitList,
-    passedDays,
-    reloadContext,
-    setReloadContext,
-  ] = useContext(HabitListContext);
-  const [currentlyViewingDay, setCurrentlyViewingDay] = useState(1);
-  const [listView, setListView] = useState(false);
-  const [currentlyLoadedHabits, setCurrentlyLoadedHabits] = useState(
-    <View style={styles.container}></View>,
+  const [habitList, setHabitList, loadCurrentlyActiveDayHabits] = useContext(
+    HabitListContext,
   );
-  const [scheduleIcons, setScheduleIcons] = useState([]);
-  const [habitInnerContainerWidth, setHabitInnerContainerWidth] = useState(
-    null,
-  );
-  const [currentlyActiveScreen, setCurrentlyActiveScreen] = useState(0);
+  const calendarRef = useRef(null);
 
-  const loadHabits = (day) => {
-    const index = day - 1;
-    const loadingHabitList = JSON.parse(JSON.stringify(habitList[index]));
-    let indents = [];
-    if (loadingHabitList) {
-      for (let i = 0; i < loadingHabitList.length; i++) {
-        indents.push(
-          <HabitButton
-            listView={listView}
-            key={loadingHabitList[i].name + i + index}
-            disabled={day > passedDays + 1 ? true : false}
-            title={loadingHabitList[i].name}
-            description={loadingHabitList[i].description}
-            textColor={loadingHabitList[i].colors.textColor}
-            backgroundColor={loadingHabitList[i].colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
-            textActiveColor={loadingHabitList[i].colors.textActiveColor}
-            backgroundActiveColor={
-              loadingHabitList[i].colors.backgroundActiveColor
-            }
-            completed={loadingHabitList[i].completed}
-            onPress={() => {
-              loadingHabitList[i].completed = !loadingHabitList[i].completed;
-              // clone habitlist and replace index with deep cloned index item
-              const habitListClone = [...habitList];
-              // console.log(habitList)
-              habitListClone[index] = loadingHabitList;
-              // update habits list
-              setHabitList(habitListClone);
-            }}></HabitButton>,
-        );
-      }
-    }
-    setCurrentlyLoadedHabits(indents);
-    setCurrentlyViewingDay(day);
-    setCurrentlyActiveScreen(day);
+  const parseDate = (dateString) => {
+    return parse(dateString, 'dd/MM/yyyy', new Date());
+  };
+  const formatDate = (dateObj) => {
+    return format(dateObj, 'dd/MM/yyyy');
+  };
+  const getToday = () => {
+    return parseDate(formatDate(new Date()));
   };
 
-  const calculateWidth = (e) => {
-    const habitButtonTotalWidth = 84;
-    const newWidth = parseInt(
-      e.nativeEvent.layout.width / habitButtonTotalWidth,
-    );
-    const newContainerWidth = newWidth * habitButtonTotalWidth;
-    // console.log('native width: ' + e.nativeEvent.layout.width);
-    // console.log('newWidth: ' + newContainerWidth);
-    setHabitInnerContainerWidth(newContainerWidth);
-  };
-
-  useEffect(() => {
-    console.log('Passed Days: ' + passedDays);
-    setCurrentlyViewingDay(passedDays + 1);
-  }, [passedDays]);
-
-  useEffect(() => {
-    const generateScheduleIcons = () => {
-      let data = [];
-      for (let day = 1; day <= 14; day++) {
-        data.push({
-          number: day,
-          activeColor: 'lightblue',
-        });
-      }
-      return data;
-    };
-    setScheduleIcons(generateScheduleIcons());
-    let loading = false;
-    if (habitList.length > 0 && habitList[0] !== null) {
-      if (!loading) {
-        loading = true;
-        if (currentlyActiveScreen !== 0) {
-          loadHabits(currentlyActiveScreen);
-        } else {
-          loadHabits(passedDays + 1);
-        }
-        loading = false;
-      }
-    }
-  }, [habitList]);
-
-  const loadDayIcons = () => {
-    return (
-      <FlatList
-        contentContainerStyle={styles.listContainer}
-        numColumns={7}
-        data={scheduleIcons}
-        renderItem={({item, index}) => (
-          <DayIcon
-            index={index}
-            number={item.number}
-            activeColor={item.activeColor}
-            textStyle={styles.iconText}
-            style={styles.icon}
-            isCurrentDay={index === passedDays ? true : false} // where index is day -1
-            currentlyViewingDay={currentlyViewingDay}
-            onPress={() => {
-              const day = index + 1;
-              loadHabits(day);
-            }}
-          />
-        )}
-        keyExtractor={(item) => `${item.number}`}
-        extraData={[currentlyViewingDay, scheduleIcons]}
-      />
-    );
-  };
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-      <View style={styles.navbar}>
-        <Clock showDayTime={true} />
-        <View style={styles.rightNavContainer}>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => {
-              setListView(true);
-              setReloadContext(!reloadContext);
-            }}>
-            <IonIcon
-              style={styles.habitIcon}
-              name="ios-menu"
-              color={'white'}
-              size={32}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => {
-              setListView(false);
-              setReloadContext(!reloadContext);
-            }}>
-            <AntIcon
-              style={styles.habitIcon}
-              name="appstore-o"
-              color={'white'}
-              size={26}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.habitOuterContainer} onLayout={calculateWidth}>
-          <ScrollView
-            contentContainerStyle={[
-              styles.habitContainer,
-              {width: habitInnerContainerWidth},
-              {flexDirection: listView ? 'column' : 'row'},
-            ]}>
-            {currentlyLoadedHabits}
-          </ScrollView>
-        </View>
-        <View style={styles.days}>
-          {/* <Button
-          title="delete"
-          onPress={async () => {
-            await deleteAllPastHabitData();
-          }}></Button>
-        <Button
-          title="test"
-          onPress={async () => {
-            // console.log(habitList[passedDays][7]);
-            await deleteAllScheduledHabits();
-          }}></Button> */}
-          {/* <Button
-            title="listView"
-            onPress={() => {
-              setListView(!listView);
-              console.log('change listview' + listView);
-              setReloadContext(!reloadContext);
-            }}></Button> */}
-          <Text style={styles.dayTitle}>Schedule</Text>
-          {loadDayIcons()}
-        </View>
-      </View>
+      <CalendarStrip
+        ref={calendarRef}
+        scrollable={true}
+        maxDayComponentSize={58}
+        startingDate={sub(getToday(), {days: 3})}
+        selectedDate={getToday()}
+        onDateSelected={(dateString) => {
+          const date = parseDate(formatDate(new Date(dateString)));
+          calendarRef.current.updateWeekView(
+            sub(date, {
+              days: 3,
+            }),
+          );
+          loadCurrentlyActiveDayHabits(date);
+        }}
+        daySelectionAnimation={{
+          type: 'border',
+          duration: 200,
+          borderWidth: 1,
+          borderHighlightColor: 'white',
+        }}
+        style={{
+          height: 80,
+          paddingVertical: 2,
+        }}
+        calendarColor={'black'}
+        calendarHeaderStyle={{color: 'white', fontSize: 12}}
+        highlightDateNumberStyle={{color: 'white', fontSize: 10}}
+        highlightDateNameStyle={{color: 'white', fontSize: 10}}
+        dateNumberStyle={{color: 'white', fontSize: 12}}
+        dateNameStyle={{color: 'white', fontSize: 12}}
+        iconContainer={{flex: 0.1, paddingBottom: 10}}
+        iconStyle={{height: 25}}
+        iconLeft={require('../imgs/left-arrow-white.png')}
+        iconRight={require('../imgs/right-arrow-white.png')}
+      />
+      <FlatList
+        data={habitList}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={({item, index}) => (
+          <HabitButton
+            disabled={false}
+            title={item.name}
+            description={item.description}
+            textColor={item.colors.textColor}
+            backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
+            textActiveColor={item.colors.textActiveColor}
+            backgroundActiveColor={item.colors.backgroundActiveColor}
+            // completed={item.completed} // need to add this to data
+          />
+        )}
+      />
     </SafeAreaView>
   );
 };
