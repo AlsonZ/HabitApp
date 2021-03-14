@@ -15,6 +15,8 @@ import {
   storeCalendarHabit,
   getCalendarHabitList,
   editCalendarHabit,
+  storeCalendarPastHabitDataOfDate,
+  getCalendarPastHabitDataOfDate,
 } from '../components/settings/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -420,5 +422,25 @@ describe('Calendar Habit Tests', () => {
     const habitList = await getCalendarHabitList();
     // expect habit to be in list
     expect(habitList[0]).toEqual(testCalendarHabits.editedDaily);
+  });
+
+  test('Add new Calendar Past Habit Data', async () => {
+    await storeCalendarPastHabitDataOfDate(
+      testCalendarHabits.daily,
+      formatDate(new Date()),
+    );
+
+    const pastHabitData = await getCalendarPastHabitDataOfDate(
+      formatDate(new Date()),
+    );
+
+    expect(pastHabitData).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: testCalendarHabits.daily.id,
+          name: testCalendarHabits.daily.name,
+        }),
+      ]),
+    );
   });
 });
