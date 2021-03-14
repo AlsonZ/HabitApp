@@ -437,3 +437,27 @@ export const storeCalendarPastHabitDataOfDate = async (habit, dateString) => {
   // success
   return 'Success';
 };
+export const editCalendarPastHabitDataOfDate = async (habit, dateString) => {
+  const pastHabitData = await getCalendarPastHabitDataOfDate(dateString);
+
+  let index = await pastHabitData.findIndex((habitInData) => {
+    return habitInData.id === habit.id;
+  });
+  // index should be -1
+  if (index === -1) {
+    return 'Error, No Habit of this id was found!';
+  }
+
+  pastHabitData[index] = habit;
+
+  // split date into year
+  const [day, month, year] = dateString.split('/');
+  // get stored year object
+  const yearListData = await getCalendarPastHabitDataOfYear(year);
+  // replace new date to year
+  yearListData.dateString = pastHabitData;
+  // store year
+  await storeWithKey(yearListData, CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year);
+  // success
+  return 'Success';
+};
