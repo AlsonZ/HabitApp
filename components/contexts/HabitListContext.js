@@ -8,6 +8,10 @@ import {
   editPastHabitData,
   getCalendarHabitList,
   storeCalendarHabit,
+  editCalendarHabit,
+  deleteAllCalendarHabits,
+  storeCalendarPastHabitDataOfDate,
+  editCalendarPastHabitDataOfDate,
 } from '../settings/Storage';
 import {add, format, isBefore, isAfter, isEqual, parse, sub} from 'date-fns';
 import {config} from '../config/config';
@@ -16,6 +20,7 @@ export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
+  // const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -59,16 +64,22 @@ export const HabitListProvider = (props) => {
     // update storage too
     return newHabit;
   };
-  const updateAndStoreLoadedHabitDates = (habit) => {
+  const updateAndStoreLoadedHabitDates = async (habit) => {
     // do not update next date as it will be updated by assignNewHabitDates tomorrow/day after
     // clone habit
     const newHabit = JSON.parse(JSON.stringify(habit));
     // update last date to today
+    console.log(
+      newHabit.lastOccuranceDate,
+      'is last Occurance Date for:',
+      newHabit.name,
+    );
     newHabit.lastOccuranceDate = formatDate(getToday());
-    console.log(newHabit.lastOccuranceDate, 'is now');
-    // store habit into list
-
-    // store habit into past habit data
+    // edit habit into list, not store as habit already exists
+    await editCalendarHabit(newHabit);
+    // store habit into past habit data, as past habit should not exist yet on first run
+    // store does nothing if the past habit already exists so doesnt replace old data
+    await storeCalendarPastHabitDataOfDate(newHabit, formatDate(getToday()));
   };
 
   const loadCurrentlyActiveDayHabits = async (day) => {
@@ -78,12 +89,17 @@ export const HabitListProvider = (props) => {
     const calendarHabitList = await getCalendarHabitList();
     setHabitList([]);
     if (calendarHabitList.length > 0) {
-      calendarHabitList.forEach((habit) => {
+      // calendarHabitList.forEach(async (habit) => {
+      for (const habit of calendarHabitList) {
         if (habit.archived) {
           console.log('Move to archived habits list');
         }
         if (habit.scheduleType.name === config.scheduleType.everyday.name) {
           setHabitList((prevState) => [...prevState, habit]);
+          if (isEqual(day, getToday())) {
+            // mabe move this elsewhere as it only applies if it is the current day
+            await updateAndStoreLoadedHabitDates(habit);
+          }
         } else if (
           habit.scheduleType.name === config.scheduleType.weekly.name ||
           habit.scheduleType.name === config.scheduleType.fortnightly.name ||
@@ -98,7 +114,7 @@ export const HabitListProvider = (props) => {
             setHabitList((prevState) => [...prevState, habit]);
             if (isEqual(day, getToday())) {
               // mabe move this elsewhere as it only applies if it is the current day
-              updateAndStoreLoadedHabitDates(habit);
+              await updateAndStoreLoadedHabitDates(habit);
             }
           } else if (isAfter(parseDate(habit.nextOccuranceDate), day)) {
             console.log(habit.name, 'is in the future');
@@ -111,7 +127,7 @@ export const HabitListProvider = (props) => {
               setHabitList((prevState) => [...prevState, updatedHabit]);
               if (isEqual(day, getToday())) {
                 // mabe move this elsewhere as it only applies if it is the current day
-                updateAndStoreLoadedHabitDates(updatedHabit);
+                await updateAndStoreLoadedHabitDates(updatedHabit);
               }
             }
           }
@@ -126,14 +142,29 @@ export const HabitListProvider = (props) => {
         } else {
           console.log(habit.name, 'TBA');
         }
-      });
+      }
+      // );
     }
+    // setInitialUseEffectHasRun(true);
   };
+
+  const updateHabit = async (habit, dateString) => {
+    await editCalendarPastHabitDataOfDate(habit, dateString);
+  };
+
+  useEffect(() => {
+    // if (initialUseEffectHasRun) {
+    // console.log('Store calendar past habit data');
+    // update past habit data
+    // await
+    // }
+  }, [habitList]);
 
   useEffect(() => {
     let loading = false;
     const day = getToday();
     const createPlaceholderHabits = async () => {
+      // await deleteAllCalendarHabits();
       const defaultColors = {
         textColor: 'gray',
         backgroundColor: 'transparent',
@@ -156,6 +187,7 @@ export const HabitListProvider = (props) => {
           // stays current day if loaded until next day,
           // where today will be > nextoccurdate in which then it will be updated
           nextOccuranceDate: formatDate(new Date()), // should be editable for user as it might screw up
+          completed: false,
         },
         {
           id: 2,
@@ -169,6 +201,7 @@ export const HabitListProvider = (props) => {
           endDate: null,
           lastOccuranceDate: null,
           nextOccuranceDate: formatDate(new Date()),
+          completed: false,
         },
         {
           id: 3,
@@ -182,6 +215,7 @@ export const HabitListProvider = (props) => {
           endDate: null,
           lastOccuranceDate: null,
           nextOccuranceDate: formatDate(add(new Date(), {days: 2})),
+          completed: false,
         },
         {
           id: 4,
@@ -195,6 +229,7 @@ export const HabitListProvider = (props) => {
           endDate: null,
           lastOccuranceDate: null,
           nextOccuranceDate: formatDate(sub(new Date(), {days: 7})),
+          completed: false,
         },
         {
           id: 5,
@@ -208,6 +243,7 @@ export const HabitListProvider = (props) => {
           endDate: null,
           lastOccuranceDate: null,
           nextOccuranceDate: formatDate(new Date()),
+          completed: false,
         },
       ];
       for (let i = 0; i < habitList.length; i++) {
@@ -228,7 +264,7 @@ export const HabitListProvider = (props) => {
 
   return (
     <HabitListContext.Provider
-      value={[habitList, setHabitList, loadCurrentlyActiveDayHabits]}>
+      value={[habitList, updateHabit, loadCurrentlyActiveDayHabits]}>
       {props.children}
     </HabitListContext.Provider>
   );
