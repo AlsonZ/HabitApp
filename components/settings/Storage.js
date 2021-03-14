@@ -395,15 +395,45 @@ export const editCalendarHabit = async (habit) => {
 };
 
 // Calendar Past Storage
-export const getCalendarPastHabitDataOfDate = async (dateString) => {
-  const [day, month, year] = dateString.split('/');
-
+const getCalendarPastHabitDataOfYear = async (year) => {
   const habitListJSON = await getWithKey(
     CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year,
   );
   const temp = JSON.parse(habitListJSON);
   const yearListData = temp ? temp : {};
-  const pastHabitData = yearListData.dateString ? yearListData.dateString : {};
+  return yearListData;
+};
+export const getCalendarPastHabitDataOfDate = async (dateString) => {
+  const [day, month, year] = dateString.split('/');
+
+  const yearListData = await getCalendarPastHabitDataOfYear(year);
+
+  const pastHabitData = yearListData.dateString ? yearListData.dateString : [];
 
   return pastHabitData;
+};
+
+export const storeCalendarPastHabitDataOfDate = async (habit, dateString) => {
+  const pastHabitData = await getCalendarPastHabitDataOfDate(dateString);
+
+  let index = await pastHabitData.findIndex((habitInData) => {
+    return habitInData.id === habit.id;
+  });
+  // index should be -1
+  if (index !== -1) {
+    return 'Error, Habit with this id already exists!';
+  }
+
+  pastHabitData.push(habit);
+
+  // split date into year
+  const [day, month, year] = dateString.split('/');
+  // get stored year object
+  const yearListData = await getCalendarPastHabitDataOfYear(year);
+  // add new date to year
+  yearListData.dateString = pastHabitData;
+  // store year
+  await storeWithKey(yearListData, CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year);
+  // success
+  return 'Success';
 };
