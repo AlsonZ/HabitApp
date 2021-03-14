@@ -6,222 +6,137 @@ import {
   storeNewPastHabitData,
   getDateDifference,
   editPastHabitData,
+  getCalendarHabitList,
 } from '../settings/Storage';
+import {add, format, isBefore, isAfter, isEqual, parse, sub} from 'date-fns';
+import {config} from '../config/config';
 
 export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
-  const [passedDays, setPassedDays] = useState(0);
-  const [pastHabitData, setPastHabitData] = useState({});
-  const [isNewPastHabitData, setIsNewPastHabitData] = useState(true);
-  const [reloadContext, setReloadContext] = useState(false);
-  const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
-  const date = getDate();
-  const endDate = new Date(date);
-  endDate.setDate(endDate.getDate() + 14);
 
-  const storeEditedPastData = async (pastData, habitListData) => {
-    if (pastData) {
-      // clone pastHabitData as it should be immutable
-      const pastHabitDataCopy = JSON.parse(JSON.stringify(pastData));
-      // get dates and convert into date Object
-      const today = new Date(date);
-      // compare today to startDate of latestPastHabitData
-      const startDate = new Date(pastHabitDataCopy.startDate);
-      const difference = getDateDifference(startDate, today);
-      // set new latest date for past habit data
-      pastHabitDataCopy.latestDate = date;
+  const parseDate = (dateString) => {
+    return parse(dateString, 'dd/MM/yyyy', new Date());
+  };
+  const formatDate = (dateObj) => {
+    return format(dateObj, 'dd/MM/yyyy');
+  };
+  const getToday = () => {
+    return parseDate(formatDate(new Date()));
+  };
+  const assignNewHabitDates = (habit) => {
+    // if day is today or day < today
+    // add to date until it is in the future
+    const updateDate = (newHabit) => {
+      let newNextDate = newHabit.lastOccuranceDate
+        ? newHabit.lastOccuranceDate
+        : newHabit.startDate;
+      console.log('starts as:', newNextDate);
+      // repeat +daydifference until no longer before today
+      while (isBefore(parseDate(newNextDate), getToday())) {
+        // get latestOccurDate + weeks
+        newNextDate = formatDate(
+          add(parseDate(newNextDate), newHabit.scheduleType.duration),
+        );
+      }
+      return newNextDate;
+    };
+    // clone habit
+    const newHabit = JSON.parse(JSON.stringify(habit));
+    // updateNextOccurance
+    if (
+      habit.scheduleType.name === config.scheduleType.weekly.name ||
+      habit.scheduleType.name === config.scheduleType.fortnightly.name ||
+      habit.scheduleType.name === config.scheduleType.monthly.name ||
+      habit.scheduleType.name === config.scheduleType.yearly.name ||
+      habit.scheduleType.name === config.scheduleType.custom.name
+    ) {
+      newHabit.nextOccuranceDate = updateDate(newHabit);
+    }
+    console.log(habit.name, 'is being updated to:', newHabit.nextOccuranceDate);
+    // update storage too
+    return newHabit;
+  };
+  const updateAndStoreLoadedHabitDates = (habit) => {
+    // do not update next date as it will be updated by assignNewHabitDates tomorrow/day after
+    // clone habit
+    const newHabit = JSON.parse(JSON.stringify(habit));
+    // update last date to today
+    newHabit.lastOccuranceDate = formatDate(getToday());
+    console.log(newHabit.lastOccuranceDate, 'is now');
+    // store habit into list
 
-      // negative = startDate is in the future, positive = today is n days ahead of startDate
-      // replace habitDays array in previous data with new array
-      // this allows modification of previous days
-      // >= 0 means it also stores up until today
-      if (difference >= 0) {
-        const maxDays = difference <= 14 ? difference : 14;
-        let newHabitDays = [];
-        for (let i = 0; i <= maxDays; i++) {
-          newHabitDays.push(habitListData[i]);
+    // store habit into past habit data
+  };
+
+  const loadCurrentlyActiveDayHabits = async (day) => {
+    // this is for the current day's habits only
+    // past habits should load from past habit data storage
+    // future habits are loaded with this too
+    const calendarHabitList = await getCalendarHabitList();
+    setHabitList([]);
+    if (calendarHabitList.length > 0) {
+      calendarHabitList.forEach((habit) => {
+        if (habit.archived) {
+          console.log('Move to archived habits list');
         }
-        pastHabitDataCopy.habitDays = newHabitDays;
-      } else {
-        // this should not happen
-        // contact admin
-      }
-      if (isNewPastHabitData) {
-        console.log('Store New past data in HabitListContext');
-        storeNewPastHabitData(pastHabitDataCopy);
-      } else if (!isNewPastHabitData) {
-        console.log('Store Edit past data in HabitListContext');
-        editPastHabitData(pastHabitDataCopy);
-      }
-      setIsNewPastHabitData(false);
+        if (habit.scheduleType.name === config.scheduleType.everyday.name) {
+          setHabitList((prevState) => [...prevState, habit]);
+        } else if (
+          habit.scheduleType.name === config.scheduleType.weekly.name ||
+          habit.scheduleType.name === config.scheduleType.fortnightly.name ||
+          habit.scheduleType.name === config.scheduleType.monthly.name ||
+          habit.scheduleType.name === config.scheduleType.yearly.name ||
+          habit.scheduleType.name === config.scheduleType.custom.name
+        ) {
+          if (
+            isEqual(parseDate(habit.nextOccuranceDate), day) ||
+            isEqual(parseDate(habit.lastOccuranceDate), day)
+          ) {
+            setHabitList((prevState) => [...prevState, habit]);
+            if (isEqual(day, getToday())) {
+              // mabe move this elsewhere as it only applies if it is the current day
+              updateAndStoreLoadedHabitDates(habit);
+            }
+          } else if (isAfter(parseDate(habit.nextOccuranceDate), day)) {
+            console.log(habit.name, 'is in the future');
+            // do nothing, this is normal
+          } else if (isBefore(parseDate(habit.nextOccuranceDate), day)) {
+            console.log(habit.name, 'is in the past');
+            const updatedHabit = assignNewHabitDates(habit); // this also updates storage
+            // incase updateddates is now today
+            if (isEqual(parseDate(updatedHabit.nextOccuranceDate), day)) {
+              setHabitList((prevState) => [...prevState, updatedHabit]);
+              if (isEqual(day, getToday())) {
+                // mabe move this elsewhere as it only applies if it is the current day
+                updateAndStoreLoadedHabitDates(updatedHabit);
+              }
+            }
+          }
+        } else if (
+          habit.scheduleType.name === config.scheduleType.weekday.name
+        ) {
+          console.log(habit.name, 'Weekday');
+        } else if (
+          habit.scheduleType.name === config.scheduleType.singleTime.name
+        ) {
+          console.log(habit.name, 'Single Time');
+        } else {
+          console.log(habit.name, 'TBA');
+        }
+      });
     }
   };
 
   useEffect(() => {
-    let loading = false;
-    const getData = async () => {
-      console.log('Currently Getting Data, loading: ' + loading);
-      const tempLatestPastHabitData = await getLatestPastHabitData();
-      const latestPastHabitData = (await tempLatestPastHabitData)
-        ? tempLatestPastHabitData
-        : {
-            startDate: date,
-            endDate: endDate.toISOString(),
-            latestDate: date,
-            habitDays: [],
-          };
-      if (!tempLatestPastHabitData) {
-        setIsNewPastHabitData(true);
-      } else {
-        setIsNewPastHabitData(false);
-      }
+    const day = getToday();
+    loadCurrentlyActiveDayHabits(day); // for today, is date obj
+  }, []);
 
-      console.log('This is latestPastHabitData: ' + latestPastHabitData);
-      setPastHabitData(latestPastHabitData);
-      const startNewSection = async () => {
-        const tempHabitList = [];
-        for (let i = 1; i <= 14; i++) {
-          // get habit day data
-          const habitDayJSON = await getDayHabit(i);
-          const habitDay = JSON.parse(habitDayJSON);
-          // insert into temp array
-          tempHabitList.push(habitDay);
-        }
-        setHabitList(tempHabitList);
-        // store the newly created day
-      };
-      const generatePrevHabitList = async (pastHabitData) => {
-        const tempList = [];
-        for (let i = 0; i < pastHabitData.habitDays.length; i++) {
-          tempList.push(pastHabitData.habitDays[i]);
-        }
-        // setPrevHabitList(tempList);
-        return tempList;
-      };
-      const generateNewHabitList = async (pastHabitData) => {
-        const length = pastHabitData.habitDays
-          ? pastHabitData.habitDays.length
-          : 0;
-        const tempList = [];
-        for (let day = length + 1; day <= 14; day++) {
-          const habitDayJSON = await getDayHabit(day);
-          const habitDay = JSON.parse(habitDayJSON);
-          tempList.push(habitDay);
-        }
-        // setNewHabitList(tempList);
-        return tempList;
-      };
-      const generatePassedDays = (startDate, today) => {
-        const difference = getDateDifference(
-          new Date(startDate),
-          new Date(today),
-        );
-        setPassedDays(difference);
-      };
-
-      // data exists
-      if (latestPastHabitData.habitDays.length > 0) {
-        console.log('PastHabitData.habitDays.length is: >0');
-        generatePassedDays(latestPastHabitData.startDate, date);
-        // max size
-        if (latestPastHabitData.habitDays.length >= 14) {
-          console.log('PastHabitData.habitDays.length is: >=14');
-          startNewSection();
-        }
-        // is in previous section
-        const prevList = await generatePrevHabitList(latestPastHabitData);
-        const newList = await generateNewHabitList(latestPastHabitData);
-        if (
-          date <= latestPastHabitData.endDate &&
-          date >= latestPastHabitData.startDate
-        ) {
-          console.log('Date is inside previous Section');
-          // create combo list
-          const tempList = prevList.concat(newList);
-          // replace today with getDay of today
-          const habitDayJSON = await getDayHabit(
-            latestPastHabitData.habitDays.length,
-          );
-          const habitDay = JSON.parse(habitDayJSON);
-          tempList[prevList.length - 1] = habitDay;
-          // change active state for today's habits by looking at prevHabits
-          if (tempList[prevList.length - 1] && prevList[prevList.length - 1]) {
-            tempList[prevList.length - 1].forEach((newHabitItem) => {
-              for (let i = 0; i < prevList[prevList.length - 1].length; i++) {
-                if (newHabitItem.id === prevList[prevList.length - 1][i].id) {
-                  // set completed
-                  newHabitItem.completed =
-                    prevList[prevList.length - 1][i].completed;
-                  // splice habit from prevList
-                  prevList[prevList.length - 1].splice(i, 1);
-                  // break out of inner loop
-                  break;
-                }
-              }
-            });
-          }
-          setHabitList(tempList);
-        } else {
-          console.log('Date is outside previous Section');
-          // create combined list to update
-          const comboList = prevList.concat(newList);
-          // update old data to complete previous section
-          await storeEditedPastData(latestPastHabitData, comboList);
-          // It is possible that multiple sections may have passed.
-          const oldStartDate = new Date(latestPastHabitData.startDate);
-          const today = new Date(date);
-          const difference = getDateDifference(oldStartDate, today);
-          // divide difference by every 14 days
-          const multiplier = parseInt(difference / 14);
-          // create new start date
-          const newStartDate = new Date(oldStartDate.toISOString());
-          newStartDate.setDate(newStartDate.getDate() + 14 * multiplier);
-          // create new end date
-          const newEndDate = new Date(newStartDate.toISOString());
-          newEndDate.setDate(newEndDate.getDate() + 14);
-
-          const newHabitData = {
-            startDate: newStartDate.toISOString(),
-            endDate: newEndDate.toISOString(),
-            latestDate: date,
-            habitDays: [],
-          };
-          setPastHabitData(newHabitData);
-          generatePassedDays(newStartDate.toISOString(), today.toISOString());
-          startNewSection();
-        }
-        // previous habit data does not exist
-      } else if (latestPastHabitData.habitDays.length <= 0) {
-        console.log('PastHabitData.habitDays.length is: <=0');
-        startNewSection();
-      }
-      loading = false;
-      setInitialUseEffectHasRun(true);
-    };
-    console.log('Reloading Context in HabitListContext');
-    if (!loading) {
-      loading = true;
-      getData();
-    }
-  }, [reloadContext]);
-
-  useEffect(() => {
-    if (initialUseEffectHasRun) {
-      console.log('HabitList has been modified and is storing data again');
-      storeEditedPastData(pastHabitData, habitList);
-    }
-  }, [habitList]);
   return (
     <HabitListContext.Provider
-      value={[
-        habitList,
-        setHabitList,
-        passedDays,
-        reloadContext,
-        setReloadContext,
-      ]}>
+      value={[habitList, setHabitList, loadCurrentlyActiveDayHabits]}>
       {props.children}
     </HabitListContext.Provider>
   );
