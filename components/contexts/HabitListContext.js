@@ -176,15 +176,13 @@ export const HabitListProvider = (props) => {
     // clone habitList
     const habitListCopy = JSON.parse(JSON.stringify(habitList));
     // loop through habitlist
-    // console.log(habitListCopy.length);
-    // console.log(habitListCopy);
     for (let habit of habitListCopy) {
       // loop through pastHabitData
       for (const pastHabit of pastHabitData) {
         // if equal id then set habitlist completed to pasthabitdata completed
         if (habit.id === pastHabit.id) {
           habit.completed = pastHabit.completed;
-          console.log(habit.name, 'is completed:', habit.completed);
+          // console.log(habit.name, 'is completed:', habit.completed);
           break;
         }
       }
@@ -200,7 +198,6 @@ export const HabitListProvider = (props) => {
         formatDate(date),
       );
       setHabitList(pastHabitData);
-      setCurrentlyLoadedDay(date);
     } else if (isEqual(date, getToday())) {
       console.log('loadDay isEqual');
       // load
@@ -208,24 +205,13 @@ export const HabitListProvider = (props) => {
       await loadCurrentlyActiveDayHabits(date);
       // trigger updateCompletedHabits
       setSelectedDateisToday(date);
-      setCurrentlyLoadedDay(date);
     } else if (isAfter(date, getToday())) {
       console.log('loadDay isAfter');
       // load
       await loadCurrentlyActiveDayHabits(date);
-      setCurrentlyLoadedDay(date);
     }
+    setCurrentlyLoadedDay(date);
   };
-
-  useEffect(() => {
-    if (habitList.length > 0) {
-      console.log(
-        'habitList is being updated with:',
-        habitList[0].name,
-        habitList[0].completed,
-      );
-    }
-  }, [habitList]);
 
   useEffect(() => {
     if (loadedAllHabits && selectedDateisToday) {
