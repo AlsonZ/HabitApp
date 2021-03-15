@@ -26,14 +26,12 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {getAllHabits, storeNewHabit} from '../settings/Storage';
+import {config} from '../config/config';
 
 const AddHabitMain = ({navigation, route}) => {
-  const [
-    habitDetails,
-    setHabitDetails,
-    reloadAddHabitContext,
-    setReloadAddHabitContext,
-  ] = useContext(AddHabitContext);
+  const [habitDetails, setHabitDetails, reloadAddHabitContext] = useContext(
+    AddHabitContext,
+  );
   const [, , reloadEditContext, setReloadEditContext] = useContext(
     EditHabitContext,
   );
@@ -61,7 +59,7 @@ const AddHabitMain = ({navigation, route}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <OkModal
+      {/* <OkModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={'Scheduled Days'}
@@ -69,20 +67,28 @@ const AddHabitMain = ({navigation, route}) => {
         modalFooter={true}>
         <FlatList
           style={{marginRight: 1}}
-          data={habitDetails.schedule}
+          data={config.scheduleType}
           renderItem={({item, index}) => (
             <ScheduleItem
               index={index}
-              day={item.day}
-              active={item.active}
+              // day={item.day}
+              active={habitDetails.scheduleType}
               habitDetails={habitDetails}
               setHabitDetails={setHabitDetails}
             />
           )}
-          keyExtractor={(item) => `${item.day}`}
-          extraData={habitDetails.schedule}
+          keyExtractor={(item) => `${item.name}`}
+          extraData={habitDetails.scheduleType}
         />
-      </OkModal>
+        {Object.keys(config.scheduleType).map((key) => {
+          return (
+            <ScheduleItem
+              key={config.scheduleType[key].name}
+              scheduleType={config.scheduleType[key]}
+            />
+          );
+        })}
+      </OkModal> */}
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
@@ -135,7 +141,8 @@ const AddHabitMain = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          setModalVisible(true);
+          // setModalVisible(true);
+          navigation.navigate('AddHabitSchedule');
         }}
         style={styles.habitItem}>
         <FontistoIcon
@@ -144,7 +151,7 @@ const AddHabitMain = ({navigation, route}) => {
           color={'black'}
           size={24}
         />
-        <Text style={styles.habitText}>Schedule</Text>
+        <Text style={styles.habitText}>Schedule Type</Text>
         <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
@@ -162,9 +169,9 @@ const AddHabitMain = ({navigation, route}) => {
           color={'gray'}
           size={24}
         />
-        <Text style={[styles.habitText, {color: 'gray'}]}>Daily Schedule</Text>
+        <Text style={[styles.habitText, {color: 'gray'}]}>Frequency</Text>
         <NumberIcon
-          number={habitDetails.dailySchedule}
+          number={habitDetails.frequency}
           borderColor="gray"
           textColor="gray"
         />
@@ -206,19 +213,6 @@ const AddHabitMain = ({navigation, route}) => {
         <NumberIcon number={`0`} borderColor="gray" textColor="gray" />
       </TouchableOpacity>
 
-      {/* Order is only for Editing */}
-      {/* <TouchableOpacity
-        onPress={() => navigation.navigate('test')}
-        style={styles.habitItem}>
-        <IonIcon
-          style={styles.habitIcon}
-          name="list"
-          color={'black'}
-          size={24}
-        />
-        <Text style={styles.habitText}>Order</Text>
-        <NumberIcon number={habitDetails.order} />
-      </TouchableOpacity> */}
       <View style={styles.buttonContainer}>
         <Button
           title="Create New Habit"
@@ -231,7 +225,7 @@ const AddHabitMain = ({navigation, route}) => {
               // one to start new
               // reload Context's when new habit is added
               setReloadContext(!reloadContext);
-              setReloadAddHabitContext(!reloadAddHabitContext);
+              setReloadAddHabitContext();
               setReloadEditContext(!reloadEditContext);
               // send to main screen
               navigation.navigate('Home');
