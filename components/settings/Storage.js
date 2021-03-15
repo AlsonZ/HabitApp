@@ -321,7 +321,9 @@ export const getCalendarPastHabitDataOfDate = async (dateString) => {
 
   const yearListData = await getCalendarPastHabitDataOfYear(year);
 
-  const pastHabitData = yearListData.dateString ? yearListData.dateString : [];
+  const pastHabitData = yearListData[dateString]
+    ? yearListData[dateString]
+    : [];
 
   return pastHabitData;
 };
@@ -344,7 +346,7 @@ export const storeCalendarPastHabitDataOfDate = async (habit, dateString) => {
   // get stored year object
   const yearListData = await getCalendarPastHabitDataOfYear(year);
   // add new date to year
-  yearListData.dateString = pastHabitData;
+  yearListData[dateString] = pastHabitData;
   // store year
   await storeWithKey(yearListData, CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year);
   // success
@@ -368,9 +370,13 @@ export const editCalendarPastHabitDataOfDate = async (habit, dateString) => {
   // get stored year object
   const yearListData = await getCalendarPastHabitDataOfYear(year);
   // replace new date to year
-  yearListData.dateString = pastHabitData;
+  yearListData[dateString] = pastHabitData;
   // store year
   await storeWithKey(yearListData, CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year);
   // success
   return 'Success';
+};
+export const deleteCalendarPastHabitDataOfYear = async (year) => {
+  console.log('Deleting All Calendar Past Habit Data of Year:', year);
+  await AsyncStorage.removeItem(CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR + year);
 };
