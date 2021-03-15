@@ -2,33 +2,21 @@ import React, {createContext, useEffect, useState} from 'react';
 import {DefaultColors as Colors} from '../settings/Colors';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
+import {config} from '../config/config';
+import {format} from 'date-fns';
 
 export const AddHabitContext = createContext();
 
 export const AddHabitProvider = (props) => {
-  const initialHabitDetails = (id) => ({
+  const formatDate = (dateObj) => {
+    return format(dateObj, 'dd/MM/yyyy');
+  };
+
+  const initialHabitDetails = (id, date) => ({
     id: id,
     name: '',
     category: 'Category', // placeholder text
     description: '',
-    // schedule: 1, // 1 = daily
-    schedule: [
-      {day: 1, active: true},
-      {day: 2, active: true},
-      {day: 3, active: true},
-      {day: 4, active: true},
-      {day: 5, active: true},
-      {day: 6, active: true},
-      {day: 7, active: true},
-      {day: 8, active: true},
-      {day: 9, active: true},
-      {day: 10, active: true},
-      {day: 11, active: true},
-      {day: 12, active: true},
-      {day: 13, active: true},
-      {day: 14, active: true},
-    ],
-    dailySchedule: 1, // 1 = once per day
     colors: {
       // default colors here
       textColor: Colors.gray,
@@ -36,8 +24,18 @@ export const AddHabitProvider = (props) => {
       textActiveColor: Colors.white,
       backgroundActiveColor: Colors.blue,
     },
-    // completed: false,
-    order: 1,
+    archived: false,
+    frequency: 1,
+    scheduleType: config.scheduleType.everyday,
+    startDate: date, // will be chosen by user
+    endDate: null,
+    lastOccuranceDate: null,
+    // will be startdate by default then changes later,
+    // stays current day if loaded until next day,
+    // where next day will be > nextoccurdate in which then it will be updated
+    nextOccuranceDate: date, // should be editable for user as it might screw up
+    completed: false,
+    // order: 1,
   });
   const [habitDetails, setHabitDetails] = useState(
     initialHabitDetails(uuidv4()),
@@ -45,12 +43,15 @@ export const AddHabitProvider = (props) => {
   const [reloadContext, setReloadContext] = useState(false);
 
   useEffect(() => {
-    setHabitDetails(initialHabitDetails(uuidv4()));
+    setHabitDetails(initialHabitDetails(uuidv4(), formatDate(new Date())));
   }, [reloadContext]);
 
+  const reload = () => {
+    setReloadContext(!reloadContext);
+  };
+
   return (
-    <AddHabitContext.Provider
-      value={[habitDetails, setHabitDetails, reloadContext, setReloadContext]}>
+    <AddHabitContext.Provider value={[habitDetails, setHabitDetails, reload]}>
       {props.children}
     </AddHabitContext.Provider>
   );
