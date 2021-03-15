@@ -25,7 +25,7 @@ import Clock from './Clock';
 import {format, parse, add, sub} from 'date-fns';
 
 const Habits = () => {
-  const [habitList, setHabitList, loadCurrentlyActiveDayHabits] = useContext(
+  const [habitList, updateHabit, loadDay, refreshHabits] = useContext(
     HabitListContext,
   );
   const calendarRef = useRef(null);
@@ -55,7 +55,7 @@ const Habits = () => {
               days: 3,
             }),
           );
-          loadCurrentlyActiveDayHabits(date);
+          loadDay(date);
         }}
         daySelectionAnimation={{
           type: 'border',
@@ -80,8 +80,9 @@ const Habits = () => {
       />
       <FlatList
         data={habitList}
-        keyExtractor={(item) => `${item.id}`}
-        renderItem={({item, index}) => (
+        extraData={habitList}
+        keyExtractor={(item) => `${item.id}${item.name}`}
+        renderItem={({item}) => (
           <HabitButton
             disabled={false}
             title={item.name}
@@ -91,6 +92,15 @@ const Habits = () => {
             textActiveColor={item.colors.textActiveColor}
             backgroundActiveColor={item.colors.backgroundActiveColor}
             completed={item.completed} // need to add this to data
+            onPress={() => {
+              // set completed
+              item.completed = !item.completed;
+              // update habit
+              updateHabit(
+                item,
+                formatDate(new Date(calendarRef.current.getSelectedDate())),
+              );
+            }}
           />
         )}
       />
