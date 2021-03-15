@@ -5,13 +5,14 @@ import {
   getDayHabit,
   storeNewPastHabitData,
   getDateDifference,
-  editPastHabitData,
   getCalendarHabitList,
   storeCalendarHabit,
   editCalendarHabit,
   deleteAllCalendarHabits,
   storeCalendarPastHabitDataOfDate,
   editCalendarPastHabitDataOfDate,
+  getCalendarPastHabitDataOfDate,
+  delteCalendarPastHabitDataOfYear,
 } from '../settings/Storage';
 import {add, format, isBefore, isAfter, isEqual, parse, sub} from 'date-fns';
 import {config} from '../config/config';
@@ -20,7 +21,8 @@ export const HabitListContext = createContext();
 
 export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
-  // const [initialUseEffectHasRun, setInitialUseEffectHasRun] = useState(false);
+  const [loadedAllHabits, setLoadedAllHabits] = useState(false);
+  const [selectedDateisToday, setSelectedDateisToday] = useState(false);
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -65,15 +67,16 @@ export const HabitListProvider = (props) => {
     return newHabit;
   };
   const updateAndStoreLoadedHabitDates = async (habit) => {
+    console.log('updateAndStoreLoadedHabitDates is being run');
     // do not update next date as it will be updated by assignNewHabitDates tomorrow/day after
     // clone habit
     const newHabit = JSON.parse(JSON.stringify(habit));
     // update last date to today
-    console.log(
-      newHabit.lastOccuranceDate,
-      'is last Occurance Date for:',
-      newHabit.name,
-    );
+    // console.log(
+    //   newHabit.lastOccuranceDate,
+    //   'is last Occurance Date for:',
+    //   newHabit.name,
+    // );
     newHabit.lastOccuranceDate = formatDate(getToday());
     // edit habit into list, not store as habit already exists
     await editCalendarHabit(newHabit);
@@ -96,7 +99,10 @@ export const HabitListProvider = (props) => {
         }
         if (habit.scheduleType.name === config.scheduleType.everyday.name) {
           setHabitList((prevState) => [...prevState, habit]);
-          if (isEqual(day, getToday())) {
+          if (
+            isEqual(day, getToday()) &&
+            habit.lastOccuranceDate !== formatDate(getToday())
+          ) {
             // mabe move this elsewhere as it only applies if it is the current day
             await updateAndStoreLoadedHabitDates(habit);
           }
@@ -111,8 +117,12 @@ export const HabitListProvider = (props) => {
             isEqual(parseDate(habit.nextOccuranceDate), day) ||
             isEqual(parseDate(habit.lastOccuranceDate), day)
           ) {
+            console.log(habit.name, 'is current day');
             setHabitList((prevState) => [...prevState, habit]);
-            if (isEqual(day, getToday())) {
+            if (
+              isEqual(day, getToday()) &&
+              habit.lastOccuranceDate !== formatDate(getToday())
+            ) {
               // mabe move this elsewhere as it only applies if it is the current day
               await updateAndStoreLoadedHabitDates(habit);
             }
@@ -125,7 +135,10 @@ export const HabitListProvider = (props) => {
             // incase updateddates is now today
             if (isEqual(parseDate(updatedHabit.nextOccuranceDate), day)) {
               setHabitList((prevState) => [...prevState, updatedHabit]);
-              if (isEqual(day, getToday())) {
+              if (
+                isEqual(day, getToday()) &&
+                habit.lastOccuranceDate !== formatDate(getToday())
+              ) {
                 // mabe move this elsewhere as it only applies if it is the current day
                 await updateAndStoreLoadedHabitDates(updatedHabit);
               }
@@ -145,20 +158,80 @@ export const HabitListProvider = (props) => {
       }
       // );
     }
-    // setInitialUseEffectHasRun(true);
+    setLoadedAllHabits(true);
   };
 
   const updateHabit = async (habit, dateString) => {
     await editCalendarPastHabitDataOfDate(habit, dateString);
   };
 
+  const updateCompletedHabits = async (date) => {
+    // get past data
+    const pastHabitData = await getCalendarPastHabitDataOfDate(
+      formatDate(date),
+    );
+    // if habit has been deleted dont load it for today?
+    // will need to delete habit for past data as well then
+    // clone habitList
+    const habitListCopy = JSON.parse(JSON.stringify(habitList));
+    // loop through habitlist
+    // console.log(habitListCopy.length);
+    // console.log(habitListCopy);
+    for (let habit of habitListCopy) {
+      // loop through pastHabitData
+      for (const pastHabit of pastHabitData) {
+        // if equal id then set habitlist completed to pasthabitdata completed
+        if (habit.id === pastHabit.id) {
+          habit.completed = pastHabit.completed;
+          console.log(habit.name, 'is completed:', habit.completed);
+          break;
+        }
+      }
+    }
+    console.log('updating habitList');
+    setHabitList(habitListCopy);
+  };
+
+  const loadDay = async (date) => {
+    if (isBefore(date, getToday())) {
+      console.log('loadDay isBefore');
+      const pastHabitData = await getCalendarPastHabitDataOfDate(
+        formatDate(date),
+      );
+      setHabitList(pastHabitData);
+    } else if (isEqual(date, getToday())) {
+      console.log('loadDay isEqual');
+      // load
+      console.log('before loadCurrentlyActive');
+      await loadCurrentlyActiveDayHabits(date);
+      // trigger updateCompletedHabits
+      setSelectedDateisToday(date);
+    } else if (isAfter(date, getToday())) {
+      console.log('loadDay isAfter');
+      // load
+      await loadCurrentlyActiveDayHabits(date);
+    }
+  };
+
   useEffect(() => {
-    // if (initialUseEffectHasRun) {
-    // console.log('Store calendar past habit data');
-    // update past habit data
-    // await
-    // }
+    if (habitList.length > 0) {
+      console.log(
+        'habitList is being updated with:',
+        habitList[0].name,
+        habitList[0].completed,
+      );
+    }
   }, [habitList]);
+
+  useEffect(() => {
+    if (loadedAllHabits && selectedDateisToday) {
+      console.log('this update runs');
+      const update = async () => {
+        await updateCompletedHabits(selectedDateisToday);
+      };
+      update();
+    }
+  }, [loadedAllHabits, selectedDateisToday]);
 
   useEffect(() => {
     let loading = false;
@@ -253,8 +326,9 @@ export const HabitListProvider = (props) => {
     };
     const getData = async () => {
       loading = true;
-      await createPlaceholderHabits();
-      await loadCurrentlyActiveDayHabits(day); // for today, is date obj
+      // await createPlaceholderHabits();
+      // await loadCurrentlyActiveDayHabits(day); // for today, is date obj
+      await loadDay(day);
       loading = false;
     };
     if (!loading) {
@@ -263,8 +337,7 @@ export const HabitListProvider = (props) => {
   }, []);
 
   return (
-    <HabitListContext.Provider
-      value={[habitList, updateHabit, loadCurrentlyActiveDayHabits]}>
+    <HabitListContext.Provider value={[habitList, updateHabit, loadDay]}>
       {props.children}
     </HabitListContext.Provider>
   );
