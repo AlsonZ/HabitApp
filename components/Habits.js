@@ -22,10 +22,10 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clock from './Clock';
-import {format, parse, add, sub} from 'date-fns';
+import {format, parse, add, sub, isAfter} from 'date-fns';
 
 const Habits = () => {
-  const [habitList, updateHabit, loadDay, refreshHabits] = useContext(
+  const [habitList, updateHabit, loadDay, currentlyLoadedDay] = useContext(
     HabitListContext,
   );
   const calendarRef = useRef(null);
@@ -84,7 +84,7 @@ const Habits = () => {
         keyExtractor={(item) => `${item.id}${item.name}`}
         renderItem={({item}) => (
           <HabitButton
-            disabled={false}
+            disabled={isAfter(currentlyLoadedDay, getToday())}
             title={item.name}
             description={item.description}
             textColor={item.colors.textColor}

@@ -23,6 +23,7 @@ export const HabitListProvider = (props) => {
   const [habitList, setHabitList] = useState([]);
   const [loadedAllHabits, setLoadedAllHabits] = useState(false);
   const [selectedDateisToday, setSelectedDateisToday] = useState(false);
+  const [currentlyLoadedDay, setCurrentlyLoadedDay] = useState(null);
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -199,6 +200,7 @@ export const HabitListProvider = (props) => {
         formatDate(date),
       );
       setHabitList(pastHabitData);
+      setCurrentlyLoadedDay(date);
     } else if (isEqual(date, getToday())) {
       console.log('loadDay isEqual');
       // load
@@ -206,10 +208,12 @@ export const HabitListProvider = (props) => {
       await loadCurrentlyActiveDayHabits(date);
       // trigger updateCompletedHabits
       setSelectedDateisToday(date);
+      setCurrentlyLoadedDay(date);
     } else if (isAfter(date, getToday())) {
       console.log('loadDay isAfter');
       // load
       await loadCurrentlyActiveDayHabits(date);
+      setCurrentlyLoadedDay(date);
     }
   };
 
@@ -337,7 +341,8 @@ export const HabitListProvider = (props) => {
   }, []);
 
   return (
-    <HabitListContext.Provider value={[habitList, updateHabit, loadDay]}>
+    <HabitListContext.Provider
+      value={[habitList, updateHabit, loadDay, currentlyLoadedDay]}>
       {props.children}
     </HabitListContext.Provider>
   );
