@@ -17,7 +17,7 @@ const HabitButton = ({
   completed,
   listView,
 }) => {
-  const [isActive, setIsActive] = useState(completed ? completed : false);
+  const [isActive, setIsActive] = useState(false);
 
   const iconBackgroundSvgProps = {
     width: listView ? '40' : '58',
@@ -47,6 +47,9 @@ const HabitButton = ({
       onPress();
     }
   };
+  useEffect(() => {
+    setIsActive(completed);
+  }, [completed]);
 
   return (
     <TouchableOpacity
