@@ -7,6 +7,7 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -29,6 +30,7 @@ const Habits = () => {
     HabitListContext,
   );
   const calendarRef = useRef(null);
+  const windowWidth = useWindowDimensions().width;
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -39,6 +41,21 @@ const Habits = () => {
   const getToday = () => {
     return parseDate(formatDate(new Date()));
   };
+
+  useEffect(() => {
+    if (calendarRef.current !== null) {
+      const timer = setTimeout(() => {
+        calendarRef.current.updateWeekView(
+          sub(currentlyLoadedDay, {
+            days: 3,
+          }),
+        );
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [windowWidth]);
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
