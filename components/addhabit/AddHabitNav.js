@@ -33,11 +33,11 @@ const AddHabitNav = () => {
               ...TransitionPresets.SlideFromRightIOS,
             }}
           />
-          {/* <Stack.Screen
-            name="Schedule"
-            options={{title: 'Repeat every'}}
+          <Stack.Screen
+            name="AddHabitSchedule"
+            options={{title: 'Repeat '}}
             component={ScheduleItem}
-          /> */}
+          />
           <Stack.Screen
             name="AddHabitColors"
             options={{
