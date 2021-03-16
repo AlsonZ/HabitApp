@@ -9,32 +9,49 @@ import {
 
 const ScrollPicker = ({
   values,
-  selectedValue,
-  setSelectedValue,
+  selectedValueIndex,
+  setSelectedValueIndex,
   width = 80,
   itemHeight = 40,
   fontSize = 20,
   selectedValueStyle = {},
+  userSelectedIndex,
 }) => {
-  const [current, setCurrent] = useState(selectedValue);
+  // const [current, setCurrent] = useState(selectedValueIndex);
   const flatListRef = useRef(null);
   let offsetValues = [...Array(values.length)].map(
     (_, index) => index * itemHeight,
   );
   const flatListData = [...values, '', ''];
 
-  const scrollToValue = (valueIndex) => {
-    console.log('Index of selected value is:', valueIndex);
-    flatListRef.current.scrollToIndex({index: valueIndex});
+  useEffect(() => {
+    scrollToValue(userSelectedIndex);
+  }, [userSelectedIndex]);
+
+  const scrollToValue = async (valueIndex) => {
+    // console.log('Index of selected value is:', current, valueIndex);
+    //   console.log('currently scrolling');
+    await flatListRef.current.scrollToIndex({index: valueIndex});
+  };
+
+  const handleScroll = ({nativeEvent}) => {
+    // while scrolling dont set values
+    const index = Math.round(nativeEvent.contentOffset.y / itemHeight);
+    // console.log('ScrollTo index:', index);
+    // if (index !== current) {
+    // setCurrent(index);
+    setSelectedValueIndex(index);
+    // }
   };
 
   const DurationItem = React.memo(({text, index}) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if (flatListData[index] !== '') {
-            setSelectedValue(flatListData[index]);
-          }
+          // if (flatListData[index] !== '') {
+          //   setSelectedValue(flatListData[index]);
+          // }
+          setSelectedValueIndex(index);
           scrollToValue(index);
         }}
         style={{height: itemHeight}}>
@@ -52,19 +69,6 @@ const ScrollPicker = ({
       </TouchableWithoutFeedback>
     );
   });
-
-  const handleScroll = ({nativeEvent}) => {
-    const value = Math.round(nativeEvent.contentOffset.y / itemHeight + 1);
-    console.log('ScrollTo value:', value);
-    // console.log(
-    //   nativeEvent.contentOffset.y,
-    //   Math.round(nativeEvent.contentOffset.y / itemHeight + 1),
-    // );
-    if (value !== current) {
-      setCurrent(value);
-      setSelectedValue(value);
-    }
-  };
 
   return (
     <View
@@ -97,7 +101,7 @@ const ScrollPicker = ({
           offset: itemHeight * index,
           index,
         })}
-        initialScrollIndex={selectedValue - 1}
+        initialScrollIndex={selectedValueIndex}
         showsVerticalScrollIndicator={false}
         snapToOffsets={offsetValues}
         onScroll={handleScroll}
