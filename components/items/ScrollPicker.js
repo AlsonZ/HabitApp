@@ -73,7 +73,6 @@ const ScrollPicker = ({
         {
           height: itemHeight * 3,
           width: width,
-          marginTop: itemHeight,
         },
       ]}>
       <View
