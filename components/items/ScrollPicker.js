@@ -1,13 +1,11 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 
 const ScrollPicker = ({
   values,
@@ -26,7 +24,7 @@ const ScrollPicker = ({
   const flatListData = [...values, '', ''];
 
   const scrollToValue = (valueIndex) => {
-    console.log(valueIndex);
+    console.log('Index of selected value is:', valueIndex);
     flatListRef.current.scrollToIndex({index: valueIndex});
   };
 
@@ -55,20 +53,13 @@ const ScrollPicker = ({
     );
   });
 
-  useEffect(() => {
-    // set to selected value
-    if (flatListRef.current !== null) {
-      let valueIndex = selectedValue - 1;
-      scrollToValue(valueIndex);
-    }
-  }, [flatListRef.current]);
-
   const handleScroll = ({nativeEvent}) => {
     const value = Math.round(nativeEvent.contentOffset.y / itemHeight + 1);
-    console.log(
-      nativeEvent.contentOffset.y,
-      Math.round(nativeEvent.contentOffset.y / itemHeight + 1),
-    );
+    console.log('ScrollTo value:', value);
+    // console.log(
+    //   nativeEvent.contentOffset.y,
+    //   Math.round(nativeEvent.contentOffset.y / itemHeight + 1),
+    // );
     if (value !== current) {
       setCurrent(value);
       setSelectedValue(value);
@@ -107,7 +98,7 @@ const ScrollPicker = ({
           offset: itemHeight * index,
           index,
         })}
-        initialScrollIndex={selectedValue - 2}
+        initialScrollIndex={selectedValue - 1}
         showsVerticalScrollIndicator={false}
         snapToOffsets={offsetValues}
         onScroll={handleScroll}
