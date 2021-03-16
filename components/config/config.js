@@ -9,7 +9,8 @@ export const config = {
     weekday: {name: 'weekday'},
     custom: {
       name: 'custom',
-      duration: {days: 1, weeks: 0, months: 0, years: 0},
+      // duration: {days: 1, weeks: 0, months: 0, years: 0},
+      duration: {days: 1},
     }, // this will be added/changed by user
   },
 };
