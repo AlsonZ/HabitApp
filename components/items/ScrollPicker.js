@@ -1,32 +1,43 @@
-import React, {useState, useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 
 const ScrollPicker = ({
   values,
   selectedValue,
   setSelectedValue,
-  width = 100,
+  width = 80,
   itemHeight = 40,
   fontSize = 20,
+  selectedValueStyle = {},
 }) => {
-  // const [currentlyChosen, setCurrentlyChosen] = useState(0);
-  const durationPickerScrollView = useRef(null);
+  const [current, setCurrent] = useState(selectedValue);
+  const flatListRef = useRef(null);
+  let offsetValues = [...Array(values.length)].map(
+    (_, index) => index * itemHeight,
+  );
+  const flatListData = [...values, '', ''];
 
-  const DurationItem = ({text, index}) => {
+  const scrollToValue = (valueIndex) => {
+    console.log(valueIndex);
+    flatListRef.current.scrollToIndex({index: valueIndex});
+  };
+
+  const DurationItem = React.memo(({text, index}) => {
     return (
-      <TouchableOpacity
+      <TouchableWithoutFeedback
         onPress={() => {
-          setSelectedValue(values[index]);
-          durationPickerScrollView.current.scrollTo({
-            y: index * itemHeight,
-            animated: true,
-          });
+          if (flatListData[index] !== '') {
+            setSelectedValue(flatListData[index]);
+          }
+          scrollToValue(index);
         }}
         style={{height: itemHeight}}>
         <Text
@@ -40,8 +51,28 @@ const ScrollPicker = ({
           ]}>
           {text}
         </Text>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     );
+  });
+
+  useEffect(() => {
+    // set to selected value
+    if (flatListRef.current !== null) {
+      let valueIndex = selectedValue - 1;
+      scrollToValue(valueIndex);
+    }
+  }, [flatListRef.current]);
+
+  const handleScroll = ({nativeEvent}) => {
+    const value = Math.round(nativeEvent.contentOffset.y / itemHeight + 1);
+    console.log(
+      nativeEvent.contentOffset.y,
+      Math.round(nativeEvent.contentOffset.y / itemHeight + 1),
+    );
+    if (value !== current) {
+      setCurrent(value);
+      setSelectedValue(value);
+    }
   };
 
   return (
@@ -55,18 +86,38 @@ const ScrollPicker = ({
         },
       ]}>
       <View
-        style={[styles.pickerSelector, {height: itemHeight, top: itemHeight}]}
+        style={[
+          styles.pickerSelector,
+          {
+            height: itemHeight,
+            top: itemHeight,
+            backgroundColor: 'rgba(1,1,1,0.1)',
+          },
+          selectedValueStyle,
+        ]}
       />
-      <ScrollView
-        ref={durationPickerScrollView}
-        snapToInterval={itemHeight}
+      <FlatList
+        ref={flatListRef}
+        contentContainerStyle={[
+          styles.scrollView,
+          {marginTop: itemHeight, width: width},
+        ]}
+        getItemLayout={(data, index) => ({
+          length: itemHeight,
+          offset: itemHeight * index,
+          index,
+        })}
+        initialScrollIndex={selectedValue - 2}
         showsVerticalScrollIndicator={false}
-        style={[styles.scrollView, {paddingTop: itemHeight}]}>
-        {values.map((value, index) => (
-          <DurationItem key={value + index} text={value} index={index} />
-        ))}
-        <View style={{height: itemHeight * 2}}></View>
-      </ScrollView>
+        snapToOffsets={offsetValues}
+        onScroll={handleScroll}
+        scrollEventThrottle={0}
+        data={flatListData}
+        renderItem={({item, index}) => (
+          <DurationItem text={item} index={index} />
+        )}
+        keyExtractor={(item, index) => `${item + index * index}`}
+      />
     </View>
   );
 };
@@ -79,9 +130,8 @@ const styles = StyleSheet.create({
   },
   pickerSelector: {
     position: 'absolute',
-    backgroundColor: 'rgba(255,1,1,0.5)',
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 15,
   },
   scrollView: {
     width: '100%',
