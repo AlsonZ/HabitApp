@@ -167,15 +167,29 @@ const ScheduleItem = ({navigation, route}) => {
         setUserSelectedDurationTypeIndex(3);
         break;
       case 'custom':
+        console.log(route.params.scheduleType);
         // need to check what key is in duration here
+        // Object.keys(route.params.scheduleType.duration)
+        let key = [];
+        for (const type in route.params.scheduleType.duration) {
+          key.push(type);
+        }
+        const typeIndex = durationType.findIndex((type) => key[0] === type);
+        console.log(
+          'duration amount',
+          key,
+          route.params.scheduleType.duration,
+          route.params.scheduleType.duration[key],
+          route.params.scheduleType.duration[key] - 1,
+        );
+        setUserSelectedDurationTypeIndex(typeIndex);
+        setSelectedDurationTypeIndex(typeIndex);
         // then set index, amount also relies on this key
-        setUserSelectedDurationTypeIndex(0);
-        setSelectedDurationTypeIndex(0);
         setSelectedDurationAmountIndex(
-          route.params.scheduleType.duration.days - 1,
+          route.params.scheduleType.duration[key] - 1,
         );
         setUserSelectedDurationAmountIndex(
-          route.params.scheduleType.duration.days - 1,
+          route.params.scheduleType.duration[key] - 1,
         );
         break;
     }
@@ -207,7 +221,7 @@ const ScheduleItem = ({navigation, route}) => {
   }, [selectedMonthIndex, selectedYearIndex]);
 
   return (
-    <ScrollView contentContainerStyle={{flex: 1, backgroundColor: '#F2F2F2'}}>
+    <ScrollView contentContainerStyle={{backgroundColor: '#F2F2F2'}}>
       <ScrollView horizontal contentContainerStyle={{width: '100%'}}>
         <FlatList
           data={Object.keys(config.scheduleType)}
@@ -232,6 +246,7 @@ const ScheduleItem = ({navigation, route}) => {
               setSelectedValueIndex={setSelectedDurationAmountIndex}
               width={80}
               itemHeight={60}
+              fontSize={18}
               userSelectedIndex={userSelectedDurationAmountIndex}
             />
             <ScrollPicker
@@ -240,6 +255,7 @@ const ScheduleItem = ({navigation, route}) => {
               setSelectedValueIndex={setSelectedDurationTypeIndex}
               width={100}
               itemHeight={60}
+              fontSize={18}
               userSelectedIndex={userSelectedDurationTypeIndex}
             />
           </>
