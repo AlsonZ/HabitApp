@@ -25,18 +25,20 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {getAllHabits, storeNewHabit} from '../settings/Storage';
+import {
+  getAllHabits,
+  storeCalendarHabit,
+  storeNewHabit,
+} from '../settings/Storage';
 import {config} from '../config/config';
 
 const AddHabitMain = ({navigation, route}) => {
   const [habitDetails, setHabitDetails, reloadAddHabitContext] = useContext(
     AddHabitContext,
   );
-  const [, , reloadEditContext, setReloadEditContext] = useContext(
-    EditHabitContext,
-  );
-  const [, , , reloadContext, setReloadContext] = useContext(HabitListContext);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [, , reloadEditHabitContext] = useContext(EditHabitContext);
+  const [, , , , reloadHabitListContext] = useContext(HabitListContext);
+  // const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (route.params?.category) {
@@ -176,16 +178,55 @@ const AddHabitMain = ({navigation, route}) => {
           color={'black'}
           size={24}
         />
-        <Text style={styles.habitText}>
-          Schedule Type {habitDetails.startDate}{' '}
-          {habitDetails.scheduleType.name}
-        </Text>
-        <MCIcon
+        <Text style={styles.habitText}>Schedule Type:</Text>
+        <View style={styles.rightIcon}>
+          <Text style={styles.habitText}>
+            {habitDetails.scheduleType.name.charAt(0).toUpperCase() +
+              habitDetails.scheduleType.name.slice(1)}
+          </Text>
+        </View>
+        {/* <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
           color={'black'}
           size={26}
+        /> */}
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('AddHabitSchedule', {
+            startDate: habitDetails.startDate, // '01/01/2021'
+            scheduleType: habitDetails.scheduleType, // {name: 'everyday', duration: {days: 1}}
+            parentRoute: route.name,
+          });
+        }}
+        style={styles.habitItem}>
+        <FontistoIcon
+          style={styles.habitIcon}
+          name="date"
+          color={'black'}
+          size={24}
         />
+        <Text style={styles.habitText}>Start Date:</Text>
+        <View style={styles.rightIcon}>
+          <Text style={styles.habitText}>{habitDetails.startDate}</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity disabled onPress={() => {}} style={styles.habitItem}>
+        <FontistoIcon
+          style={styles.habitIcon}
+          name="date"
+          color={'gray'}
+          size={24}
+        />
+        <Text style={[styles.habitText, {color: 'gray'}]}>
+          Next Occurance Date:
+        </Text>
+        <View style={styles.rightIcon}>
+          <Text style={[styles.habitText, {color: 'gray'}]}>
+            {habitDetails.nextOccuranceDate}
+          </Text>
+        </View>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
@@ -245,16 +286,17 @@ const AddHabitMain = ({navigation, route}) => {
         <Button
           title="Create New Habit"
           onPress={async () => {
-            const success = await storeNewHabit(habitDetails);
+            // const success = await storeNewHabit(habitDetails);
+            const success = await storeCalendarHabit(habitDetails);
             // const success = 'Success';
             if (success === 'Success') {
               // show modal popup for success with 3 buttons
               // one to go to home, other to continue making duplicate habit
               // one to start new
               // reload Context's when new habit is added
-              setReloadContext(!reloadContext);
-              setReloadAddHabitContext();
-              setReloadEditContext(!reloadEditContext);
+              reloadAddHabitContext();
+              reloadHabitListContext();
+              reloadEditHabitContext();
               // send to main screen
               navigation.navigate('Home');
             } else if (success === 'Name Matches Existing Habit') {
