@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {getAllHabits} from '../settings/Storage';
+import {getAllHabits, getCalendarHabitList} from '../settings/Storage';
 
 export const EditHabitContext = createContext();
 
@@ -10,7 +10,8 @@ export const EditHabitProvider = (props) => {
   useEffect(() => {
     let loading = false;
     const getData = async () => {
-      const allHabitsData = await getAllHabits();
+      // const allHabitsData = await getAllHabits();
+      const allHabitsData = await getCalendarHabitList();
       setAllHabits(allHabitsData);
       loading = false;
     };
@@ -20,9 +21,12 @@ export const EditHabitProvider = (props) => {
     }
   }, [reloadContext]);
 
+  const reload = () => {
+    setReloadContext(!reloadContext);
+  };
+
   return (
-    <EditHabitContext.Provider
-      value={[allHabits, setAllHabits, reloadContext, setReloadContext]}>
+    <EditHabitContext.Provider value={[allHabits, setAllHabits, reload]}>
       {props.children}
     </EditHabitContext.Provider>
   );
