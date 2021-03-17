@@ -4,6 +4,7 @@ import EditHabitMain from './EditHabitMain.js';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
 import EditHabitItem from './EditHabitItem';
 import CategoryItem from '../items/CategoryItem';
+import ScheduleItem from '../items/ScheduleItem';
 import HabitColorItem from '../items/HabitColorItem';
 import AddHabitNav from '../addhabit/AddHabitNav';
 
@@ -33,6 +34,14 @@ const EditHabitNav = () => {
           }}
           name="EditCategories"
           component={CategoryItem}
+        />
+        <Stack.Screen
+          options={{
+            title: 'Repeat',
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+          name="EditHabitSchedule"
+          component={ScheduleItem}
         />
         <Stack.Screen
           options={{
