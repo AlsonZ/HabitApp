@@ -1,10 +1,11 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
+  Button,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
-  ScrollView,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {DefaultColors} from '../settings/Colors';
@@ -13,9 +14,10 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import ScrollPicker from './ScrollPicker';
 import {format, isLeapYear} from 'date-fns';
 
-const ScheduleItem = () => {
+const ScheduleItem = ({navigation, route}) => {
+  const parentRoute = route.params.parentRoute;
   // set this to scheduletype from navigation and not default to the config
-  const [active, setActive] = useState(config.scheduleType.everyday);
+  const [active, setActive] = useState(route.params.scheduleType);
   const durationAmount = [...Array(365)].map((_, index) => index + 1);
   const durationType = ['days', 'weeks', 'months', 'years'];
   const [
@@ -103,7 +105,7 @@ const ScheduleItem = () => {
         <View style={styles.container}>
           <CheckBox
             disable={false}
-            value={scheduleType === active}
+            value={scheduleType.name === active.name}
             onChange={() => {
               setActive(scheduleType);
             }}
@@ -115,18 +117,75 @@ const ScheduleItem = () => {
   };
 
   useEffect(() => {
-    // get today
-    const formatDate = (dateObj) => {
-      return format(dateObj, 'dd/MM/yyyy');
-    };
-    const [dayString, monthString, yearString] = formatDate(new Date()).split(
+    // set selected
+    // startDate
+    const [dayString, monthString, yearString] = route.params.startDate.split(
       '/',
     );
-    // set startDate to today
+    // duration
+    // set active checkbox
+    // {name: 'everyday', duration: {days: 1}}
+    switch (route.params.scheduleType.name) {
+      case 'weekly':
+        setSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.weeks - 1,
+        );
+        setUserSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.weeks - 1,
+        );
+        setSelectedDurationTypeIndex(1);
+        setUserSelectedDurationTypeIndex(1);
+        break;
+      case 'fortnightly':
+        setSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.weeks - 1,
+        );
+        setUserSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.weeks - 1,
+        );
+        setSelectedDurationTypeIndex(1);
+        setUserSelectedDurationTypeIndex(1);
+        break;
+      case 'monthly':
+        setSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.months - 1,
+        );
+        setUserSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.months - 1,
+        );
+        setSelectedDurationTypeIndex(2);
+        setUserSelectedDurationTypeIndex(2);
+        break;
+      case 'yearly':
+        setSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.years - 1,
+        );
+        setUserSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.years - 1,
+        );
+        setSelectedDurationTypeIndex(3);
+        setUserSelectedDurationTypeIndex(3);
+        break;
+      case 'custom':
+        // need to check what key is in duration here
+        // then set index, amount also relies on this key
+        setUserSelectedDurationTypeIndex(0);
+        setSelectedDurationTypeIndex(0);
+        setSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.days - 1,
+        );
+        setUserSelectedDurationAmountIndex(
+          route.params.scheduleType.duration.days - 1,
+        );
+        break;
+    }
+
+    // set startDate to params
     setUserSelectedDayIndex(parseInt(dayString) - 1);
     setUserSelectedMonthIndex(parseInt(monthString) - 1);
-    // year should be default this year anyways
-    // setUserSelectedYearIndex(parseInt(yearString));
+    // find index of year
+    const yearIndex = years.findIndex((year) => parseInt(yearString) === year);
+    setUserSelectedYearIndex(yearIndex);
   }, []);
 
   useEffect(() => {
@@ -225,6 +284,26 @@ const ScheduleItem = () => {
           </>
         )}
       </ScrollView>
+      <View style={styles.saveButtonContainer}>
+        <Button
+          title="Save"
+          onPress={() => {
+            // {name: 'everyday', duration: {days: 1}}
+            const selectedDate = `${days[selectedDayIndex]}/${months[selectedMonthIndex]}/${years[selectedYearIndex]}`;
+            const type = durationType[selectedDurationTypeIndex];
+            const amount = durationAmount[selectedDurationAmountIndex];
+            navigation.navigate(parentRoute, {
+              startDate: selectedDate,
+              scheduleType: {
+                name: active.name,
+                duration: {
+                  [type]: amount,
+                },
+              },
+            });
+          }}
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -254,6 +333,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  saveButtonContainer: {
+    paddingBottom: 17,
+    marginHorizontal: 17,
   },
 });
 
