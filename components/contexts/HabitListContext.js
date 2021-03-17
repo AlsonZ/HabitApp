@@ -24,6 +24,7 @@ export const HabitListProvider = (props) => {
   const [loadedAllHabits, setLoadedAllHabits] = useState(false);
   const [selectedDateisToday, setSelectedDateisToday] = useState(false);
   const [currentlyLoadedDay, setCurrentlyLoadedDay] = useState(null);
+  const [reloadContext, setReloadContext] = useState(false);
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -324,11 +325,15 @@ export const HabitListProvider = (props) => {
     if (!loading) {
       getData();
     }
-  }, []);
+  }, [reloadContext]);
+
+  const reload = () => {
+    setReloadContext(!reloadContext);
+  };
 
   return (
     <HabitListContext.Provider
-      value={[habitList, updateHabit, loadDay, currentlyLoadedDay]}>
+      value={[habitList, updateHabit, loadDay, currentlyLoadedDay, reload]}>
       {props.children}
     </HabitListContext.Provider>
   );
