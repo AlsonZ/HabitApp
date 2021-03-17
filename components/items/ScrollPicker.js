@@ -16,6 +16,8 @@ const ScrollPicker = ({
   fontSize = 20,
   selectedValueStyle = {},
   userSelectedIndex,
+  title = '',
+  titleStyle,
 }) => {
   // const [current, setCurrent] = useState(selectedValueIndex);
   const flatListRef = useRef(null);
@@ -90,6 +92,19 @@ const ScrollPicker = ({
           selectedValueStyle,
         ]}
       />
+      <View
+        style={[
+          {
+            position: 'absolute',
+            width: '100%',
+            top: 0,
+            paddingBottom: 10,
+            zIndex: 1,
+          },
+          titleStyle,
+        ]}>
+        <Text style={{textAlign: 'center'}}>{title}</Text>
+      </View>
       <FlatList
         ref={flatListRef}
         contentContainerStyle={[
