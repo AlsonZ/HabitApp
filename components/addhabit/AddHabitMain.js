@@ -55,7 +55,29 @@ const AddHabitMain = ({navigation, route}) => {
         };
       });
     }
-  }, [route.params?.category, route.params?.colors]);
+    if (route.params?.startDate) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          startDate: route.params.startDate,
+        };
+      });
+    }
+    if (route.params?.scheduleType) {
+      console.log(route.params?.scheduleType);
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          scheduleType: route.params.scheduleType,
+        };
+      });
+    }
+  }, [
+    route.params?.category,
+    route.params?.colors,
+    route.params?.startDate,
+    route.params?.scheduleType,
+  ]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -141,8 +163,11 @@ const AddHabitMain = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          // setModalVisible(true);
-          navigation.navigate('AddHabitSchedule');
+          navigation.navigate('AddHabitSchedule', {
+            startDate: habitDetails.startDate, // '01/01/2021'
+            scheduleType: habitDetails.scheduleType, // {name: 'everyday', duration: {days: 1}}
+            parentRoute: route.name,
+          });
         }}
         style={styles.habitItem}>
         <FontistoIcon
@@ -151,7 +176,10 @@ const AddHabitMain = ({navigation, route}) => {
           color={'black'}
           size={24}
         />
-        <Text style={styles.habitText}>Schedule Type</Text>
+        <Text style={styles.habitText}>
+          Schedule Type {habitDetails.startDate}{' '}
+          {habitDetails.scheduleType.name}
+        </Text>
         <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
