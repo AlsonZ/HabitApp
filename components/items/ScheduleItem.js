@@ -11,6 +11,7 @@ import {DefaultColors} from '../settings/Colors';
 import {config} from '../config/config';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import ScrollPicker from './ScrollPicker';
+import {format, isLeapYear} from 'date-fns';
 
 const ScheduleItem = () => {
   // set this to scheduletype from navigation and not default to the config
@@ -30,6 +31,18 @@ const ScheduleItem = () => {
     setUserSelectedDurationTypeIndex,
   ] = useState(0);
   const [selectedDurationTypeIndex, setSelectedDurationTypeIndex] = useState(0);
+  const [days, setDays] = useState([...Array(31)].map((_, index) => index + 1));
+  // const days = [...Array(31)].map((_, index) => index + 1);
+  const months = [...Array(12)].map((_, index) => index + 1);
+  const currentYear = new Date().getFullYear();
+  const years = [...Array(10)].map((_, index) => currentYear + index);
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const [userSelectedDayIndex, setUserSelectedDayIndex] = useState(0);
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+  const [userSelectedMonthIndex, setUserSelectedMonthIndex] = useState(0);
+  const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+  const [userSelectedYearIndex, setUserSelectedYearIndex] = useState(0);
+
   const onPress = (val) => {};
 
   useEffect(() => {
@@ -86,11 +99,6 @@ const ScheduleItem = () => {
               setUserSelectedDurationAmountIndex(0);
               break;
           }
-          // console.log(
-          //   scheduleType,
-          //   scheduleType.name,
-          //   selectedDurationTypeIndex,
-          // );
         }}>
         <View style={styles.container}>
           <CheckBox
@@ -106,8 +114,41 @@ const ScheduleItem = () => {
     );
   };
 
+  useEffect(() => {
+    // get today
+    const formatDate = (dateObj) => {
+      return format(dateObj, 'dd/MM/yyyy');
+    };
+    const [dayString, monthString, yearString] = formatDate(new Date()).split(
+      '/',
+    );
+    // set startDate to today
+    setUserSelectedDayIndex(parseInt(dayString) - 1);
+    setUserSelectedMonthIndex(parseInt(monthString) - 1);
+    // year should be default this year anyways
+    // setUserSelectedYearIndex(parseInt(yearString));
+  }, []);
+
+  useEffect(() => {
+    switch (selectedMonthIndex) {
+      case 0 || 2 || 4 || 6 || 7 || 9 || 11:
+        setDays([...Array(31)].map((_, index) => index + 1));
+        break;
+      case 3 || 5 || 8 || 10:
+        setDays([...Array(30)].map((_, index) => index + 1));
+        break;
+      case 1:
+        if (isLeapYear(new Date(years[selectedYearIndex], 1, 1))) {
+          setDays([...Array(29)].map((_, index) => index + 1));
+        } else {
+          setDays([...Array(28)].map((_, index) => index + 1));
+        }
+        break;
+    }
+  }, [selectedMonthIndex, selectedYearIndex]);
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{flex: 1, backgroundColor: '#F2F2F2'}}>
       <ScrollView horizontal contentContainerStyle={{width: '100%'}}>
         <FlatList
           data={Object.keys(config.scheduleType)}
@@ -141,6 +182,45 @@ const ScheduleItem = () => {
               width={100}
               itemHeight={60}
               userSelectedIndex={userSelectedDurationTypeIndex}
+            />
+          </>
+        )}
+      </ScrollView>
+      {active !== config.scheduleType.everyday && (
+        <Text style={styles.pickerTitle}>Start Date</Text>
+      )}
+      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
+        {active !== config.scheduleType.everyday && (
+          <>
+            <ScrollPicker
+              values={days}
+              selectedValueIndex={selectedDayIndex}
+              setSelectedValueIndex={setSelectedDayIndex}
+              width={80}
+              itemHeight={60}
+              userSelectedIndex={userSelectedDayIndex}
+              title="Day"
+              titleStyle={{backgroundColor: '#F2F2F2'}}
+            />
+            <ScrollPicker
+              values={months}
+              selectedValueIndex={selectedMonthIndex}
+              setSelectedValueIndex={setSelectedMonthIndex}
+              width={80}
+              itemHeight={60}
+              userSelectedIndex={userSelectedMonthIndex}
+              title="Month"
+              titleStyle={{backgroundColor: '#F2F2F2'}}
+            />
+            <ScrollPicker
+              values={years}
+              selectedValueIndex={selectedYearIndex}
+              setSelectedValueIndex={setSelectedYearIndex}
+              width={100}
+              itemHeight={60}
+              userSelectedIndex={userSelectedYearIndex}
+              title="Year"
+              titleStyle={{backgroundColor: '#F2F2F2'}}
             />
           </>
         )}
