@@ -12,7 +12,7 @@ import {
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
-import {deleteHabit, editHabit} from '../settings/Storage';
+import {deleteHabit, editCalendarHabit, editHabit} from '../settings/Storage';
 
 import OkModal from '../modal/OkModal';
 import ScheduleItem from '../items/ScheduleItem';
@@ -25,17 +25,11 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const EditHabitItem = ({route, navigation}) => {
-  const [allHabits, , reloadContext, setReloadContext] = useContext(
+  const [allHabits, setAllHabits, reloadEditHabitContext] = useContext(
     EditHabitContext,
   );
-  const [
-    habitList,
-    setHabitList,
-    passedDays,
-    reloadHabitListContext,
-    setReloadHabitListContext,
-  ] = useContext(HabitListContext);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [, , , , reloadHabitListContext] = useContext(HabitListContext);
+  // const [modalVisible, setModalVisible] = useState(false);
   const {index, ...rest} = route.params;
   const [habitDetails, setHabitDetails] = useState(allHabits[index]);
 
@@ -56,11 +50,33 @@ const EditHabitItem = ({route, navigation}) => {
         };
       });
     }
-  }, [route.params?.category, route.params?.colors]);
+    if (route.params?.startDate) {
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          startDate: route.params.startDate,
+        };
+      });
+    }
+    if (route.params?.scheduleType) {
+      console.log(route.params?.scheduleType);
+      setHabitDetails((prevState) => {
+        return {
+          ...prevState,
+          scheduleType: route.params.scheduleType,
+        };
+      });
+    }
+  }, [
+    route.params?.category,
+    route.params?.colors,
+    route.params?.startDate,
+    route.params?.scheduleType,
+  ]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <OkModal
+      {/* <OkModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={'Scheduled Days'}
@@ -83,7 +99,7 @@ const EditHabitItem = ({route, navigation}) => {
             extraData={habitDetails.schedule}
           />
         )}
-      </OkModal>
+      </OkModal> */}
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
@@ -137,7 +153,11 @@ const EditHabitItem = ({route, navigation}) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          setModalVisible(true);
+          navigation.navigate('EditHabitSchedule', {
+            startDate: habitDetails.startDate, // '01/01/2021'
+            scheduleType: habitDetails.scheduleType, // {name: 'everyday', duration: {days: 1}}
+            parentRoute: route.name,
+          });
         }}
         style={styles.habitItem}>
         <FontistoIcon
@@ -146,14 +166,57 @@ const EditHabitItem = ({route, navigation}) => {
           color={'black'}
           size={24}
         />
-        <Text style={styles.habitText}>Schedule</Text>
-        <MCIcon
+        <Text style={styles.habitText}>Schedule Type:</Text>
+        <View style={styles.rightIcon}>
+          <Text style={styles.habitText}>
+            {habitDetails.scheduleType.name.charAt(0).toUpperCase() +
+              habitDetails.scheduleType.name.slice(1)}
+          </Text>
+        </View>
+        {/* <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
           color={'black'}
           size={26}
-        />
+        /> */}
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('EditHabitSchedule', {
+            startDate: habitDetails.startDate, // '01/01/2021'
+            scheduleType: habitDetails.scheduleType, // {name: 'everyday', duration: {days: 1}}
+            parentRoute: route.name,
+          });
+        }}
+        style={styles.habitItem}>
+        <FontistoIcon
+          style={styles.habitIcon}
+          name="date"
+          color={'black'}
+          size={24}
+        />
+        <Text style={styles.habitText}>Start Date:</Text>
+        <View style={styles.rightIcon}>
+          <Text style={styles.habitText}>{habitDetails.startDate}</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity disabled onPress={() => {}} style={styles.habitItem}>
+        <FontistoIcon
+          style={styles.habitIcon}
+          name="date"
+          color={'gray'}
+          size={24}
+        />
+        <Text style={[styles.habitText, {color: 'gray'}]}>
+          Next Occurance Date:
+        </Text>
+        <View style={styles.rightIcon}>
+          <Text style={[styles.habitText, {color: 'gray'}]}>
+            {habitDetails.nextOccuranceDate}
+          </Text>
+        </View>
+      </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('test')}
         style={styles.habitItem}
@@ -164,9 +227,9 @@ const EditHabitItem = ({route, navigation}) => {
           color={'gray'}
           size={24}
         />
-        <Text style={[styles.habitText, {color: 'gray'}]}>Daily Schedule</Text>
+        <Text style={[styles.habitText, {color: 'gray'}]}>Frequency</Text>
         <NumberIcon
-          number={habitDetails.dailySchedule}
+          number={habitDetails.frequency}
           borderColor="gray"
           textColor="gray"
         />
@@ -207,28 +270,15 @@ const EditHabitItem = ({route, navigation}) => {
         <Text style={[styles.habitText, {color: 'gray'}]}>Reminders</Text>
         <NumberIcon number={`0`} borderColor="gray" textColor="gray" />
       </TouchableOpacity>
-
-      {/* Order is only for Editing */}
-      {/* <TouchableOpacity
-        onPress={() => navigation.navigate('test')}
-        style={styles.habitItem}>
-        <IonIcon
-          style={styles.habitIcon}
-          name="list"
-          color={'black'}
-          size={24}
-        />
-        <Text style={styles.habitText}>Order</Text>
-        <NumberIcon number={habitDetails.order} />
-      </TouchableOpacity> */}
       <TouchableOpacity
         onPress={async () => {
-          const success = await deleteHabit(habitDetails);
-          if (success === 'Success') {
-            setReloadContext(!reloadContext);
-            setReloadHabitListContext(!reloadHabitListContext);
-            navigation.navigate('EditHabitMain');
-          }
+          // const success = await deleteHabit(habitDetails);
+          // if (success === 'Success') {
+          //   setReloadContext(!reloadContext);
+          //   setReloadHabitListContext(!reloadHabitListContext);
+          //   navigation.navigate('EditHabitMain');
+          // }
+          console.log('Delete is temporarily disabled');
         }}
         style={styles.habitItem}>
         <IonIcon
@@ -249,31 +299,19 @@ const EditHabitItem = ({route, navigation}) => {
         <Button
           title="Save Edit"
           onPress={async () => {
-            const success = await editHabit(habitDetails);
+            // const success = await editHabit(habitDetails);
+            const success = await editCalendarHabit(habitDetails);
             if (success === 'Success') {
               console.log('Successfully Edited Habit');
               // send to main screen
               navigation.navigate('EditHabitMain');
               // reload Context's when habit is edited
-              setReloadContext(!reloadContext);
-              setReloadHabitListContext(!reloadHabitListContext);
+              reloadEditHabitContext();
+              reloadHabitListContext();
             } else {
               // show error
             }
           }}></Button>
-        {/* <Button
-          title="Log Details"
-          onPress={async () => {
-            // console.log(habitDetails);
-            console.log(habitDetails.name, habitDetails.description);
-          }}></Button>
-        <Button
-          title="Log schedule"
-          onPress={() => {
-            // console.log(allHabits[index]);
-            // console.log(habitDetails);
-            // console.log(uuidv4());
-          }}></Button> */}
       </View>
     </ScrollView>
   );
