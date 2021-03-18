@@ -14,7 +14,16 @@ import {
   getCalendarPastHabitDataOfDate,
   delteCalendarPastHabitDataOfYear,
 } from '../settings/Storage';
-import {add, format, isBefore, isAfter, isEqual, parse, sub} from 'date-fns';
+import {
+  add,
+  format,
+  isBefore,
+  isAfter,
+  isEqual,
+  parse,
+  sub,
+  getDay,
+} from 'date-fns';
 import {config} from '../config/config';
 
 export const HabitListContext = createContext();
@@ -109,11 +118,11 @@ export const HabitListProvider = (props) => {
             await updateAndStoreLoadedHabitDates(habit);
           }
         } else if (
-          habit.scheduleType.name === config.scheduleType.weekly.name ||
-          habit.scheduleType.name === config.scheduleType.fortnightly.name ||
-          habit.scheduleType.name === config.scheduleType.monthly.name ||
-          habit.scheduleType.name === config.scheduleType.yearly.name ||
-          habit.scheduleType.name === config.scheduleType.custom.name
+          habit.scheduleType.name === config.scheduleType.weekly?.name ||
+          habit.scheduleType.name === config.scheduleType.fortnightly?.name ||
+          habit.scheduleType.name === config.scheduleType.monthly?.name ||
+          habit.scheduleType.name === config.scheduleType.yearly?.name ||
+          habit.scheduleType.name === config.scheduleType.custom?.name
         ) {
           if (
             isEqual(parseDate(habit.nextOccuranceDate), day) ||
@@ -147,11 +156,30 @@ export const HabitListProvider = (props) => {
             }
           }
         } else if (
-          habit.scheduleType.name === config.scheduleType.weekday.name
+          habit.scheduleType.name === config.scheduleType.weekday?.name
         ) {
           console.log(habit.name, 'Weekday');
+          // get today's weekday
+          const weekdayAtDay = getDay(day);
+          // get and loop habit.scheduleType.weekday.day
+          for (const weekdayKey in habit.scheduleType.days) {
+            // if day(key) is true and === today weekday load it
+            if (
+              habit.scheduleType.days[weekdayKey] &&
+              parseInt(weekdayKey) === weekdayAtDay
+            ) {
+              setHabitList((prevState) => [...prevState, habit]);
+              if (
+                isEqual(day, getToday()) &&
+                habit.lastOccuranceDate !== formatDate(getToday())
+              ) {
+                // mabe move this elsewhere as it only applies if it is the current day
+                await updateAndStoreLoadedHabitDates(habit);
+              }
+            }
+          }
         } else if (
-          habit.scheduleType.name === config.scheduleType.singleTime.name
+          habit.scheduleType.name === config.scheduleType.singleTime?.name
         ) {
           console.log(habit.name, 'Single Time');
         } else {
