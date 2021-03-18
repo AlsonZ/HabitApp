@@ -21,7 +21,8 @@ const Habits = () => {
   const [habitList, updateHabit, loadDay, currentlyLoadedDay] = useContext(
     HabitListContext,
   );
-  const [habitColumns, setHabitColumns] = useState(4);
+  const [habitButtonView, setHabitButtonView] = useState('list');
+  const [habitColumns, setHabitColumns] = useState(1);
   const calendarRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -38,8 +39,9 @@ const Habits = () => {
 
   useEffect(() => {
     // 84 is width
-    const columns = parseInt(windowWidth / 84);
-    setHabitColumns(columns);
+    if (habitButtonView === 'app') {
+      setHabitColumns(parseInt(windowWidth / 84));
+    }
     if (calendarRef.current !== null) {
       const timer = setTimeout(() => {
         calendarRef.current.updateWeekView(
@@ -93,11 +95,7 @@ const Habits = () => {
         iconRight={require('../imgs/right-arrow-white.png')}
       />
       <FlatList
-        contentContainerStyle={[
-          styles.habitContainer,
-          // {flexDirection: listView ? 'column' : 'row'},
-          // {flexDirection: 'row'},
-        ]}
+        contentContainerStyle={[styles.habitContainer]}
         key={habitColumns}
         numColumns={habitColumns}
         data={habitList}
@@ -112,7 +110,8 @@ const Habits = () => {
             backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
             textActiveColor={item.colors.textActiveColor}
             backgroundActiveColor={item.colors.backgroundActiveColor}
-            completed={item.completed} // need to add this to data
+            completed={item.completed}
+            listView={habitButtonView === 'list'}
             onPress={() => {
               // set completed
               item.completed = !item.completed;
@@ -143,16 +142,12 @@ const styles = StyleSheet.create({
   listContainer: {
     alignItems: 'center',
   },
-  habitOuterContainer: {
-    display: 'flex',
-    flex: 1,
-    alignItems: 'center',
-  },
   habitContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingBottom: 17,
+    paddingHorizontal: 17,
   },
   days: {
     display: 'flex',

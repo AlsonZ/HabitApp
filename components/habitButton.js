@@ -85,7 +85,8 @@ const HabitButton = ({
 
 const listStyles = StyleSheet.create({
   touchable: {
-    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
     width: '100%',
     paddingVertical: 5,
     borderBottomColor: 'lightgray',
@@ -99,9 +100,11 @@ const listStyles = StyleSheet.create({
   description: {
     color: 'gray',
     fontSize: 10,
+    paddingLeft: 5,
   },
   textContainer: {
     flexGrow: 1,
+    paddingHorizontal: 5,
   },
 });
 
