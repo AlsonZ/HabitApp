@@ -68,14 +68,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    margin: 2,
+    // margin: 2,
   },
   listContainer: {
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'center',
-    marginLeft: 7,
-    marginRight: 5,
+    paddingHorizontal: 17,
   },
   habitItem: {
     display: 'flex',
