@@ -14,14 +14,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import HabitButton from './HabitButton';
 import {DefaultColors as Colors} from './settings/Colors';
 import {HabitListContext} from './contexts/HabitListContext';
-import DayIcon from './icons/DayIcon';
-import {
-  deleteAllPastHabitData,
-  deleteAllScheduledHabits,
-} from './settings/Storage';
-import AntIcon from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import MCIIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clock from './Clock';
 import {format, parse, add, sub, isAfter} from 'date-fns';
 
@@ -29,8 +21,10 @@ const Habits = () => {
   const [habitList, updateHabit, loadDay, currentlyLoadedDay] = useContext(
     HabitListContext,
   );
+  const [habitColumns, setHabitColumns] = useState(4);
   const calendarRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
+  const windowHeight = useWindowDimensions().height;
 
   const parseDate = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy', new Date());
@@ -43,6 +37,9 @@ const Habits = () => {
   };
 
   useEffect(() => {
+    // 84 is width
+    const columns = parseInt(windowWidth / 84);
+    setHabitColumns(columns);
     if (calendarRef.current !== null) {
       const timer = setTimeout(() => {
         calendarRef.current.updateWeekView(
@@ -55,7 +52,7 @@ const Habits = () => {
         clearTimeout(timer);
       };
     }
-  }, [windowWidth]);
+  }, [windowWidth, windowHeight]);
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -96,6 +93,13 @@ const Habits = () => {
         iconRight={require('../imgs/right-arrow-white.png')}
       />
       <FlatList
+        contentContainerStyle={[
+          styles.habitContainer,
+          // {flexDirection: listView ? 'column' : 'row'},
+          // {flexDirection: 'row'},
+        ]}
+        key={habitColumns}
+        numColumns={habitColumns}
         data={habitList}
         extraData={habitList}
         keyExtractor={(item) => `${item.id}${item.name}`}
@@ -146,8 +150,8 @@ const styles = StyleSheet.create({
   },
   habitContainer: {
     display: 'flex',
-    flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingBottom: 17,
   },
   days: {
