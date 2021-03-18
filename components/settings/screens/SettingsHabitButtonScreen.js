@@ -15,6 +15,17 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
     HabitButtonContext,
   );
 
+  useEffect(() => {
+    if (route.params?.colors) {
+      setHabitButtonSettings((prevState) => {
+        return {
+          ...prevState,
+          colors: route.params.colors,
+        };
+      });
+    }
+  }, [route.params?.colors]);
+
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <TouchableOpacity
