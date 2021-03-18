@@ -4,6 +4,7 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import SettingsMainScreen from './SettingsMainScreen';
 import SettingsThemeScreen from './screens/SettingsThemeScreen';
 import SettingsHabitButtonScreen from './screens/SettingsHabitButtonScreen';
+import HabitColorItem from '../items/HabitColorItem';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,14 @@ const SettingsNav = () => {
         name="SettingsHabitButtonScreen"
         options={{title: 'Habit Button', headerTransparent: false}}
         component={SettingsHabitButtonScreen}
+      />
+      <Stack.Screen
+        name="SettingsHabitButtonDefaultColorScreen"
+        options={{
+          title: 'Habit Button Default Colors',
+          headerTransparent: false,
+        }}
+        component={HabitColorItem}
       />
     </Stack.Navigator>
   );
