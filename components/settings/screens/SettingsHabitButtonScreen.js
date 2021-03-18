@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {
+  Button,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,11 +10,14 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ColorIcon from '../../icons/ColorIcon';
 import {HabitButtonContext} from '../../contexts/HabitButtonContext';
+import {storeOrEditDefaultHabitButton} from '../Storage';
 
 const SettingsHabitButtonScreen = ({navigation, route}) => {
-  const [habitButtonSettings, setHabitButtonSettings, reload] = useContext(
-    HabitButtonContext,
-  );
+  const [
+    habitButtonSettings,
+    setHabitButtonSettings,
+    reloadHabitButtonContext,
+  ] = useContext(HabitButtonContext);
 
   useEffect(() => {
     if (route.params?.colors) {
@@ -75,8 +79,8 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
         </Text>
         <ColorIcon
           style={[styles.rightListContent, styles.colorIcon]}
-          activeColor={'black'}
-          borderColor={'black'}
+          activeColor={habitButtonSettings.colors.backgroundActiveColor}
+          borderColor={habitButtonSettings.colors.textActiveColor}
           parentRoute={route.name}
         />
         {/* <MCIcon
@@ -86,6 +90,18 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
           size={26}
         /> */}
       </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={async () => {
+            // save HabitButtonContext to storage
+            await storeOrEditDefaultHabitButton(habitButtonSettings);
+            // reload context
+            reloadHabitButtonContext();
+            navigation.goBack();
+          }}
+          title="Save"
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -110,6 +126,11 @@ const styles = StyleSheet.create({
   },
   rightListContent: {
     marginLeft: 'auto',
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginVertical: 17,
   },
 });
 
