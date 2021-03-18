@@ -252,6 +252,21 @@ export const deleteCategory = async (category) => {
   return 'Success';
 };
 
+// Habit Button Defaults
+const DEFAULT_HABIT_BUTTON = 'Default-Habit-Button-Key';
+export const getDefaultHabitButton = async () => {
+  const defaultHabitJSON = await getWithKey(DEFAULT_HABIT_BUTTON);
+  const temp = JSON.parse(defaultHabitJSON);
+  const defaultHabit = temp ? temp : {};
+  return defaultHabit;
+};
+export const storeOrEditDefaultHabitButton = async (defaultHabitButton) => {
+  let habitButtonData = await getAllCategories();
+  habitButtonData = defaultHabitButton;
+  await storeWithKey(habitButtonData, DEFAULT_HABIT_BUTTON);
+  return 'Success';
+};
+
 // Calendar Storage
 const CALENDAR_HABIT_LIST_KEY = 'Calendar-Habit-List-Key';
 const CALENDAR_PAST_HABIT_LIST_KEY_OF_YEAR =
