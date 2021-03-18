@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {Colors} from '../settings/Colors';
-import {getHabitButtonSettings} from '../settings/Storage';
+import {getDefaultHabitButton} from '../settings/Storage';
 
 export const HabitButtonContext = createContext();
 
@@ -10,7 +10,7 @@ export const HabitButtonProvider = (props) => {
     colors: {
       textColor: Colors.gray,
       backgroundColor: Colors.transparent,
-      textActiveColor: 'black',
+      textActiveColor: Colors.border,
       backgroundActiveColor: Colors.white,
     },
   });
@@ -20,13 +20,17 @@ export const HabitButtonProvider = (props) => {
     let loading = false;
     const getData = async () => {
       loading = true;
-      // const settings = await getHabitButtonSettings();
-      // setHabitButtonSettings(settings);
+      const settings = await getDefaultHabitButton();
+      if (Object.keys(settings).length !== 0) {
+        setHabitButtonSettings(settings);
+      }
       loading = false;
     };
     if (!loading) {
       getData();
     }
+    console.log('this is habit button settings');
+    console.log(habitButtonSettings);
   }, [reload]);
 
   const reload = () => {
