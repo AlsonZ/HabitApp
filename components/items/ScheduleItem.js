@@ -234,71 +234,75 @@ const ScheduleItem = ({navigation, route}) => {
           keyExtractor={(key) => key}
         />
       </ScrollView>
-      {active !== config.scheduleType.everyday && (
-        <Text style={styles.pickerTitle}>Duration</Text>
-      )}
-      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
-        {active !== config.scheduleType.everyday && (
-          <>
-            <ScrollPicker
-              values={durationAmount}
-              selectedValueIndex={selectedDurationAmountIndex}
-              setSelectedValueIndex={setSelectedDurationAmountIndex}
-              width={80}
-              itemHeight={60}
-              fontSize={18}
-              userSelectedIndex={userSelectedDurationAmountIndex}
-            />
-            <ScrollPicker
-              values={durationType}
-              selectedValueIndex={selectedDurationTypeIndex}
-              setSelectedValueIndex={setSelectedDurationTypeIndex}
-              width={100}
-              itemHeight={60}
-              fontSize={18}
-              userSelectedIndex={userSelectedDurationTypeIndex}
-            />
-          </>
+      {active.name !== config.scheduleType.everyday?.name &&
+        active.name !== config.scheduleType.weekday?.name && (
+          <Text style={styles.pickerTitle}>Duration</Text>
         )}
+      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
+        {active.name !== config.scheduleType.everyday?.name &&
+          active.name !== config.scheduleType.weekday?.name && (
+            <>
+              <ScrollPicker
+                values={durationAmount}
+                selectedValueIndex={selectedDurationAmountIndex}
+                setSelectedValueIndex={setSelectedDurationAmountIndex}
+                width={80}
+                itemHeight={60}
+                fontSize={18}
+                userSelectedIndex={userSelectedDurationAmountIndex}
+              />
+              <ScrollPicker
+                values={durationType}
+                selectedValueIndex={selectedDurationTypeIndex}
+                setSelectedValueIndex={setSelectedDurationTypeIndex}
+                width={100}
+                itemHeight={60}
+                fontSize={18}
+                userSelectedIndex={userSelectedDurationTypeIndex}
+              />
+            </>
+          )}
       </ScrollView>
-      {active !== config.scheduleType.everyday && (
-        <Text style={styles.pickerTitle}>Start Date</Text>
-      )}
-      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
-        {active !== config.scheduleType.everyday && (
-          <>
-            <ScrollPicker
-              values={days}
-              selectedValueIndex={selectedDayIndex}
-              setSelectedValueIndex={setSelectedDayIndex}
-              width={80}
-              itemHeight={60}
-              userSelectedIndex={userSelectedDayIndex}
-              title="Day"
-              titleStyle={{backgroundColor: '#F2F2F2'}}
-            />
-            <ScrollPicker
-              values={months}
-              selectedValueIndex={selectedMonthIndex}
-              setSelectedValueIndex={setSelectedMonthIndex}
-              width={80}
-              itemHeight={60}
-              userSelectedIndex={userSelectedMonthIndex}
-              title="Month"
-              titleStyle={{backgroundColor: '#F2F2F2'}}
-            />
-            <ScrollPicker
-              values={years}
-              selectedValueIndex={selectedYearIndex}
-              setSelectedValueIndex={setSelectedYearIndex}
-              width={100}
-              itemHeight={60}
-              userSelectedIndex={userSelectedYearIndex}
-              title="Year"
-              titleStyle={{backgroundColor: '#F2F2F2'}}
-            />
-          </>
+      {active.name !== config.scheduleType.everyday?.name &&
+        active.name !== config.scheduleType.weekday?.name && (
+          <Text style={styles.pickerTitle}>Start Date</Text>
         )}
+      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
+        {active.name !== config.scheduleType.everyday?.name &&
+          active.name !== config.scheduleType.weekday?.name && (
+            <>
+              <ScrollPicker
+                values={days}
+                selectedValueIndex={selectedDayIndex}
+                setSelectedValueIndex={setSelectedDayIndex}
+                width={80}
+                itemHeight={60}
+                userSelectedIndex={userSelectedDayIndex}
+                title="Day"
+                titleStyle={{backgroundColor: '#F2F2F2'}}
+              />
+              <ScrollPicker
+                values={months}
+                selectedValueIndex={selectedMonthIndex}
+                setSelectedValueIndex={setSelectedMonthIndex}
+                width={80}
+                itemHeight={60}
+                userSelectedIndex={userSelectedMonthIndex}
+                title="Month"
+                titleStyle={{backgroundColor: '#F2F2F2'}}
+              />
+              <ScrollPicker
+                values={years}
+                selectedValueIndex={selectedYearIndex}
+                setSelectedValueIndex={setSelectedYearIndex}
+                width={100}
+                itemHeight={60}
+                userSelectedIndex={userSelectedYearIndex}
+                title="Year"
+                titleStyle={{backgroundColor: '#F2F2F2'}}
+              />
+            </>
+          )}
       </ScrollView>
       <View style={styles.saveButtonContainer}>
         <Button
