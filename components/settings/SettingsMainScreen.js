@@ -28,8 +28,8 @@ const SettingsMainScreen = ({navigation}) => {
           HabitButton
         </Text>
         <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
+          style={styles.rightListContent}
+          name="arrow-right"
           color={'black'}
           size={26}
         />
@@ -91,6 +91,10 @@ const styles = StyleSheet.create({
   rightIcon: {
     marginLeft: 'auto',
   },
+  rightListContent: {
+    marginLeft: 'auto',
+  },
+  colorIcon: {},
 });
 
 export default SettingsMainScreen;
