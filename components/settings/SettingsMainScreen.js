@@ -1,6 +1,7 @@
 import React from 'react';
 import {ScrollView, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ColorIcon from '../icons/ColorIcon';
 
 const SettingsMainScreen = ({navigation}) => {
@@ -9,13 +10,22 @@ const SettingsMainScreen = ({navigation}) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('SettingsThemeScreen')}
         style={styles.habitItem}>
-        <ColorIcon
-          activeColor={'black'}
-          borderColor={'black'}
-          // style={styles.colorIcon}
-        />
+        <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} />
         <Text numberOfLines={1} style={styles.habitText}>
           Theme
+        </Text>
+        <ColorIcon
+          style={[styles.rightIcon, styles.colorIcon]}
+          activeColor={'black'}
+          borderColor={'black'}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('SettingsHabitButtonScreen')}
+        style={styles.habitItem}>
+        <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} />
+        <Text numberOfLines={1} style={styles.habitText}>
+          HabitButton
         </Text>
         <MCIcon
           style={styles.rightIcon}
@@ -55,7 +65,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     flexGrow: 1,
-    padding: 17,
+    paddingHorizontal: 17,
   },
   habitItem: {
     display: 'flex',
@@ -66,6 +76,10 @@ const styles = StyleSheet.create({
     borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
     width: '100%',
+  },
+  colorIcon: {
+    width: 22,
+    height: 22,
   },
   habitIcon: {
     width: 35,
