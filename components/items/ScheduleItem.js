@@ -45,7 +45,18 @@ const ScheduleItem = ({navigation, route}) => {
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const [userSelectedYearIndex, setUserSelectedYearIndex] = useState(0);
 
-  const onPress = (val) => {};
+  const weekdays = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  const [selectedWeekdays, setSelectedWeekdays] = useState(
+    config.scheduleType.weekday.days,
+  );
 
   useEffect(() => {
     console.log(
@@ -111,6 +122,36 @@ const ScheduleItem = ({navigation, route}) => {
             }}
           />
           <Text style={styles.checkBoxText}>{scheduleType.name}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  const WeekdayButton = ({name, index}) => {
+    return (
+      <TouchableHighlight
+        underlayColor={DefaultColors.touchableHightlightUnderlay}
+        onPress={() => {
+          setSelectedWeekdays((prevState) => ({
+            ...prevState,
+            [index]: !prevState[index],
+          }));
+        }}>
+        <View style={styles.container}>
+          <CheckBox
+            disable={false}
+            value={selectedWeekdays[index]}
+            onChange={() => {
+              setSelectedWeekdays((prevState) => ({
+                ...prevState,
+                [index]: !prevState[index],
+              }));
+            }}
+          />
+          <Text style={styles.checkBoxText}>
+            {name}
+            {index}
+          </Text>
         </View>
       </TouchableHighlight>
     );
@@ -195,10 +236,13 @@ const ScheduleItem = ({navigation, route}) => {
     }
 
     // set startDate to params
+    setSelectedDayIndex(parseInt(dayString) - 1);
     setUserSelectedDayIndex(parseInt(dayString) - 1);
+    setSelectedMonthIndex(parseInt(monthString) - 1);
     setUserSelectedMonthIndex(parseInt(monthString) - 1);
     // find index of year
     const yearIndex = years.findIndex((year) => parseInt(yearString) === year);
+    setSelectedYearIndex(yearIndex);
     setUserSelectedYearIndex(yearIndex);
   }, []);
 
@@ -236,9 +280,11 @@ const ScheduleItem = ({navigation, route}) => {
       </ScrollView>
       {active.name !== config.scheduleType.everyday?.name &&
         active.name !== config.scheduleType.weekday?.name && (
-          <Text style={styles.pickerTitle}>Duration</Text>
+          <Text style={styles.sectionTitle}>Duration</Text>
         )}
-      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.horizontalScrollContainer}>
         {active.name !== config.scheduleType.everyday?.name &&
           active.name !== config.scheduleType.weekday?.name && (
             <>
@@ -265,9 +311,11 @@ const ScheduleItem = ({navigation, route}) => {
       </ScrollView>
       {active.name !== config.scheduleType.everyday?.name &&
         active.name !== config.scheduleType.weekday?.name && (
-          <Text style={styles.pickerTitle}>Start Date</Text>
+          <Text style={styles.sectionTitle}>Start Date</Text>
         )}
-      <ScrollView horizontal contentContainerStyle={styles.pickerContainer}>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.horizontalScrollContainer}>
         {active.name !== config.scheduleType.everyday?.name &&
           active.name !== config.scheduleType.weekday?.name && (
             <>
@@ -304,23 +352,56 @@ const ScheduleItem = ({navigation, route}) => {
             </>
           )}
       </ScrollView>
+      {active.name === config.scheduleType.weekday?.name && (
+        <Text style={styles.sectionTitle}>Weekdays</Text>
+      )}
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.horizontalScrollContainer}>
+        {active.name === config.scheduleType.weekday?.name && (
+          <FlatList
+            data={weekdays}
+            renderItem={({item, index}) => (
+              <WeekdayButton key={item} name={item} index={index} />
+            )}
+            keyExtractor={(key) => key}
+          />
+        )}
+      </ScrollView>
       <View style={styles.saveButtonContainer}>
         <Button
           title="Save"
           onPress={() => {
-            // {name: 'everyday', duration: {days: 1}}
-            const selectedDate = `${days[selectedDayIndex]}/${months[selectedMonthIndex]}/${years[selectedYearIndex]}`;
-            const type = durationType[selectedDurationTypeIndex];
-            const amount = durationAmount[selectedDurationAmountIndex];
-            navigation.navigate(parentRoute, {
-              startDate: selectedDate,
-              scheduleType: {
-                name: active.name,
-                duration: {
-                  [type]: amount,
+            if (
+              active.name === config.scheduleType.weekly?.name ||
+              active.name === config.scheduleType.fortnightly?.name ||
+              active.name === config.scheduleType.monthly?.name ||
+              active.name === config.scheduleType.yearly?.name ||
+              active.name === config.scheduleType.custom?.name
+            ) {
+              // {name: 'everyday', duration: {days: 1}}
+              const selectedDate = `${days[selectedDayIndex]}/${months[selectedMonthIndex]}/${years[selectedYearIndex]}`;
+              const type = durationType[selectedDurationTypeIndex];
+              const amount = durationAmount[selectedDurationAmountIndex];
+              navigation.navigate(parentRoute, {
+                startDate: selectedDate,
+                scheduleType: {
+                  name: active.name,
+                  duration: {
+                    [type]: amount,
+                  },
                 },
-              },
-            });
+              });
+            } else if (active.name === config.scheduleType.weekday?.name) {
+              const selectedDate = `${days[selectedDayIndex]}/${months[selectedMonthIndex]}/${years[selectedYearIndex]}`;
+              navigation.navigate(parentRoute, {
+                startDate: selectedDate,
+                scheduleType: {
+                  name: active.name,
+                  days: selectedWeekdays,
+                },
+              });
+            }
           }}
         />
       </View>
@@ -343,18 +424,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     width: '100%',
   },
-  pickerTitle: {
+  sectionTitle: {
     textAlign: 'center',
     fontSize: 20,
     marginVertical: 5,
   },
-  pickerContainer: {
+  horizontalScrollContainer: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   saveButtonContainer: {
+    paddingTop: 5,
     paddingBottom: 17,
     marginHorizontal: 17,
   },
