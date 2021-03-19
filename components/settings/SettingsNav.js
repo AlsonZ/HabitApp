@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import SettingsMainScreen from './SettingsMainScreen';
 import SettingsThemeScreen from './screens/SettingsThemeScreen';
 import SettingsHabitButtonScreen from './screens/SettingsHabitButtonScreen';

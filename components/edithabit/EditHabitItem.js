@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
-  FlatList,
   StyleSheet,
   Text,
   TextInput,
@@ -270,12 +269,6 @@ const EditHabitItem = ({route, navigation}) => {
           size={24}
         />
         <Text style={[styles.habitText, {color: 'black'}]}>Delete Habit</Text>
-        {/* <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        /> */}
       </TouchableOpacity>
       <View style={styles.buttonContainer}>
         <Button

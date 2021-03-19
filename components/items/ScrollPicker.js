@@ -19,7 +19,6 @@ const ScrollPicker = ({
   title = '',
   titleStyle,
 }) => {
-  // const [current, setCurrent] = useState(selectedValueIndex);
   const flatListRef = useRef(null);
   let offsetValues = [...Array(values.length)].map(
     (_, index) => index * itemHeight,
@@ -31,28 +30,18 @@ const ScrollPicker = ({
   }, [userSelectedIndex]);
 
   const scrollToValue = async (valueIndex) => {
-    // console.log('Index of selected value is:', current, valueIndex);
-    //   console.log('currently scrolling');
     await flatListRef.current.scrollToIndex({index: valueIndex});
   };
 
   const handleScroll = ({nativeEvent}) => {
-    // while scrolling dont set values
     const index = Math.round(nativeEvent.contentOffset.y / itemHeight);
-    // console.log('ScrollTo index:', index);
-    // if (index !== current) {
-    // setCurrent(index);
     setSelectedValueIndex(index);
-    // }
   };
 
   const DurationItem = React.memo(({text, index}) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          // if (flatListData[index] !== '') {
-          //   setSelectedValue(flatListData[index]);
-          // }
           setSelectedValueIndex(index);
           scrollToValue(index);
         }}

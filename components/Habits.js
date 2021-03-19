@@ -1,14 +1,5 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  useWindowDimensions,
-} from 'react-native';
+import {FlatList, StyleSheet, useWindowDimensions} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import HabitButton from './HabitButton';

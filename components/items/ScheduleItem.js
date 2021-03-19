@@ -34,7 +34,6 @@ const ScheduleItem = ({navigation, route}) => {
   ] = useState(0);
   const [selectedDurationTypeIndex, setSelectedDurationTypeIndex] = useState(0);
   const [days, setDays] = useState([...Array(31)].map((_, index) => index + 1));
-  // const days = [...Array(31)].map((_, index) => index + 1);
   const months = [...Array(12)].map((_, index) => index + 1);
   const currentYear = new Date().getFullYear();
   const years = [...Array(10)].map((_, index) => currentYear + index);

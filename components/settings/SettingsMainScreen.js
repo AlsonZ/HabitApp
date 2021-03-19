@@ -34,29 +34,6 @@ const SettingsMainScreen = ({navigation}) => {
           size={26}
         />
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('EditHabitItem', {
-            index: index,
-          })
-        }
-        style={styles.habitItem}>
-        <AntIcon
-          style={styles.habitIcon}
-          name="appstore-o"
-          color={'black'}
-          size={26}
-        />
-        <Text numberOfLines={1} style={styles.habitText}>
-          {item.name}
-        </Text>
-        <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        />
-      </TouchableOpacity> */}
     </ScrollView>
   );
 };

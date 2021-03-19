@@ -9,19 +9,19 @@ export const config = {
     weekday: {
       name: 'weekday',
       days: {
-        0: false,
+        0: false, // Sunday
         1: false,
         2: false,
         3: false,
         4: false,
         5: false,
-        6: false,
+        6: false, // Saturday
       },
-    }, // 0 = sunday 6 = saturday if true load the day
+    },
     custom: {
       name: 'custom',
       // duration: {days: 1, weeks: 0, months: 0, years: 0},
       duration: {days: 1},
-    }, // this will be added/changed by user
+    },
   },
 };

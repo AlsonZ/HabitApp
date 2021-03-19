@@ -29,8 +29,6 @@ export const HabitButtonProvider = (props) => {
     if (!loading) {
       getData();
     }
-    console.log('this is habit button settings');
-    console.log(habitButtonSettings);
   }, [reload]);
 
   const reload = () => {

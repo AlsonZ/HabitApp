@@ -25,11 +25,7 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {
-  getAllHabits,
-  storeCalendarHabit,
-  storeNewHabit,
-} from '../storage/Storage';
+import {storeCalendarHabit} from '../storage/Storage';
 import {config} from '../config/config';
 
 const AddHabitMain = ({navigation, route}) => {
@@ -38,7 +34,6 @@ const AddHabitMain = ({navigation, route}) => {
   );
   const [, , reloadEditHabitContext] = useContext(EditHabitContext);
   const [, , , , reloadHabitListContext] = useContext(HabitListContext);
-  // const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (route.params?.category) {
@@ -83,36 +78,6 @@ const AddHabitMain = ({navigation, route}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {/* <OkModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={'Scheduled Days'}
-        modalHeader={true}
-        modalFooter={true}>
-        <FlatList
-          style={{marginRight: 1}}
-          data={config.scheduleType}
-          renderItem={({item, index}) => (
-            <ScheduleItem
-              index={index}
-              // day={item.day}
-              active={habitDetails.scheduleType}
-              habitDetails={habitDetails}
-              setHabitDetails={setHabitDetails}
-            />
-          )}
-          keyExtractor={(item) => `${item.name}`}
-          extraData={habitDetails.scheduleType}
-        />
-        {Object.keys(config.scheduleType).map((key) => {
-          return (
-            <ScheduleItem
-              key={config.scheduleType[key].name}
-              scheduleType={config.scheduleType[key]}
-            />
-          );
-        })}
-      </OkModal> */}
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
@@ -304,11 +269,6 @@ const AddHabitMain = ({navigation, route}) => {
               console.log(success);
             }
           }}></Button>
-        {/* <Button
-          title="Log Details"
-          onPress={async () => {
-            console.log(habitDetails);
-          }}></Button> */}
       </View>
     </ScrollView>
   );

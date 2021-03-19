@@ -9,7 +9,6 @@ import EditHabitNav from './edithabit/EditHabitNav';
 import {HabitListProvider} from './contexts/HabitListContext';
 import {EditHabitProvider} from './contexts/EditHabitContext';
 import {HabitButtonProvider} from './contexts/HabitButtonContext';
-import {View} from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 

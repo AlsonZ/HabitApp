@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {
   Button,
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    // margin: 2,
   },
   listContainer: {
     alignItems: 'center',

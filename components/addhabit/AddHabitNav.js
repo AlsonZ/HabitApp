@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import AddHabitMain from './AddHabitMain.js';
 import {AddHabitProvider} from '../contexts/AddHabitContext';
