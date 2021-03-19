@@ -317,6 +317,20 @@ export const editCalendarHabit = async (habit) => {
     return 'Success';
   }
 };
+export const deleteCalendarHabit = async (habit) => {
+  const habitList = await getCalendarHabitList();
+  let index = await habitList.findIndex((habitInList) => {
+    return habitInList.id === habit.id;
+  });
+  if (index === -1) {
+    return 'Error, No Habit of this id was found!';
+  } else {
+    await habitList.splice(index, 1);
+    await storeWithKey(habitList, CALENDAR_HABIT_LIST_KEY);
+    return 'Success';
+  }
+  // may need to delete the past habit data habit for current day
+};
 export const deleteAllCalendarHabits = async () => {
   console.log('Deleting All Calendar Habits');
   await AsyncStorage.removeItem(CALENDAR_HABIT_LIST_KEY);
