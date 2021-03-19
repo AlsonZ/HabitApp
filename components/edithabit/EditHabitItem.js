@@ -12,9 +12,9 @@ import {
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
-import {deleteHabit, editCalendarHabit, editHabit} from '../storage/Storage';
+import {deleteCalendarHabit, editCalendarHabit} from '../storage/Storage';
 
-import OkModal from '../modal/OkModal';
+import DeleteModal from '../modal/DeleteModal';
 import ScheduleItem from '../items/ScheduleItem';
 import ColorIcon from '../icons/ColorIcon';
 import NumberIcon from '../icons/NumberIcon';
@@ -29,9 +29,9 @@ const EditHabitItem = ({route, navigation}) => {
     EditHabitContext,
   );
   const [, , , , reloadHabitListContext] = useContext(HabitListContext);
-  // const [modalVisible, setModalVisible] = useState(false);
   const {index, ...rest} = route.params;
   const [habitDetails, setHabitDetails] = useState(allHabits[index]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (route.params?.category) {
@@ -76,30 +76,18 @@ const EditHabitItem = ({route, navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {/* <OkModal
+      <DeleteModal
+        onPress={async () => {
+          const success = await deleteCalendarHabit(habitDetails);
+          if (success === 'Success') {
+            reloadEditHabitContext();
+            reloadHabitListContext();
+            navigation.navigate('EditHabitMain');
+          }
+        }}
+        title={`Delete ${habitDetails.name}?`}
         modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={'Scheduled Days'}
-        modalHeader={true}
-        modalFooter={true}>
-        {habitDetails && (
-          <FlatList
-            style={{marginRight: 1}}
-            data={habitDetails.schedule}
-            renderItem={({item, index}) => (
-              <ScheduleItem
-                index={index}
-                day={item.day}
-                active={item.active}
-                habitDetails={habitDetails}
-                setHabitDetails={setHabitDetails}
-              />
-            )}
-            keyExtractor={(item) => `${item.day}`}
-            extraData={habitDetails.schedule}
-          />
-        )}
-      </OkModal> */}
+        setModalVisible={setModalVisible}></DeleteModal>
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
@@ -272,13 +260,7 @@ const EditHabitItem = ({route, navigation}) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={async () => {
-          // const success = await deleteHabit(habitDetails);
-          // if (success === 'Success') {
-          //   setReloadContext(!reloadContext);
-          //   setReloadHabitListContext(!reloadHabitListContext);
-          //   navigation.navigate('EditHabitMain');
-          // }
-          console.log('Delete is temporarily disabled');
+          setModalVisible((prevState) => !prevState);
         }}
         style={styles.habitItem}>
         <IonIcon
