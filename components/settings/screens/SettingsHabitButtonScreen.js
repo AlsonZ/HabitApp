@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 import ColorIcon from '../../icons/ColorIcon';
 import {HabitButtonContext} from '../../contexts/HabitButtonContext';
 import {storeOrEditDefaultHabitButton} from '../../storage/Storage';
@@ -34,35 +36,43 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
     <ScrollView contentContainerStyle={styles.scrollView}>
       <TouchableOpacity
         onPress={() => {
-          // open modal and select app or list view
+          let buttonView = 'list';
+          if (habitButtonSettings.habitButtonView === 'list') {
+            buttonView = 'app';
+          }
+          setHabitButtonSettings((prevState) => ({
+            ...prevState,
+            habitButtonView: buttonView,
+          }));
         }}
         style={styles.listItem}>
-        {/* <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} /> */}
         <Text numberOfLines={1} style={styles.listText}>
           HabitButton
         </Text>
-        <View style={styles.rightListContent}>
-          <Text style={styles.listText}>List View</Text>
-          {/* i can either use icons or words or both here */}
-          {/* <IonIcon
-              style={styles.habitIcon}
-              name="ios-menu"
-              color={'white'}
-              size={32}
-            />
-            <AntIcon
-              style={styles.habitIcon}
-              name="appstore-o"
-              color={'white'}
-              size={26}
-            /> */}
+        <View style={[styles.rightListContent, styles.buttonView]}>
+          {habitButtonSettings.habitButtonView === 'list' && (
+            <>
+              <Text style={styles.listText}>List View</Text>
+              <IonIcon
+                style={[styles.listIcon, {margin: -3, padding: -3}]}
+                name="ios-menu"
+                color={'black'}
+                size={32}
+              />
+            </>
+          )}
+          {habitButtonSettings.habitButtonView === 'app' && (
+            <>
+              <Text style={styles.listText}>App View</Text>
+              <AntIcon
+                style={styles.listIcon}
+                name="appstore-o"
+                color={'black'}
+                size={26}
+              />
+            </>
+          )}
         </View>
-        {/* <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        /> */}
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
@@ -124,6 +134,7 @@ const styles = StyleSheet.create({
   listText: {
     margin: 3,
   },
+  listIcon: {},
   rightListContent: {
     marginLeft: 'auto',
   },
@@ -131,6 +142,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     marginVertical: 17,
+  },
+  buttonView: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  colorIcon: {
+    margin: 3,
   },
 });
 
