@@ -1,29 +1,27 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {DefaultColors as Colors} from '../settings/Colors';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 import {config} from '../config/config';
 import {format} from 'date-fns';
+import {getDefaultHabitButton} from '../storage/Storage';
+import {HabitButtonContext} from './HabitButtonContext';
 
 export const AddHabitContext = createContext();
 
 export const AddHabitProvider = (props) => {
+  const [habitButtonSettings] = useContext(HabitButtonContext);
+
   const formatDate = (dateObj) => {
     return format(dateObj, 'dd/MM/yyyy');
   };
 
-  const initialHabitDetails = (id, date) => ({
+  const initialHabitDetails = (id, date, defaultColors) => ({
     id: id,
     name: '',
     category: 'Category', // placeholder text
     description: '',
-    colors: {
-      // default colors here
-      textColor: Colors.gray,
-      backgroundColor: Colors.transparent,
-      textActiveColor: Colors.white,
-      backgroundActiveColor: Colors.blue,
-    },
+    colors: defaultColors,
     archived: false,
     frequency: 1,
     scheduleType: config.scheduleType.everyday,
@@ -38,13 +36,30 @@ export const AddHabitProvider = (props) => {
     // order: 1,
   });
   const [habitDetails, setHabitDetails] = useState(
-    initialHabitDetails(uuidv4()),
+    {},
+    // initialHabitDetails(uuidv4()),
   );
   const [reloadContext, setReloadContext] = useState(false);
 
   useEffect(() => {
-    setHabitDetails(initialHabitDetails(uuidv4(), formatDate(new Date())));
-  }, [reloadContext]);
+    // get default Habit Button Colors
+    const getData = async () => {
+      const defaultHabitButton = await getDefaultHabitButton();
+      console.log(defaultHabitButton.colors);
+      setHabitDetails(
+        initialHabitDetails(
+          uuidv4(),
+          formatDate(new Date()),
+          defaultHabitButton.colors,
+        ),
+      );
+    };
+    getData();
+  }, [reloadContext, habitButtonSettings]);
+
+  useEffect(() => {
+    console.log('habit details was changed', habitDetails);
+  }, [habitDetails]);
 
   const reload = () => {
     setReloadContext(!reloadContext);

@@ -146,8 +146,8 @@ const AddHabitMain = ({navigation, route}) => {
         <Text style={styles.habitText}>Schedule Type:</Text>
         <View style={styles.rightIcon}>
           <Text style={styles.habitText}>
-            {habitDetails.scheduleType.name.charAt(0).toUpperCase() +
-              habitDetails.scheduleType.name.slice(1)}
+            {habitDetails.scheduleType?.name.charAt(0).toUpperCase() +
+              habitDetails.scheduleType?.name.slice(1)}
           </Text>
         </View>
         {/* <MCIcon
@@ -226,7 +226,7 @@ const AddHabitMain = ({navigation, route}) => {
         />
         <Text style={styles.habitText}>Colors</Text>
         <ColorIcon
-          activeColor={habitDetails.colors.backgroundActiveColor}
+          activeColor={habitDetails.colors?.backgroundActiveColor}
           borderColor={Colors.border}
           style={styles.colorIcon}
         />
