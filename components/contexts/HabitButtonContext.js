@@ -29,7 +29,7 @@ export const HabitButtonProvider = (props) => {
     if (!loading) {
       getData();
     }
-  }, [reload]);
+  }, [reloadContext]);
 
   const reload = () => {
     setReloadContext(!reloadContext);
