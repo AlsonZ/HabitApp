@@ -11,7 +11,7 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {DefaultColors} from '../settings/Colors';
 import {CategoriesContext} from '../contexts/CategoriesContext';
-import {deleteCategory, storeNewCategory} from '../settings/Storage';
+import {deleteCategory, storeNewCategory} from '../storage/Storage';
 import DeleteModal from '../modal/DeleteModal';
 import CategoryListItem from './CategoryListItem';
 import 'react-native-get-random-values';

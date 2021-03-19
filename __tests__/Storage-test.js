@@ -18,7 +18,7 @@ import {
   storeCalendarPastHabitDataOfDate,
   getCalendarPastHabitDataOfDate,
   editCalendarPastHabitDataOfDate,
-} from '../components/settings/Storage';
+} from '../components/storage/Storage';
 import {Colors} from '../components/settings/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {format} from 'date-fns';

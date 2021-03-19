@@ -29,7 +29,7 @@ import {
   getAllHabits,
   storeCalendarHabit,
   storeNewHabit,
-} from '../settings/Storage';
+} from '../storage/Storage';
 import {config} from '../config/config';
 
 const AddHabitMain = ({navigation, route}) => {

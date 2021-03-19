@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {getAllCategories, storeNewCategory} from '../settings/Storage';
+import {getAllCategories, storeNewCategory} from '../storage/Storage';
 
 export const CategoriesContext = createContext();
 

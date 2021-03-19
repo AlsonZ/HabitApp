@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {Colors} from '../settings/Colors';
-import {getDefaultHabitButton} from '../settings/Storage';
+import {getDefaultHabitButton} from '../storage/Storage';
 
 export const HabitButtonContext = createContext();
 

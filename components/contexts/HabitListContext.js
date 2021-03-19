@@ -13,7 +13,7 @@ import {
   editCalendarPastHabitDataOfDate,
   getCalendarPastHabitDataOfDate,
   delteCalendarPastHabitDataOfYear,
-} from '../settings/Storage';
+} from '../storage/Storage';
 import {
   add,
   format,

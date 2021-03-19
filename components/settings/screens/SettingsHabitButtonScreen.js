@@ -10,7 +10,7 @@ import {
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ColorIcon from '../../icons/ColorIcon';
 import {HabitButtonContext} from '../../contexts/HabitButtonContext';
-import {storeOrEditDefaultHabitButton} from '../Storage';
+import {storeOrEditDefaultHabitButton} from '../../storage/Storage';
 
 const SettingsHabitButtonScreen = ({navigation, route}) => {
   const [

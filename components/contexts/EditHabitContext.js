@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {getAllHabits, getCalendarHabitList} from '../settings/Storage';
+import {getAllHabits, getCalendarHabitList} from '../storage/Storage';
 
 export const EditHabitContext = createContext();
 

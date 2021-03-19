@@ -12,7 +12,7 @@ import {
 import {EditHabitContext} from '../contexts/EditHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {DefaultColors as Colors, DefaultColors} from '../settings/Colors';
-import {deleteHabit, editCalendarHabit, editHabit} from '../settings/Storage';
+import {deleteHabit, editCalendarHabit, editHabit} from '../storage/Storage';
 
 import OkModal from '../modal/OkModal';
 import ScheduleItem from '../items/ScheduleItem';
