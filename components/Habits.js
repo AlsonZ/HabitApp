@@ -2,17 +2,26 @@ import React, {useContext, useEffect, useState, useRef} from 'react';
 import {FlatList, StyleSheet, useWindowDimensions} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import HabitButton from './HabitButton';
-import {DefaultColors as Colors} from './settings/Colors';
-import {HabitListContext} from './contexts/HabitListContext';
-import Clock from './Clock';
 import {format, parse, add, sub, isAfter} from 'date-fns';
 
+import {DefaultColors as Colors} from './settings/Colors';
+import Clock from './Clock';
+import HabitButton from './HabitButton';
+import {HabitListContext} from './contexts/HabitListContext';
+import {HabitButtonContext} from './contexts/HabitButtonContext';
+
 const Habits = () => {
-  const [habitList, updateHabit, loadDay, currentlyLoadedDay] = useContext(
-    HabitListContext,
+  const [
+    habitList,
+    updateHabit,
+    loadDay,
+    currentlyLoadedDay,
+    reloadHabitListContext,
+  ] = useContext(HabitListContext);
+  const [habitButtonSettings] = useContext(HabitButtonContext);
+  const [habitButtonView, setHabitButtonView] = useState(
+    habitButtonSettings.habitButtonView,
   );
-  const [habitButtonView, setHabitButtonView] = useState('list');
   const [habitColumns, setHabitColumns] = useState(1);
   const calendarRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
@@ -32,6 +41,8 @@ const Habits = () => {
     // 84 is width
     if (habitButtonView === 'app') {
       setHabitColumns(parseInt(windowWidth / 84));
+    } else if (habitButtonView === 'list') {
+      setHabitColumns(1);
     }
     if (calendarRef.current !== null) {
       const timer = setTimeout(() => {
@@ -45,7 +56,11 @@ const Habits = () => {
         clearTimeout(timer);
       };
     }
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, habitButtonView]);
+
+  useEffect(() => {
+    setHabitButtonView(habitButtonSettings.habitButtonView);
+  }, [habitButtonSettings]);
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
