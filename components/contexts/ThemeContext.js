@@ -1,28 +1,28 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {getCurrentTheme, storeCurrentTheme} from '../storage/Storage';
+import {getTheme} from '../storage/Storage';
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = (props) => {
   const [theme, setTheme] = useState({
-    bottomNavBarColor: 'black',
-    topNavBarColor: 'black',
+    navTopBarColor: 'black',
+    navStatusBarColor: 'black',
+    navBottomBarColor: 'black',
     highlightColor: 'lightBlue',
     textColor: 'black',
+    borderColor: 'red',
   });
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    let loading = false;
     const getData = async () => {
-      loading = true;
-      const currentTheme = await getCurrentTheme();
-      setCategories(currentTheme);
-      loading = false;
+      const currentTheme = await getTheme();
+      if (Object.keys(currentTheme).length > 0) {
+        setTheme(currentTheme);
+      }
     };
-    if (!loading) {
-      getData();
-    }
+
+    getData();
   }, [reload]);
 
   const reloadContext = () => {
