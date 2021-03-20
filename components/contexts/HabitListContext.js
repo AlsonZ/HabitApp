@@ -89,6 +89,7 @@ export const HabitListProvider = (props) => {
     await storeCalendarPastHabitDataOfDate(newHabit, formatDate(getToday()));
   };
 
+  // determine what habits are active today to be loaded
   const loadCurrentlyActiveDayHabits = async (day) => {
     // this is for the current day's habits only
     // past habits should load from past habit data storage
