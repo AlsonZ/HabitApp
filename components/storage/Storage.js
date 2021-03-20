@@ -28,6 +28,22 @@ const getWithKey = async (key) => {
   }
 };
 
+// Theme
+const THEME_KEY = 'Theme_key';
+export const getTheme = async () => {
+  const themeJSON = await getWithKey(THEME_KEY);
+  const temp = JSON.parse(themeJSON);
+  const theme = temp ? temp : {};
+  return theme;
+};
+
+export const storeOrEditTheme = async (newTheme) => {
+  const theme = await getTheme();
+  theme = newTheme;
+  await storeWithKey(theme, THEME_KEY);
+  return 'Success';
+};
+
 // Categories
 const CategoriesKey = 'Categories';
 export const getAllCategories = async () => {
