@@ -12,6 +12,7 @@ import {
 import {ThemeContext} from '../../contexts/ThemeContext';
 import ColorIcon from '../../icons/ColorIcon';
 import ModalItem from '../../modal/ModalItem';
+import {storeOrEditTheme} from '../../storage/Storage';
 
 const SettingsThemeScreen = ({navigation}) => {
   const [themeContext, setThemeContext, reloadThemeContext] = useContext(
@@ -34,10 +35,9 @@ const SettingsThemeScreen = ({navigation}) => {
 
   useEffect(() => {
     if (chosenColor !== '') {
-      setTheme((prevState) => ({
-        ...prevState,
-        [currentEditingColor]: ColorList[chosenColor],
-      }));
+      let themeCopy = Object.assign({}, theme);
+      themeCopy[currentEditingColor] = ColorList[chosenColor];
+      setTheme(themeCopy);
     }
   }, [chosenColor]);
 
@@ -81,7 +81,7 @@ const SettingsThemeScreen = ({navigation}) => {
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
         <View style={styles.modalView}>
           {Object.keys(ColorList).map((item) => (
-            <ChooseColorIcon item={item} color={ColorList[item]} />
+            <ChooseColorIcon key={item} item={item} color={ColorList[item]} />
           ))}
         </View>
       </ModalItem>
@@ -99,10 +99,10 @@ const SettingsThemeScreen = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button
           onPress={async () => {
-            // save HabitButtonContext to storage
-            // await storeOrEditDefaultHabitButton(habitButtonSettings);
+            // store theme
+            await storeOrEditTheme(theme);
             // reload context
-            // reloadHabitButtonContext();
+            reloadThemeContext();
             navigation.goBack();
           }}
           title="Save"
