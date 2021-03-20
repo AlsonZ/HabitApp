@@ -38,7 +38,7 @@ export const getTheme = async () => {
 };
 
 export const storeOrEditTheme = async (newTheme) => {
-  const theme = await getTheme();
+  let theme = await getTheme();
   theme = newTheme;
   await storeWithKey(theme, THEME_KEY);
   return 'Success';
