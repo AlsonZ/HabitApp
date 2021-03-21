@@ -4,24 +4,35 @@ import {getTheme} from '../storage/Storage';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = (props) => {
-  const [theme, setTheme] = useState({
-    navTopBarColor: 'black',
+  const initialTheme = {
     navStatusBarColor: 'black',
+    navStatusBarTextColor: 'dark-content',
+    navTopBarColor: 'black',
     navBottomBarColor: 'black',
     highlightColor: 'lightBlue',
     textColor: 'black',
     borderColor: 'red',
-  });
+  };
+  const [theme, setTheme] = useState(initialTheme);
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       const currentTheme = await getTheme();
       if (Object.keys(currentTheme).length > 0) {
-        setTheme(currentTheme);
+        let themeCopy = Object.assign({}, theme);
+        for (let color in themeCopy) {
+          if (
+            currentTheme.hasOwnProperty(color) &&
+            currentTheme[color] !== undefined
+          ) {
+            console.log(themeCopy[color]);
+            themeCopy[color] = currentTheme[color];
+          }
+        }
+        setTheme(themeCopy);
       }
     };
-
     getData();
   }, [reload]);
 
