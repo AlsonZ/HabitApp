@@ -42,21 +42,47 @@ const SettingsThemeScreen = ({navigation}) => {
   }, [chosenColor]);
 
   const ListColorButton = ({item, color}) => {
-    return (
-      <TouchableOpacity
-        key={item}
-        style={styles.listItem}
-        onPress={() => {
-          setModalVisible(true);
-          setCurrentEditingColor(item);
-        }}>
-        <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-        <ColorIcon
-          activeColor={color}
-          style={[styles.rightListContent, styles.colorIcon]}
-        />
-      </TouchableOpacity>
-    );
+    if (item === 'navStatusBarTextColor') {
+      return (
+        <TouchableOpacity
+          key={item}
+          style={styles.listItem}
+          onPress={() => {
+            let themeCopy = Object.assign({}, theme);
+            if (color === 'dark-content') {
+              themeCopy[item] = 'light-content';
+            } else {
+              themeCopy[item] = 'dark-content';
+            }
+            setTheme(themeCopy);
+          }}>
+          <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+          <View style={[styles.rightListContent, styles.buttonView]}>
+            <Text style={styles.listText}>{color}</Text>
+            <ColorIcon
+              activeColor={color === 'dark-content' ? 'black' : 'white'}
+              style={[styles.colorIcon]}
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          key={item}
+          style={styles.listItem}
+          onPress={() => {
+            setModalVisible(true);
+            setCurrentEditingColor(item);
+          }}>
+          <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+          <ColorIcon
+            activeColor={color}
+            style={[styles.rightListContent, styles.colorIcon]}
+          />
+        </TouchableOpacity>
+      );
+    }
   };
 
   const ChooseColorIcon = ({item, color}) => {
@@ -137,6 +163,15 @@ const styles = StyleSheet.create({
   },
   rightListContent: {
     marginLeft: 'auto',
+  },
+  buttonView: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listText: {
+    margin: 5,
   },
   modalView: {
     display: 'flex',
