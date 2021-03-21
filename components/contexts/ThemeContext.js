@@ -8,6 +8,7 @@ export const ThemeProvider = (props) => {
     navStatusBarColor: 'black',
     navStatusBarTextColor: 'dark-content',
     navTopBarColor: 'black',
+    navTopBarTextColor: 'white',
     navBottomBarColor: 'black',
     highlightColor: 'lightBlue',
     textColor: 'black',
