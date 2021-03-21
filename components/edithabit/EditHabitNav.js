@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import EditHabitMain from './EditHabitMain.js';
 import {CategoriesProvider} from '../contexts/CategoriesContext';
@@ -7,16 +7,26 @@ import CategoryItem from '../items/CategoryItem';
 import ScheduleItem from '../items/ScheduleItem';
 import HabitColorItem from '../items/HabitColorItem';
 import AddHabitNav from '../addhabit/AddHabitNav';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const Stack = createStackNavigator();
 
 const EditHabitNav = () => {
+  const [theme, setTheme] = useContext(ThemeContext);
   return (
     <CategoriesProvider>
-      <Stack.Navigator initialRouteName="EditHabitMain" headerMode="screen">
+      <Stack.Navigator
+        initialRouteName="EditHabitMain"
+        headerMode="screen"
+        screenOptions={{
+          headerStyle: {backgroundColor: theme.navTopBarColor},
+          headerTintColor: theme.navTopBarTextColor,
+        }}>
         <Stack.Screen
           name="EditHabitMain"
-          options={{title: 'List of Habits'}}
+          options={{
+            title: 'List of Habits',
+          }}
           component={EditHabitMain}
         />
         <Stack.Screen
