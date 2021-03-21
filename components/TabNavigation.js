@@ -30,7 +30,7 @@ const TabNavigation = () => {
             initialRouteName="Home"
             inactiveColor={Colors.lightgray}
             shifting={true}
-            barStyle={{backgroundColor: 'black'}}>
+            barStyle={{backgroundColor: theme.navBottomBarColor}}>
             <Tab.Screen
               name="Home"
               component={Habits}
