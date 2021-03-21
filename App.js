@@ -4,17 +4,15 @@ import {StyleSheet, StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import TabNavigation from './components/TabNavigation';
+import {ThemeProvider} from './components/contexts/ThemeContext';
 
 const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <StatusBar
-          translucent={true}
-          backgroundColor="transparent"
-          barStyle="dark-content"
-        />
-        <TabNavigation />
+        <ThemeProvider>
+          <TabNavigation />
+        </ThemeProvider>
       </NavigationContainer>
     </SafeAreaProvider>
   );
