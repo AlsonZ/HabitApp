@@ -12,6 +12,7 @@ export const ThemeProvider = (props) => {
     navBottomBarColor: 'black',
     highlightColor: 'lightBlue',
     textColor: 'black',
+    backgroundColor: 'black',
     borderColor: 'red',
   };
   const [theme, setTheme] = useState(initialTheme);
