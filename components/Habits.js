@@ -9,6 +9,7 @@ import Clock from './Clock';
 import HabitButton from './HabitButton';
 import {HabitListContext} from './contexts/HabitListContext';
 import {HabitButtonContext} from './contexts/HabitButtonContext';
+import {ThemeContext} from './contexts/ThemeContext';
 
 const Habits = () => {
   const [
@@ -19,6 +20,7 @@ const Habits = () => {
     reloadHabitListContext,
   ] = useContext(HabitListContext);
   const [habitButtonSettings] = useContext(HabitButtonContext);
+  const [theme] = useContext(ThemeContext);
   const [habitButtonView, setHabitButtonView] = useState(
     habitButtonSettings.habitButtonView,
   );
@@ -63,7 +65,11 @@ const Habits = () => {
   }, [habitButtonSettings]);
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
+    <SafeAreaView
+      style={[
+        styles.safeAreaContainer,
+        {backgroundColor: theme.backgroundColor},
+      ]}>
       <CalendarStrip
         ref={calendarRef}
         scrollable={true}
@@ -83,18 +89,18 @@ const Habits = () => {
           type: 'border',
           duration: 200,
           borderWidth: 1,
-          borderHighlightColor: 'white',
+          borderHighlightColor: theme.borderColor,
         }}
         style={{
           height: 80,
           paddingVertical: 2,
         }}
-        calendarColor={'black'}
-        calendarHeaderStyle={{color: 'white', fontSize: 12}}
-        highlightDateNumberStyle={{color: 'white', fontSize: 10}}
-        highlightDateNameStyle={{color: 'white', fontSize: 10}}
-        dateNumberStyle={{color: 'white', fontSize: 12}}
-        dateNameStyle={{color: 'white', fontSize: 12}}
+        calendarColor={theme.navTopBarColor}
+        calendarHeaderStyle={{color: theme.textColor, fontSize: 12}}
+        highlightDateNumberStyle={{color: theme.textColor, fontSize: 10}}
+        highlightDateNameStyle={{color: theme.textColor, fontSize: 10}}
+        dateNumberStyle={{color: theme.textColor, fontSize: 12}}
+        dateNameStyle={{color: theme.textColor, fontSize: 12}}
         iconContainer={{flex: 0.1, paddingBottom: 10}}
         iconStyle={{height: 25}}
         iconLeft={require('../imgs/left-arrow-white.png')}
@@ -114,6 +120,7 @@ const Habits = () => {
             description={item.description}
             textColor={item.colors.textColor}
             backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
+            // backgroundColor={'red'} // add styling to make this auto transparent and not dependent on the rgba here
             textActiveColor={item.colors.textActiveColor}
             backgroundActiveColor={item.colors.backgroundActiveColor}
             completed={item.completed}
