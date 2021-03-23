@@ -251,9 +251,7 @@ const AddHabitMain = ({navigation, route}) => {
         <Button
           title="Create New Habit"
           onPress={async () => {
-            // const success = await storeNewHabit(habitDetails);
             const success = await storeCalendarHabit(habitDetails);
-            // const success = 'Success';
             if (success === 'Success') {
               // show modal popup for success with 3 buttons
               // one to go to home, other to continue making duplicate habit
@@ -263,7 +261,7 @@ const AddHabitMain = ({navigation, route}) => {
               reloadHabitListContext();
               reloadEditHabitContext();
               // send to main screen
-              navigation.navigate('Home');
+              navigation.navigate('EditHabitMain');
             } else if (success === 'Name Matches Existing Habit') {
               //show modal popup for error
               console.log(success);
