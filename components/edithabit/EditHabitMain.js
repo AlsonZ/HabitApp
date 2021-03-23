@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import {EditHabitContext} from '../contexts/EditHabitContext';
 import {
   Button,
   FlatList,
@@ -15,11 +14,15 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {EditHabitContext} from '../contexts/EditHabitContext';
+import {ThemeContext} from '../contexts/ThemeContext';
+
 const EditHabitMain = ({navigation}) => {
   const [allHabits, setAllHabits] = useContext(EditHabitContext);
+  const [theme] = useContext(ThemeContext);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <FlatList
         contentContainerStyle={styles.listContainer}
         data={allHabits}
@@ -34,16 +37,18 @@ const EditHabitMain = ({navigation}) => {
             <AntIcon
               style={styles.habitIcon}
               name="appstore-o"
-              color={'black'}
+              color={theme.iconColor}
               size={26}
             />
-            <Text numberOfLines={1} style={styles.habitText}>
+            <Text
+              numberOfLines={1}
+              style={[styles.habitText, {color: theme.textColor}]}>
               {item.name}
             </Text>
             <MCIcon
               style={styles.rightIcon}
               name="code-greater-than"
-              color={'black'}
+              color={theme.iconColor}
               size={26}
             />
           </TouchableOpacity>
@@ -53,11 +58,11 @@ const EditHabitMain = ({navigation}) => {
       />
       <TouchableOpacity
         activeOpacity={0.6}
-        style={styles.addButton}
+        style={[styles.addButton, {backgroundColor: theme.highlightColor}]}
         onPress={() => {
           navigation.navigate('AddNewHabit');
         }}>
-        <AntIcon name="plus" color={'white'} size={26} />
+        <AntIcon name="plus" color={theme.iconColor} size={26} />
       </TouchableOpacity>
     </View>
   );
@@ -103,7 +108,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: 64,
     height: 64,
-    backgroundColor: 'lightblue',
     borderRadius: 50,
     shadowColor: '#000',
     shadowOffset: {
