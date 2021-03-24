@@ -1,36 +1,56 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ScrollView, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ColorIcon from '../icons/ColorIcon';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const SettingsMainScreen = ({navigation}) => {
+  const [theme] = useContext(ThemeContext);
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.scrollContainer,
+        {backgroundColor: theme.backgroundColor},
+      ]}>
       <TouchableOpacity
         onPress={() => navigation.navigate('SettingsThemeScreen')}
         style={styles.habitItem}>
-        <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} />
-        <Text numberOfLines={1} style={styles.habitText}>
+        <Icon
+          name="gear"
+          color={theme.iconColor}
+          size={26}
+          style={styles.habitIcon}
+        />
+        <Text
+          numberOfLines={1}
+          style={[styles.habitText, {color: theme.textColor}]}>
           Theme
         </Text>
         <ColorIcon
           style={[styles.rightIcon, styles.colorIcon]}
-          activeColor={'black'}
-          borderColor={'black'}
+          activeColor={theme.backgroundColor}
+          borderColor={theme.borderColor}
         />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate('SettingsHabitButtonScreen')}
         style={styles.habitItem}>
-        <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} />
-        <Text numberOfLines={1} style={styles.habitText}>
+        <Icon
+          name="gear"
+          color={theme.iconColor}
+          size={26}
+          style={styles.habitIcon}
+        />
+        <Text
+          numberOfLines={1}
+          style={[styles.habitText, {color: theme.textColor}]}>
           HabitButton
         </Text>
         <MCIcon
           style={styles.rightListContent}
           name="arrow-right"
-          color={'black'}
+          color={theme.iconColor}
           size={26}
         />
       </TouchableOpacity>
