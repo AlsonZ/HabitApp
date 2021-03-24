@@ -10,7 +10,6 @@ import HabitButton from './HabitButton';
 import {HabitListContext} from './contexts/HabitListContext';
 import {HabitButtonContext} from './contexts/HabitButtonContext';
 import {ThemeContext} from './contexts/ThemeContext';
-
 const Habits = () => {
   const [
     habitList,
@@ -118,10 +117,19 @@ const Habits = () => {
             disabled={isAfter(currentlyLoadedDay, getToday())}
             title={item.name}
             description={item.description}
-            textColor={item.colors.textColor}
+            // temp colors, may change theme to affect all colors, textColor may be just default with theme
+            textColor={
+              theme.backgroundColor === 'black'
+                ? habitButtonSettings.colors.textColor
+                : item.colors.textColor
+            }
             backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
             // backgroundColor={'red'} // add styling to make this auto transparent and not dependent on the rgba here
-            textActiveColor={item.colors.textActiveColor}
+            textActiveColor={
+              theme.backgroundColor === 'black'
+                ? 'white'
+                : item.colors.textActiveColor
+            }
             backgroundActiveColor={item.colors.backgroundActiveColor}
             completed={item.completed}
             listView={habitButtonView === 'list'}
