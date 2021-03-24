@@ -56,11 +56,16 @@ const SettingsThemeScreen = ({navigation}) => {
             }
             setTheme(themeCopy);
           }}>
-          <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+          <Text style={{color: themeContext.textColor}}>
+            {item.charAt(0).toUpperCase() + item.slice(1)}
+          </Text>
           <View style={[styles.rightListContent, styles.buttonView]}>
-            <Text style={styles.listText}>{color}</Text>
+            <Text style={[styles.listText, {color: themeContext.textColor}]}>
+              {color}
+            </Text>
             <ColorIcon
               activeColor={color === 'dark-content' ? 'black' : 'white'}
+              borderColor={themeContext.borderColor}
               style={[styles.colorIcon]}
             />
           </View>
@@ -75,9 +80,12 @@ const SettingsThemeScreen = ({navigation}) => {
             setModalVisible(true);
             setCurrentEditingColor(item);
           }}>
-          <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+          <Text style={{color: themeContext.textColor}}>
+            {item.charAt(0).toUpperCase() + item.slice(1)}
+          </Text>
           <ColorIcon
             activeColor={color}
+            borderColor={themeContext.borderColor}
             style={[styles.rightListContent, styles.colorIcon]}
           />
         </TouchableOpacity>
@@ -103,7 +111,11 @@ const SettingsThemeScreen = ({navigation}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.scrollView,
+        {backgroundColor: themeContext.backgroundColor},
+      ]}>
       <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
         <View style={styles.modalView}>
           {Object.keys(ColorList).map((item) => (
