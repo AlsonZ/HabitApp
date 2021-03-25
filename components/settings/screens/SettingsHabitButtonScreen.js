@@ -11,8 +11,9 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import ColorIcon from '../../icons/ColorIcon';
-import {HabitButtonContext} from '../../contexts/HabitButtonContext';
 import {storeOrEditDefaultHabitButton} from '../../storage/Storage';
+import {HabitButtonContext} from '../../contexts/HabitButtonContext';
+import {ThemeContext} from '../../contexts/ThemeContext';
 
 const SettingsHabitButtonScreen = ({navigation, route}) => {
   const [
@@ -20,6 +21,7 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
     setHabitButtonSettings,
     reloadHabitButtonContext,
   ] = useContext(HabitButtonContext);
+  const [theme] = useContext(ThemeContext);
 
   useEffect(() => {
     if (route.params?.colors) {
@@ -33,7 +35,11 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
   }, [route.params?.colors]);
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.scrollView,
+        {backgroundColor: theme.backgroundColor},
+      ]}>
       <TouchableOpacity
         onPress={() => {
           let buttonView = 'list';
@@ -46,28 +52,34 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
           }));
         }}
         style={styles.listItem}>
-        <Text numberOfLines={1} style={styles.listText}>
+        <Text
+          numberOfLines={1}
+          style={[styles.listText, {color: theme.textColor}]}>
           HabitButton
         </Text>
         <View style={[styles.rightListContent, styles.buttonView]}>
           {habitButtonSettings.habitButtonView === 'list' && (
             <>
-              <Text style={styles.listText}>List View</Text>
+              <Text style={[styles.listText, {color: theme.textColor}]}>
+                List View
+              </Text>
               <IonIcon
                 style={[styles.listIcon, {margin: -3, padding: -3}]}
                 name="ios-menu"
-                color={'black'}
+                color={theme.iconColor}
                 size={32}
               />
             </>
           )}
           {habitButtonSettings.habitButtonView === 'app' && (
             <>
-              <Text style={styles.listText}>App View</Text>
+              <Text style={[styles.listText, {color: theme.textColor}]}>
+                App View
+              </Text>
               <AntIcon
                 style={styles.listIcon}
                 name="appstore-o"
-                color={'black'}
+                color={theme.iconColor}
                 size={26}
               />
             </>
@@ -84,7 +96,9 @@ const SettingsHabitButtonScreen = ({navigation, route}) => {
         }}
         style={styles.listItem}>
         {/* <Icon name="gear" color={'black'} size={26} style={styles.habitIcon} /> */}
-        <Text numberOfLines={1} style={styles.listText}>
+        <Text
+          numberOfLines={1}
+          style={[styles.listText, {color: theme.textColor}]}>
           Select Default Button Colors
         </Text>
         <ColorIcon
