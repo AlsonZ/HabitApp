@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import SettingsMainScreen from './SettingsMainScreen';
 import SettingsThemeScreen from './screens/SettingsThemeScreen';
 import SettingsHabitButtonScreen from './screens/SettingsHabitButtonScreen';
@@ -30,7 +30,11 @@ const SettingsNav = () => {
       />
       <Stack.Screen
         name="SettingsHabitButtonScreen"
-        options={{title: 'Habit Button', headerTransparent: false}}
+        options={{
+          title: 'Habit Button',
+          headerTransparent: false,
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
         component={SettingsHabitButtonScreen}
       />
       <Stack.Screen

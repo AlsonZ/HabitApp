@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 
 const AddHabitNav = () => {
   const insets = useSafeAreaInsets();
-  const [theme, setTheme] = useContext(ThemeContext);
+  const [theme] = useContext(ThemeContext);
   return (
     <CategoriesProvider>
       <AddHabitProvider>
@@ -48,7 +48,6 @@ const AddHabitNav = () => {
             name="AddHabitColors"
             options={{
               title: 'Select Colors',
-              ...TransitionPresets.SlideFromRightIOS,
             }}
             component={HabitColorItem}
           />

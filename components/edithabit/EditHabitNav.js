@@ -12,7 +12,7 @@ import {ThemeContext} from '../contexts/ThemeContext';
 const Stack = createStackNavigator();
 
 const EditHabitNav = () => {
-  const [theme, setTheme] = useContext(ThemeContext);
+  const [theme] = useContext(ThemeContext);
   return (
     <CategoriesProvider>
       <Stack.Navigator

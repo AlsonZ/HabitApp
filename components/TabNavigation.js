@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Habits from './Habits';
 import {DefaultColors as Colors} from './settings/Colors';
@@ -10,7 +10,7 @@ import EditHabitNav from './edithabit/EditHabitNav';
 import {HabitListProvider} from './contexts/HabitListContext';
 import {EditHabitProvider} from './contexts/EditHabitContext';
 import {HabitButtonProvider} from './contexts/HabitButtonContext';
-import {ThemeProvider, ThemeContext} from './contexts/ThemeContext';
+import {ThemeContext} from './contexts/ThemeContext';
 
 const Tab = createMaterialBottomTabNavigator();
 
