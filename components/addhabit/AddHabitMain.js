@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {AddHabitContext} from '../contexts/AddHabitContext';
 import {HabitListContext} from '../contexts/HabitListContext';
 import {EditHabitContext} from '../contexts/EditHabitContext';
+import {ThemeContext} from '../contexts/ThemeContext';
 import {
   Button,
   FlatList,
@@ -34,6 +35,7 @@ const AddHabitMain = ({navigation, route}) => {
   );
   const [, , reloadEditHabitContext] = useContext(EditHabitContext);
   const [, , , , reloadHabitListContext] = useContext(HabitListContext);
+  const [theme] = useContext(ThemeContext);
 
   useEffect(() => {
     if (route.params?.category) {
@@ -77,16 +79,21 @@ const AddHabitMain = ({navigation, route}) => {
   ]);
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.scrollContainer,
+        {backgroundColor: theme.backgroundColor},
+      ]}>
       <View style={styles.habitItem}>
         <MCIcon
           style={styles.habitIcon}
           name="lead-pencil"
-          color={'black'}
+          color={theme.iconColor}
           size={26}
         />
         <TextInput
-          style={{flex: 1}}
+          style={{flex: 1, color: theme.textColor}}
+          placeholderTextColor={theme.textColor}
           placeholder="Habit Name"
           value={habitDetails.name}
           onChangeText={(text) =>
@@ -103,14 +110,16 @@ const AddHabitMain = ({navigation, route}) => {
         <AntIcon
           style={styles.habitIcon}
           name="appstore-o"
-          color={'black'}
+          color={theme.iconColor}
           size={26}
         />
-        <Text style={styles.habitText}>{habitDetails.category}</Text>
+        <Text style={[styles.habitText, {color: theme.textColor}]}>
+          {habitDetails.category}
+        </Text>
         <MCIcon
           style={styles.rightIcon}
           name="code-greater-than"
-          color={'black'}
+          color={theme.iconColor}
           size={26}
         />
       </TouchableOpacity>
@@ -118,10 +127,11 @@ const AddHabitMain = ({navigation, route}) => {
         <AntIcon
           style={styles.habitIcon}
           name="filetext1"
-          color={'black'}
+          color={theme.iconColor}
           size={24}></AntIcon>
         <TextInput
-          style={{flex: 1}}
+          style={{flex: 1, color: theme.textColor}}
+          placeholderTextColor={theme.textColor}
           placeholder="Description"
           value={habitDetails.description}
           onChangeText={(text) =>
@@ -140,22 +150,18 @@ const AddHabitMain = ({navigation, route}) => {
         <FontistoIcon
           style={styles.habitIcon}
           name="date"
-          color={'black'}
+          color={theme.iconColor}
           size={24}
         />
-        <Text style={styles.habitText}>Schedule Type:</Text>
+        <Text style={[styles.habitText, {color: theme.textColor}]}>
+          Schedule Type:
+        </Text>
         <View style={styles.rightIcon}>
-          <Text style={styles.habitText}>
+          <Text style={[styles.habitText, {color: theme.textColor}]}>
             {habitDetails.scheduleType?.name.charAt(0).toUpperCase() +
               habitDetails.scheduleType?.name.slice(1)}
           </Text>
         </View>
-        {/* <MCIcon
-          style={styles.rightIcon}
-          name="code-greater-than"
-          color={'black'}
-          size={26}
-        /> */}
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
@@ -169,12 +175,16 @@ const AddHabitMain = ({navigation, route}) => {
         <FontistoIcon
           style={styles.habitIcon}
           name="date"
-          color={'black'}
+          color={theme.iconColor}
           size={24}
         />
-        <Text style={styles.habitText}>Start Date:</Text>
+        <Text style={[styles.habitText, {color: theme.textColor}]}>
+          Start Date:
+        </Text>
         <View style={styles.rightIcon}>
-          <Text style={styles.habitText}>{habitDetails.startDate}</Text>
+          <Text style={[styles.habitText, {color: theme.textColor}]}>
+            {habitDetails.startDate}
+          </Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity disabled onPress={() => {}} style={styles.habitItem}>
@@ -221,13 +231,13 @@ const AddHabitMain = ({navigation, route}) => {
         <IonIcon
           style={styles.habitIcon}
           name="color-palette-outline"
-          color={'black'}
+          color={theme.iconColor}
           size={24}
         />
-        <Text style={styles.habitText}>Colors</Text>
+        <Text style={[styles.habitText, {color: theme.textColor}]}>Colors</Text>
         <ColorIcon
           activeColor={habitDetails.colors?.backgroundActiveColor}
-          borderColor={Colors.border}
+          borderColor={theme.borderColor}
           style={styles.colorIcon}
         />
       </TouchableOpacity>
