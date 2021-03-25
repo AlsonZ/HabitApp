@@ -118,7 +118,7 @@ const AddHabitMain = ({navigation, route}) => {
         </Text>
         <MCIcon
           style={styles.rightIcon}
-          name="code-greater-than"
+          name="arrow-right"
           color={theme.iconColor}
           size={26}
         />
