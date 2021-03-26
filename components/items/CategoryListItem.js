@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Pressable, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const CategoryListItem = ({category, selectCategory, deleteCategory}) => {
+  const [theme] = useContext(ThemeContext);
+
   return (
     <Pressable
       onPress={() => {
@@ -12,11 +15,13 @@ const CategoryListItem = ({category, selectCategory, deleteCategory}) => {
         deleteCategory(category);
       }}
       style={styles.categoryItem}>
-      <Text style={styles.categoryText}>{category}</Text>
+      <Text style={[styles.categoryText, {color: theme.textColor}]}>
+        {category}
+      </Text>
       <MCIcon
         style={styles.rightIcon}
-        name="code-greater-than"
-        color={'black'}
+        name="arrow-right"
+        color={theme.iconColor}
         size={26}
       />
     </Pressable>
