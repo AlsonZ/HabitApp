@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const ScrollPicker = ({
   values,
@@ -20,6 +21,7 @@ const ScrollPicker = ({
   titleStyle,
 }) => {
   const flatListRef = useRef(null);
+  const [theme] = useContext(ThemeContext);
   let offsetValues = [...Array(values.length)].map(
     (_, index) => index * itemHeight,
   );
@@ -50,6 +52,7 @@ const ScrollPicker = ({
           style={[
             styles.itemText,
             {
+              color: theme.textColor,
               fontSize: fontSize,
               height: itemHeight,
               lineHeight: itemHeight - itemHeight / 8,
@@ -76,7 +79,7 @@ const ScrollPicker = ({
           {
             height: itemHeight,
             top: itemHeight,
-            backgroundColor: 'rgba(1,1,1,0.1)',
+            backgroundColor: 'rgba(255,255,255,0.2)',
           },
           selectedValueStyle,
         ]}
@@ -92,7 +95,9 @@ const ScrollPicker = ({
           },
           titleStyle,
         ]}>
-        <Text style={{textAlign: 'center'}}>{title}</Text>
+        <Text style={{textAlign: 'center', color: theme.textColor}}>
+          {title}
+        </Text>
       </View>
       <FlatList
         ref={flatListRef}
