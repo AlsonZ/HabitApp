@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   Button,
   ScrollView,
@@ -13,6 +13,7 @@ import {config} from '../config/config';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import ScrollPicker from './ScrollPicker';
 import {format, isLeapYear} from 'date-fns';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const ScheduleItem = ({navigation, route}) => {
   const parentRoute = route.params.parentRoute;
@@ -56,6 +57,8 @@ const ScheduleItem = ({navigation, route}) => {
   const [selectedWeekdays, setSelectedWeekdays] = useState(
     config.scheduleType.weekday.days,
   );
+
+  const [theme] = useContext(ThemeContext);
 
   useEffect(() => {
     console.log(
@@ -114,13 +117,15 @@ const ScheduleItem = ({navigation, route}) => {
         }}>
         <View style={styles.container}>
           <CheckBox
-            disable={false}
+            tintColors={{true: theme.highlightColor, false: theme.borderColor}}
             value={scheduleType.name === active.name}
             onChange={() => {
               setActive(scheduleType);
             }}
           />
-          <Text style={styles.checkBoxText}>{scheduleType.name}</Text>
+          <Text style={[styles.checkBoxText, {color: theme.textColor}]}>
+            {scheduleType.name}
+          </Text>
         </View>
       </TouchableHighlight>
     );
@@ -138,7 +143,7 @@ const ScheduleItem = ({navigation, route}) => {
         }}>
         <View style={styles.container}>
           <CheckBox
-            disable={false}
+            tintColors={{true: theme.highlightColor, false: theme.borderColor}}
             value={selectedWeekdays[index]}
             onChange={() => {
               setSelectedWeekdays((prevState) => ({
@@ -147,9 +152,8 @@ const ScheduleItem = ({navigation, route}) => {
               }));
             }}
           />
-          <Text style={styles.checkBoxText}>
+          <Text style={[styles.checkBoxText, {color: theme.textColor}]}>
             {name}
-            {index}
           </Text>
         </View>
       </TouchableHighlight>
@@ -264,7 +268,13 @@ const ScheduleItem = ({navigation, route}) => {
   }, [selectedMonthIndex, selectedYearIndex]);
 
   return (
-    <ScrollView contentContainerStyle={{backgroundColor: '#F2F2F2'}}>
+    <ScrollView
+      nestedScrollEnabled
+      contentContainerStyle={[
+        styles.scrollContainer,
+        {backgroundColor: theme.backgroundColor},
+        // {backgroundColor: '#F2F2F2'},
+      ]}>
       <ScrollView horizontal contentContainerStyle={{width: '100%'}}>
         <FlatList
           data={Object.keys(config.scheduleType)}
@@ -279,7 +289,9 @@ const ScheduleItem = ({navigation, route}) => {
       </ScrollView>
       {active.name !== config.scheduleType.everyday?.name &&
         active.name !== config.scheduleType.weekday?.name && (
-          <Text style={styles.sectionTitle}>Duration</Text>
+          <Text style={[styles.sectionTitle, {color: theme.textColor}]}>
+            Duration
+          </Text>
         )}
       <ScrollView
         horizontal
@@ -310,7 +322,9 @@ const ScheduleItem = ({navigation, route}) => {
       </ScrollView>
       {active.name !== config.scheduleType.everyday?.name &&
         active.name !== config.scheduleType.weekday?.name && (
-          <Text style={styles.sectionTitle}>Start Date</Text>
+          <Text style={[styles.sectionTitle, {color: theme.textColor}]}>
+            Start Date
+          </Text>
         )}
       <ScrollView
         horizontal
@@ -326,7 +340,7 @@ const ScheduleItem = ({navigation, route}) => {
                 itemHeight={60}
                 userSelectedIndex={userSelectedDayIndex}
                 title="Day"
-                titleStyle={{backgroundColor: '#F2F2F2'}}
+                titleStyle={{backgroundColor: theme.backgroundColor}}
               />
               <ScrollPicker
                 values={months}
@@ -336,7 +350,7 @@ const ScheduleItem = ({navigation, route}) => {
                 itemHeight={60}
                 userSelectedIndex={userSelectedMonthIndex}
                 title="Month"
-                titleStyle={{backgroundColor: '#F2F2F2'}}
+                titleStyle={{backgroundColor: theme.backgroundColor}}
               />
               <ScrollPicker
                 values={years}
@@ -346,13 +360,15 @@ const ScheduleItem = ({navigation, route}) => {
                 itemHeight={60}
                 userSelectedIndex={userSelectedYearIndex}
                 title="Year"
-                titleStyle={{backgroundColor: '#F2F2F2'}}
+                titleStyle={{backgroundColor: theme.backgroundColor}}
               />
             </>
           )}
       </ScrollView>
       {active.name === config.scheduleType.weekday?.name && (
-        <Text style={styles.sectionTitle}>Weekdays</Text>
+        <Text style={[styles.sectionTitle, {color: theme.textColor}]}>
+          Weekdays
+        </Text>
       )}
       <ScrollView
         horizontal
@@ -409,6 +425,13 @@ const ScheduleItem = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingHorizontal: 17,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -417,7 +440,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     margin: 2,
     marginBottom: 0,
-    marginLeft: 20,
   },
   checkBoxText: {
     fontSize: 15,
@@ -438,6 +460,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 17,
     marginHorizontal: 17,
+    width: '100%',
   },
 });
 
