@@ -16,11 +16,13 @@ import DeleteModal from '../modal/DeleteModal';
 import CategoryListItem from './CategoryListItem';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const CategoryItem = ({route, navigation}) => {
   const [categories, setCategories, reloadContext] = useContext(
     CategoriesContext,
   );
+  const [theme] = useContext(ThemeContext);
   const {selectedCategory, parentRoute} = route.params;
   const [categoryColor, setCategoryColor] = useState(DefaultColors.red);
   const [categoryName, setCategoryName] = useState('');
@@ -87,15 +89,16 @@ const CategoryItem = ({route, navigation}) => {
         <MCIcon
           style={styles.categoryIcon}
           name="lead-pencil"
-          color={'black'}
+          color={theme.iconColor}
           size={26}
         />
         <TextInput
           placeholder="Category Name"
+          placeholderTextColor={theme.textColor}
           onChangeText={onCategoryNameChange}
           onSubmitEditing={createCategory}
           value={categoryName}
-          style={styles.textInput}></TextInput>
+          style={[styles.textInput, {color: theme.textColor}]}></TextInput>
         <TouchableOpacity style={styles.rightIcon} onPress={createCategory}>
           <MCIcon
             name="arrow-right-bold-box-outline"
