@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
   Modal,
@@ -15,6 +15,7 @@ import ColorIcon from '../icons/ColorIcon';
 import {HabitColors} from '../settings/Colors';
 import HabitButton from '../HabitButton';
 import ModalItem from '../modal/ModalItem';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const HabitColorItem = ({navigation, route}) => {
   const parentRoute = route.params.parentRoute;
@@ -24,6 +25,8 @@ const HabitColorItem = ({navigation, route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [chosenColor, setChosenColor] = useState('');
   const [currentEditingColor, setCurrentEditingColor] = useState('');
+
+  const [theme] = useContext(ThemeContext);
 
   useEffect(() => {
     if (chosenColor != '') {
@@ -61,12 +64,13 @@ const HabitColorItem = ({navigation, route}) => {
           <IonIcon
             style={styles.habitIcon}
             name="color-palette-outline"
-            color={'black'}
+            color={theme.iconColor}
             size={24}
           />
-          <Text>{name}</Text>
+          <Text style={{color: theme.iconColor}}>{name}</Text>
           <ColorIcon
             activeColor={HabitButtonColors[item]}
+            borderColor={theme.borderColor}
             style={styles.colorIcon}
           />
         </TouchableOpacity>
@@ -85,7 +89,7 @@ const HabitColorItem = ({navigation, route}) => {
           }}>
           <ColorIcon
             activeColor={HabitColors[colorKey]}
-            borderColor="black"
+            borderColor={theme.borderColor}
             style={{width: 50, height: 50, margin: 5}}
           />
         </TouchableOpacity>
@@ -100,7 +104,7 @@ const HabitColorItem = ({navigation, route}) => {
       </ModalItem>
       {loadListItems()}
       <View style={styles.exampleHabitItemContainer}>
-        <Text>Example Habit Item</Text>
+        <Text style={{color: theme.textColor}}>Example Habit Item</Text>
         <HabitButton
           title="Habit"
           textColor={HabitButtonColors.textColor}
@@ -108,7 +112,9 @@ const HabitColorItem = ({navigation, route}) => {
           textActiveColor={HabitButtonColors.textActiveColor}
           backgroundActiveColor={HabitButtonColors.backgroundActiveColor}
         />
-        <Text style={styles.smallText}>Press Item to show active colors</Text>
+        <Text style={[styles.smallText, {color: theme.textColor}]}>
+          Press Item to show active colors
+        </Text>
       </View>
       <View style={styles.saveButtonContainer}>
         <Button
