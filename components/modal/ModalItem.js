@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -6,19 +6,40 @@ import {
   View,
   StatusBar,
 } from 'react-native';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const ModalItem = ({children, modalVisible, setModalVisible}) => {
+  const [theme] = useContext(ThemeContext);
   return (
     <Modal visible={modalVisible} animationType="fade" transparent={true}>
-      <StatusBar backgroundColor="rgba(0, 0, 0, 0.5)" animated={true} />
+      <StatusBar
+        backgroundColor={
+          theme.overlayColor === 'dark-content'
+            ? 'rgba(0, 0, 0, 0.5)'
+            : 'rgba(255,255,255, 0.08)'
+        }
+        animated={true}
+      />
       <TouchableWithoutFeedback
         onPress={() => {
           setModalVisible(false);
         }}>
-        <View style={styles.modalOverlay}></View>
+        <View
+          style={[
+            styles.modalOverlay,
+            {
+              backgroundColor:
+                theme.overlayColor === 'dark-content'
+                  ? 'rgba(0, 0, 0, 0.5)'
+                  : 'rgba(255,255,255, 0.08)',
+            },
+          ]}></View>
       </TouchableWithoutFeedback>
       <View style={styles.modalContainer}>
-        <View style={styles.modalView}>{children}</View>
+        <View
+          style={[styles.modalView, {backgroundColor: theme.backgroundColor}]}>
+          {children}
+        </View>
       </View>
     </Modal>
   );
@@ -55,7 +76,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 
