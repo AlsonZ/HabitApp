@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, Pressable, View} from 'react-native';
 import ModalItem from './ModalItem';
 import {DefaultColors} from '../settings/Colors';
+import {ThemeContext} from '../contexts/ThemeContext';
 
 const DeleteModal = ({title, onPress, modalVisible, setModalVisible}) => {
+  const [theme] = useContext(ThemeContext);
   return (
     <ModalItem modalVisible={modalVisible} setModalVisible={setModalVisible}>
       <View>
         <View style={styles.modalHeader}>
-          <Text style={styles.modalHeading}>{title}</Text>
+          <Text style={[styles.modalHeading, {color: theme.textColor}]}>
+            {title}
+          </Text>
         </View>
         <View style={styles.modalFooter}>
           <Pressable
@@ -17,7 +21,9 @@ const DeleteModal = ({title, onPress, modalVisible, setModalVisible}) => {
             onPress={() => {
               setModalVisible(false);
             }}>
-            <Text style={styles.modalButtonText}>Cancel</Text>
+            <Text style={[styles.modalButtonText, {color: theme.textColor}]}>
+              Cancel
+            </Text>
           </Pressable>
           <Pressable
             style={[styles.modalButton, styles.modalButtonBorder]}
@@ -26,7 +32,9 @@ const DeleteModal = ({title, onPress, modalVisible, setModalVisible}) => {
               onPress();
               setModalVisible(false);
             }}>
-            <Text style={styles.modalButtonText}>Delete</Text>
+            <Text style={[styles.modalButtonText, {color: theme.textColor}]}>
+              Delete
+            </Text>
           </Pressable>
         </View>
       </View>
