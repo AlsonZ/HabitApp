@@ -100,6 +100,7 @@ const ScrollPicker = ({
         </Text>
       </View>
       <FlatList
+        nestedScrollEnabled
         ref={flatListRef}
         contentContainerStyle={[
           styles.scrollView,
