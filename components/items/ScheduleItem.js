@@ -416,6 +416,14 @@ const ScheduleItem = ({navigation, route}) => {
                   days: selectedWeekdays,
                 },
               });
+            } else if (active.name === config.scheduleType.everyday?.name) {
+              const selectedDate = `${days[selectedDayIndex]}/${months[selectedMonthIndex]}/${years[selectedYearIndex]}`;
+              navigation.navigate(parentRoute, {
+                startDate: selectedDate,
+                scheduleType: {
+                  name: active.name,
+                },
+              });
             }
           }}
         />
