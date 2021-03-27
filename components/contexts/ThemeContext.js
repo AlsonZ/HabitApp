@@ -15,6 +15,7 @@ export const ThemeProvider = (props) => {
     backgroundColor: 'black',
     borderColor: 'red',
     iconColor: 'white',
+    overlayColor: 'light-content',
   };
   const [theme, setTheme] = useState(initialTheme);
   const [reload, setReload] = useState(false);
