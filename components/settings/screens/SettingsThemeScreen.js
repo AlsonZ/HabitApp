@@ -42,7 +42,7 @@ const SettingsThemeScreen = ({navigation}) => {
   }, [chosenColor]);
 
   const ListColorButton = ({item, color}) => {
-    if (item === 'navStatusBarTextColor') {
+    if (item === 'navStatusBarTextColor' || item === 'overlayColor') {
       return (
         <TouchableOpacity
           key={item}
@@ -61,7 +61,7 @@ const SettingsThemeScreen = ({navigation}) => {
           </Text>
           <View style={[styles.rightListContent, styles.buttonView]}>
             <Text style={[styles.listText, {color: themeContext.textColor}]}>
-              {color}
+              {color.split('-')[0]}
             </Text>
             <ColorIcon
               activeColor={color === 'dark-content' ? 'black' : 'white'}
