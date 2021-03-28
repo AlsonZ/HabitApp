@@ -3,6 +3,7 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ThemeProvider} from './components/contexts/ThemeContext';
+import RootNavigation from './src/navigation/RootNavigation';
 
 const App = () => {
   return (
