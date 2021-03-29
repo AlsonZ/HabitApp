@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import TabNavigation from './BottomNavigation';
+import BottomNavigation from './BottomNavigation';
 
 const RootNavigation = () => {
   // const [theme] = useContext(ThemeContext);
