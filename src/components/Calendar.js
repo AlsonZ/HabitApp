@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import {
   getDateObject,
@@ -7,10 +7,26 @@ import {
 } from '../date/DateHandler';
 import {sub} from 'date-fns';
 
-const Calendar = React.memo(({loadDay}) => {
+const Calendar = React.memo(({loadDay, currentlyLoadedDay}) => {
   const calendarRef = useRef(null);
-  const onDateSelected = (dateString) => {
-    const date = getDateObject(new Date(dateString));
+
+  useEffect(() => {
+    if (calendarRef.current !== null) {
+      const timer = setTimeout(() => {
+        calendarRef.current.updateWeekView(
+          sub(currentlyLoadedDay, {
+            days: 3,
+          }),
+        );
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, []);
+
+  const onDateSelected = (dateObj) => {
+    const date = new Date(dateObj);
     calendarRef.current.updateWeekView(
       sub(date, {
         days: 3,
