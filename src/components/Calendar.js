@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 import {
   getDateObject,
@@ -7,23 +7,26 @@ import {
 } from '../date/DateHandler';
 import {sub} from 'date-fns';
 
-const Calendar = React.memo(({ref, selectedDate}) => {
+const Calendar = React.memo(({loadDay}) => {
+  const calendarRef = useRef(null);
+  const onDateSelected = (dateString) => {
+    const date = getDateObject(new Date(dateString));
+    calendarRef.current.updateWeekView(
+      sub(date, {
+        days: 3,
+      }),
+    );
+    loadDay(date);
+  };
+
   return (
     <CalendarStrip
-      // ref={calendarRef}
+      ref={calendarRef}
       scrollable={true}
-      // maxDayComponentSize={58}
+      maxDayComponentSize={58}
       startingDate={sub(getTodaysDateObject(), {days: 3})}
       selectedDate={getTodaysDateObject()}
-      onDateSelected={(dateString) => {
-        const date = getDateObject(new Date(dateString));
-        // calendarRef.current.updateWeekView(
-        //   sub(date, {
-        //     days: 3,
-        //   }),
-        // );
-        // loadDay(date);
-      }}
+      onDateSelected={onDateSelected}
       daySelectionAnimation={{
         type: 'border',
         duration: 200,
