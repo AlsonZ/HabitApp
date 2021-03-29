@@ -1,9 +1,10 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import Home from '../icons/Home';
+import HomeIcon from '../icons/Home';
 import EditIcon from '../icons/Edit';
 import GearIcon from '../icons/Gear';
+import HomeController from '../modules/Home/HomeController';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,7 +26,7 @@ const BottomNavigation = () => {
       screenOptions={({route}) => ({
         tabBarIcon: () => {
           if (route.name === 'Home') {
-            return <Home />;
+            return <HomeIcon />;
           } else if (route.name === 'Habits') {
             return <EditIcon />;
           } else if (route.name === 'Settings') {
@@ -33,7 +34,7 @@ const BottomNavigation = () => {
           }
         },
       })}>
-      <Tab.Screen name="Home" component={PlaceholderComponent} />
+      <Tab.Screen name="Home" component={HomeController} />
       <Tab.Screen name="Habits" component={PlaceholderComponent} />
       <Tab.Screen name="Settings" component={PlaceholderComponent} />
     </Tab.Navigator>
