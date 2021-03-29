@@ -1,6 +1,9 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import Home from '../icons/Home';
+import EditIcon from '../icons/Edit';
+import GearIcon from '../icons/Gear';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -8,7 +11,7 @@ const PlaceholderComponent = () => {
   return <View></View>;
 };
 
-const TabNavigation = () => {
+const BottomNavigation = () => {
   return (
     // <LoadedHabitsProvider>
     // <ListOfHabitsProvider>
@@ -22,11 +25,11 @@ const TabNavigation = () => {
       screenOptions={({route}) => ({
         tabBarIcon: () => {
           if (route.name === 'Home') {
-            // return icon house
+            return <Home />;
           } else if (route.name === 'Habits') {
-            // return icon pencil
+            return <EditIcon />;
           } else if (route.name === 'Settings') {
-            // return icon gear
+            return <GearIcon />;
           }
         },
       })}>
@@ -39,4 +42,4 @@ const TabNavigation = () => {
   );
 };
 
-export default RootNavigation;
+export default BottomNavigation;
