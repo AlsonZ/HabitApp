@@ -10,6 +10,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Calendar from '../../components/Calendar';
 import {isAfter} from 'date-fns';
 import {getTodaysDateObject} from '../../date/DateHandler';
+import HabitAppIcon from '../../components/HabitAppIcon';
 
 const HomeScreen = ({
   habitButtonView = 'list',
@@ -45,7 +46,19 @@ const HomeScreen = ({
         extraData={loadedHabits}
         keyExtractor={(item) => `${item.id}${item.name}`}
         renderItem={({item}) => (
-          <View></View>
+          <HabitAppIcon
+            disabled={false}
+            title={item.name}
+            description={item.description}
+            textColor={item.colors.textColor}
+            textActiveColor={item.colors.textActiveColor}
+            backgroundColor={item.colors.backgroundColor}
+            backgroundActiveColor={item.colors.backgroundActiveColor}
+            completed={item.completed}
+            onPress={() => {
+              console.log('pressed icon');
+            }}
+          />
           // <HabitButton
           //   disabled={isAfter(currentlyLoadedDay, getTodaysDateObject())}
           //   title={item.name}
