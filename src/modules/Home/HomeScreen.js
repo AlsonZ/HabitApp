@@ -34,11 +34,7 @@ const HomeScreen = ({
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Calendar
-        onload={() => {}}
-        loadDay={loadDay}
-        currentlyLoadedDay={currentlyLoadedDay}
-      />
+      <Calendar loadDay={loadDay} currentlyLoadedDay={currentlyLoadedDay} />
       <FlatList
         contentContainerStyle={[styles.habitContainer]}
         key={columns}
@@ -49,7 +45,7 @@ const HomeScreen = ({
         renderItem={({item}) => {
           return (
             <HabitAppIcon
-              disabled={false}
+              disabled={isAfter(currentlyLoadedDay, getToday())}
               title={item.name}
               description={item.description}
               textColor={item.colors.textColor}
@@ -58,41 +54,15 @@ const HomeScreen = ({
               backgroundActiveColor={item.colors.backgroundActiveColor}
               completed={item.completed}
               onPress={() => {
-                console.log('pressed icon');
-                updateHabit({...item, completed: !item.completed});
+                // updateHabit({...item, completed: !item.completed});
                 // console.log(item.completed);
+                item.completed = !item.completed;
+                // update habit
+                updateHabit(item, currentlyLoadedDay);
               }}
             />
             // <HabitButton
-            //   disabled={isAfter(currentlyLoadedDay, getTodaysDateObject())}
-            //   title={item.name}
-            //   description={item.description}
-            //   // temp colors, may change theme to affect all colors, textColor may be just default with theme
-            //   textColor={
-            //     theme.backgroundColor === 'black'
-            //       ? habitButtonSettings.colors.textColor
-            //       : item.colors.textColor
-            //   }
-            //   backgroundColor={item.colors.backgroundColor} // add styling to make this auto transparent and not dependent on the rgba here
-            //   // backgroundColor={'red'} // add styling to make this auto transparent and not dependent on the rgba here
-            //   textActiveColor={
-            //     theme.backgroundColor === 'black'
-            //       ? 'white'
-            //       : item.colors.textActiveColor
-            //   }
-            //   backgroundActiveColor={item.colors.backgroundActiveColor}
-            //   completed={item.completed}
             //   listView={habitButtonView === 'list'}
-            //   onPress={() => {
-            //     // set completed
-            //     item.completed = !item.completed;
-            //     // update habit
-            //     updateHabit(
-            //       item,
-            //       // formatDate(new Date(calendarRef.current.getSelectedDate())),
-            //       currentlyLoadedDay,
-            //     );
-            //   }}
             // />
           );
         }}
